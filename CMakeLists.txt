@@ -65,3 +65,8 @@ install(TARGETS ${APP_NAME}
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+if (UNIX)
+	install(FILES res/logo/quezer.svg DESTINATION share/icons/hicolor/scalable/apps)
+	install(FILES res/app/quezer.desktop DESTINATION share/applications)
+endif ()
