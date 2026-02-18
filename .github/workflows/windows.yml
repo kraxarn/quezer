@@ -34,7 +34,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           cache: true
-          version: ${{matrix.qt-version}}
+          version: ${{env.QT_VERSION}}
           arch: ${{matrix.qt-arch}}
           host: ${{matrix.qt-host}}
           modules: "qtmultimedia qtwebview"
