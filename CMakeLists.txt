@@ -15,6 +15,8 @@ find_package(Qt6 REQUIRED COMPONENTS
 	Multimedia
 	Quick
 	QuickControls2
+	WebEngineCore
+	WebEngineQuick
 )
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -55,6 +57,8 @@ target_link_libraries(${APP_NAME} PRIVATE
 	Qt6::Multimedia
 	Qt6::Quick
 	Qt6::QuickControls2
+	Qt6::WebEngineCore
+	Qt6::WebEngineQuick
 )
 
 include(GNUInstallDirs)
