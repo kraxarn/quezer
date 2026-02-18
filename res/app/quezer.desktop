@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=quezer
+GenericName=Music Player
+Comment=Deezer client
+Icon=quezer
+Exec=quezer
+Terminal=false
+Categories=Audio;Music;Player;AudioVideo;
