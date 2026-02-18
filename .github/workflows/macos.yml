@@ -29,10 +29,10 @@ jobs:
         run: cmake --build build --config $BUILD_TYPE
 
       - name: Package
-        run: macdeployqt ${{runner.workspace}}/build/quezer.app -dmg -verbose=2
+        run: macdeployqt build/quezer.app -dmg -verbose=2
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v6
         with:
           name: quezer-macos-universal
-          path: ${{runner.workspace}}/build/quezer.dmg
+          path: build/quezer.dmg
