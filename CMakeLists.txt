@@ -19,7 +19,16 @@ find_package(Qt6 REQUIRED COMPONENTS
 )
 qt_standard_project_setup(REQUIRES 6.8)
 
-qt_add_executable(${APP_NAME})
+if (APPLE)
+	set(APP_ICNS "${CMAKE_CURRENT_SOURCE_DIR}/res/app/quezer.icns")
+	set_source_files_properties(${APP_ICNS} PROPERTIES
+		MACOSX_PACKAGE_LOCATION "Resources"
+	)
+	qt_add_executable(${APP_NAME} MACOSX_BUNDLE ${APP_ICNS})
+else ()
+	qt_add_executable(${APP_NAME})
+endif ()
+
 add_subdirectory(src)
 
 include(qml.cmake)
@@ -47,6 +56,7 @@ set_target_properties(${APP_NAME} PROPERTIES
 	MACOSX_BUNDLE_GUI_IDENTIFIER "com.kraxarn.${PROJECT_NAME}"
 	MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
 	MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+	MACOSX_BUNDLE_ICON_FILE "quezer.icns"
 	# Windows
 	WIN32_EXECUTABLE TRUE
 )
