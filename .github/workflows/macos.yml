@@ -1,0 +1,37 @@
+name: macOS
+
+on: [ push, pull_request ]
+
+env:
+  BUILD_TYPE: Release
+  QT_VERSION: "6.10.2"
+  QT_ARCH: "clang_64"
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          cache: true
+          version: ${{env.QT_VERSION}}
+          arch: ${{env.QT_ARCH}}
+
+      - name: Configure CMake
+        run: cmake -S . -B build -D CMAKE_BUILD_TYPE=$BUILD_TYPE -D CMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+
+      - name: Build
+        run: cmake --build build --config $BUILD_TYPE
+
+      - name: Package
+        run: macdeployqt ${{runner.workspace}}/build/quezer.app -dmg -verbose=2
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: quezer-macos-universal
+          path: ${{runner.workspace}}/build/quezer.dmg
