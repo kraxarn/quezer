@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(quezer
+project(quezer-app
 	LANGUAGES CXX
 	VERSION 0.0.1
 )
 
-set(APP_NAME "${PROJECT_NAME}_app")
+set(APP_NAME "quezer")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

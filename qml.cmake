@@ -4,7 +4,7 @@ if (QT_KNOWN_POLICY_QTP0004)
 endif ()
 
 qt_add_qml_module(${APP_NAME}
-	URI ${PROJECT_NAME}
+	URI ${APP_NAME}
 	VERSION ${PROJECT_VERSION}
 	QML_FILES
 	qml/Main.qml
