@@ -37,6 +37,7 @@ jobs:
           version: ${{matrix.qt-version}}
           arch: ${{matrix.qt-arch}}
           host: ${{matrix.qt-host}}
+          modules: "qtmultimedia qtwebview"
 
       - name: Configure CMake
         run: cmake -S . -B build -G "${{env.CMAKE_GENERATOR}}" -A "${{matrix.cmake-arch}}" -D CMAKE_BUILD_TYPE="${{env.BUILD_TYPE}}"
