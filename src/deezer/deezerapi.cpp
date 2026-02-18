@@ -8,7 +8,6 @@
 #include <QNetworkCookieJar>
 #include <QNetworkReply>
 #include <QUrlQuery>
-#include <QWebEngineProfile>
 
 DeezerApi::DeezerApi(QObject *parent)
 	: QObject(parent),
@@ -81,7 +80,9 @@ auto DeezerApi::headers() const -> QHttpHeaders
 
 	headers.append(
 		QHttpHeaders::WellKnownHeader::UserAgent,
-		QWebEngineProfile().httpUserAgent()
+		QStringLiteral(
+			"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"
+		)
 	);
 
 	return headers;
