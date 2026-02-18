@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="28"
-   height="27"
-   viewBox="0 0 28 27"
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
    version="1.1"
    id="svg1"
    xml:space="preserve"
@@ -15,6 +15,7 @@
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
      id="namedview1"
@@ -29,16 +30,16 @@
      inkscape:zoom="16"
      inkscape:cx="14.9375"
      inkscape:cy="18.4375"
-     inkscape:window-width="1788"
+     inkscape:window-width="2107"
      inkscape:window-height="1371"
-     inkscape:window-x="7"
+     inkscape:window-x="8"
      inkscape:window-y="33"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer1"><inkscape:page
+     inkscape:current-layer="layer2"><inkscape:page
        x="0"
        y="0"
-       width="28"
-       height="27"
+       width="32"
+       height="32"
        id="page2"
        margin="0"
        bleed="0" /></sodipodi:namedview><defs
@@ -46,8 +47,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:inline"
-     transform="translate(-2,-3)"><ellipse
+     style="display:inline"><ellipse
        style="display:inline;fill:#a238ff;fill-opacity:1;stroke-width:0.199485;stroke-linecap:round;stroke-linejoin:round"
        id="ellipse8"
        cx="29"
