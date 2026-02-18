@@ -1,0 +1,74 @@
+name: Linux
+
+on: [ push, pull_request ]
+
+env:
+  BUILD_TYPE: "Release"
+  QT_VERSION: "6.10.2"
+
+jobs:
+  build:
+    name: "${{matrix.arch}}"
+    runs-on: ${{matrix.os}}
+
+    strategy:
+      matrix:
+        include:
+          - arch: "x86_64"
+            # Qt 6 requires Ubuntu 22.04 on x86_64
+            # https://doc.qt.io/qt-6/linux.html
+            os: ubuntu-22.04
+            qt-arch: "linux_gcc_64"
+            qt-host: "linux"
+
+          - arch: "aarch64"
+            # Qt 6 requires Ubuntu 24.04 on arm64
+            # https://doc.qt.io/qt-6/linux.html
+            os: ubuntu-24.04-arm
+            qt-arch: "linux_gcc_arm64"
+            qt-host: "linux_arm64"
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          cache: true
+          version: ${{env.QT_VERSION}}
+          arch: ${{matrix.qt-arch}}
+          host: ${{matrix.qt-host}}
+          modules: "qtwaylandcompositor"
+
+      - name: Install Dependencies
+        run: sudo apt install libxkbcommon-x11-dev libxcb-cursor-dev -y
+
+      - name: Configure CMake
+        run: cmake -S . -B build -D CMAKE_BUILD_TYPE=$BUILD_TYPE -D CMAKE_INSTALL_PREFIX=/usr
+
+      - name: Build
+        run: cmake --build build --config $BUILD_TYPE
+
+      - name: Install
+        run: make DESTDIR="${{runner.workspace}}/dist" install
+
+      - name: Download linuxdeploy
+        run: |
+          curl -L "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-${{matrix.arch}}.AppImage" -o ${{runner.workspace}}/linuxdeploy-${{matrix.arch}}.AppImage
+          curl -L "https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-${{matrix.arch}}.AppImage" -o ${{runner.workspace}}/linuxdeploy-plugin-appimage-${{matrix.arch}}.AppImage
+          curl -L "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-${{matrix.arch}}.AppImage" -o ${{runner.workspace}}/linuxdeploy-plugin-qt-${{matrix.arch}}.AppImage
+          chmod +x ${{runner.workspace}}/linuxdeploy-*.AppImage
+
+      - name: Package
+        env:
+          EXTRA_QT_PLUGINS: "waylandcompositor"
+          EXTRA_PLATFORM_PLUGINS: "libqwayland.so"
+        run: |
+          export OUTPUT="quezer-$(git rev-parse --short HEAD)-${{matrix.arch}}.AppImage"
+          ${{runner.workspace}}/linuxdeploy-${{matrix.arch}}.AppImage --appdir ${{runner.workspace}}/dist --output appimage --plugin qt -d ${{runner.workspace}}/dist/usr/share/applications/quezer.desktop
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: quezer-linux-${{matrix.arch}}
+          path: ${{runner.workspace}}/quezer/quezer-*.AppImage
