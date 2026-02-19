@@ -13,7 +13,18 @@ class DeezerClient : public QObject
 public:
 	explicit DeezerClient(QObject *parent);
 
-	auto login(const QString &arl) -> bool;
+	auto login(const QString &arl) const -> bool;
+
+	[[nodiscard]]
+	auto userData() const -> ApiResponse *;
+
+	[[nodiscard]]
+	auto search(SearchMediaType mediaType, const QString &query,
+		SearchMode mode = SearchMode::Fuzzy,
+		SearchOrder order = SearchOrder::Ranking) const -> ApiResponse *;
+
+	[[nodiscard]]
+	auto album(qint64 albumId) const -> ApiResponse *;
 
 private:
 	QNetworkAccessManager *mHttp;

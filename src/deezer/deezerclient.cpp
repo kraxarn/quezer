@@ -20,8 +20,13 @@ DeezerClient::DeezerClient(QObject *parent)
 {
 }
 
-auto DeezerClient::login(const QString &arl) -> bool
+auto DeezerClient::login(const QString &arl) const -> bool
 {
+	if (arl.isEmpty())
+	{
+		return false;
+	}
+
 	QNetworkCookieJar *cookies = mHttp->cookieJar();
 
 	QNetworkCookie cookie;
@@ -31,69 +36,23 @@ auto DeezerClient::login(const QString &arl) -> bool
 	cookie.setPath(QStringLiteral("/"));
 	cookie.setHttpOnly(true);
 
-	if (!cookies->insertCookie(cookie))
-	{
-		return false;
-	}
+	return cookies->insertCookie(cookie);
+}
 
-	ApiResponse *userResponse = mGw->userData();
-	connect(userResponse, &ApiResponse::finished, [userResponse]() -> void
-	{
-		if (!userResponse->isValid())
-		{
-			qWarning() << "Request failed:" << userResponse->errorString();
-			userResponse->deleteLater();
-			return;
-		}
+auto DeezerClient::userData() const -> ApiResponse *
+{
+	return mGw->userData();
+}
 
-		const UserData &userData = userResponse->value<UserData>();
-		userResponse->deleteLater();
+auto DeezerClient::search(const SearchMediaType mediaType, const QString &query,
+	const SearchMode mode, const SearchOrder order) const -> ApiResponse *
+{
+	return mApi->search(mediaType, query, mode, order);
+}
 
-		qDebug().nospace() << "Welcome " << userData.blogName() << "!";
-	});
-
-	ApiResponse *searchResponse = mApi->search(SearchMediaType::Album,
-		QStringLiteral("Penny's Big Breakaway"));
-
-	connect(searchResponse, &ApiResponse::finished, [this, searchResponse]() -> void
-	{
-		if (!searchResponse->isValid())
-		{
-			qWarning() << "Request failed:" << searchResponse->errorString();
-			searchResponse->deleteLater();
-			return;
-		}
-
-		const auto page = searchResponse->value<Page<SearchAlbum>>();
-		searchResponse->deleteLater();
-
-		qDebug() << "Results:" << page.total();
-		qDebug() << "Has next:" << page.next().isValid();
-
-		for (const SearchAlbum &searchAlbum: page.data())
-		{
-			qInfo()
-				<< "Album:" << searchAlbum.title()
-				<< "by" << searchAlbum.artist().name();
-
-			ApiResponse *albumResponse = mApi->album(searchAlbum.id());
-			connect(albumResponse, &ApiResponse::finished, [this, albumResponse]() -> void
-			{
-				if (!albumResponse->isValid())
-				{
-					qWarning() << "Request failed:" << albumResponse->errorString();
-					albumResponse->deleteLater();
-					return;
-				}
-
-				const Album album = albumResponse->value<Album>();
-
-				qInfo() << "Album:" << album.id() << album.title();
-			});
-		}
-	});
-
-	return true;
+auto DeezerClient::album(const qint64 albumId) const -> ApiResponse *
+{
+	return mApi->album(albumId);
 }
 
 auto DeezerClient::request(const QUrl &url) const -> QNetworkRequest
