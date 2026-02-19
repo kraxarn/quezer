@@ -1,4 +1,6 @@
 #include "deezer/deezerclient.hpp"
+#include "deezer/objects/page.hpp"
+#include "deezer/objects/searchalbum.hpp"
 
 #include <QCoreApplication>
 #include <QHttpHeaders>
@@ -44,8 +46,27 @@ auto DeezerClient::login(const QString &arl) -> bool
 
 		const UserData &userData = response->value<UserData>();
 		qDebug().nospace() << "Welcome " << userData.blogName() << "!";
+	});
 
-		QCoreApplication::exit(0);
+	ApiResponse *searchResponse = mApi->search(SearchMediaType::Album,
+		QStringLiteral("Penny's Big Breakaway"));
+
+	connect(searchResponse, &ApiResponse::finished, [searchResponse]
+	{
+		if (!searchResponse->isValid())
+		{
+			qWarning() << "Request failed:" << searchResponse->errorString();
+			return;
+		}
+
+		const Page<SearchAlbum> page = searchResponse->value<Page<SearchAlbum>>();
+		qDebug() << "Results:" << page.total();
+		qDebug() << "Has next:" << page.next().isValid();
+
+		for (const SearchAlbum &album: page.data())
+		{
+			qInfo() << "Album:" << album.title() << "by" << album.artist().name();
+		}
 	});
 
 	return true;
