@@ -1,4 +1,4 @@
-#include "deezer/deezerapi.hpp"
+#include "deezer/deezerclient.hpp"
 
 #include <QCoreApplication>
 #include <QHttpHeaders>
@@ -9,14 +9,14 @@
 #include <QNetworkReply>
 #include <QUrlQuery>
 
-DeezerApi::DeezerApi(QObject *parent)
+DeezerClient::DeezerClient(QObject *parent)
 	: QObject(parent),
 	mHttp(new QNetworkAccessManager(this)),
 	mGwApi(new GwApi(mHttp, this))
 {
 }
 
-auto DeezerApi::login(const QString &arl) -> bool
+auto DeezerClient::login(const QString &arl) -> bool
 {
 	QNetworkCookieJar *cookies = mHttp->cookieJar();
 
@@ -50,14 +50,14 @@ auto DeezerApi::login(const QString &arl) -> bool
 	return true;
 }
 
-auto DeezerApi::request(const QUrl &url) const -> QNetworkRequest
+auto DeezerClient::request(const QUrl &url) const -> QNetworkRequest
 {
 	QNetworkRequest request(url);
 	request.setHeaders(headers());
 	return request;
 }
 
-auto DeezerApi::headers() const -> QHttpHeaders
+auto DeezerClient::headers() const -> QHttpHeaders
 {
 	QHttpHeaders headers;
 

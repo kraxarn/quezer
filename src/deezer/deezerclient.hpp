@@ -1,18 +1,21 @@
 #pragma once
 
 #include "deezer/gwapi.hpp"
+#include "enums/searchmediatype.hpp"
 
 #include <QHttpHeaders>
 #include <QNetworkAccessManager>
 
-class DeezerApi : public QObject
+class DeezerClient : public QObject
 {
 	Q_OBJECT
 
 public:
-	explicit DeezerApi(QObject *parent);
+	explicit DeezerClient(QObject *parent);
 
 	auto login(const QString &arl) -> bool;
+
+	void search(SearchMediaType mediaType, const QString &query);
 
 private:
 	QNetworkAccessManager *mHttp;
