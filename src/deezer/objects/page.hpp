@@ -10,6 +10,9 @@ template<typename T>
 class Page
 {
 public:
+	Page() = default;
+
+	[[nodiscard]]
 	static auto fromJson(const QJsonObject &json) -> Page
 	{
 		Page result;
@@ -47,8 +50,6 @@ public:
 	}
 
 private:
-	Page() = default;
-
 	QList<T> mData;
 	qint32 mTotal;
 	QUrl mNext;

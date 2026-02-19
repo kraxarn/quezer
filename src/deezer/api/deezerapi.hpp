@@ -15,9 +15,13 @@ class DeezerApi : public QObject
 public:
 	DeezerApi(QNetworkAccessManager *http, QObject *parent);
 
+	[[nodiscard]]
 	auto search(SearchMediaType mediaType, const QString &query,
 		SearchMode mode = SearchMode::Fuzzy,
-		SearchOrder order = SearchOrder::Ranking) -> ApiResponse*;
+		SearchOrder order = SearchOrder::Ranking) -> ApiResponse *;
+
+	[[nodiscard]]
+	auto album(qint64 albumId) -> ApiResponse *;
 
 private:
 	QNetworkAccessManager *mHttp;
