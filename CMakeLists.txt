@@ -42,7 +42,7 @@ target_include_directories(${APP_NAME} PRIVATE
 
 target_compile_definitions(${APP_NAME} PRIVATE
 	# App info
-	APP_NAME="${PROJECT_NAME}"
+	APP_NAME="${APP_NAME}"
 	APP_VERSION="v${PROJECT_VERSION}"
 	# Qt config
 	QT_NO_CAST_FROM_ASCII
