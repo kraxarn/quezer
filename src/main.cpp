@@ -60,7 +60,9 @@ namespace
 			ApiResponse *response = client.album(547868882);
 			QObject::connect(response, &ApiResponse::finished, [response]() -> void
 			{
-				const Album album = response->value<Album>();
+				const auto album = response->value<Album>();
+				response->deleteLater();
+
 				qDebug() << "Album:" << album.id() << album.title();
 			});
 		}
