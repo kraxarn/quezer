@@ -1,7 +1,7 @@
 #pragma once
 
 #include "deezer/apiresponse.hpp"
-#include "deezer/userdata.hpp"
+#include "deezer/objects/userdata.hpp"
 
 #include <QNetworkAccessManager>
 #include <QObject>
