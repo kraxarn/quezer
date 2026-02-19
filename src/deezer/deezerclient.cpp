@@ -35,23 +35,25 @@ auto DeezerClient::login(const QString &arl) -> bool
 		return false;
 	}
 
-	ApiResponse *response = mGw->userData();
-	connect(response, &ApiResponse::finished, [response]() -> void
+	ApiResponse *userResponse = mGw->userData();
+	connect(userResponse, &ApiResponse::finished, [userResponse]() -> void
 	{
-		if (!response->isValid())
+		if (!userResponse->isValid())
 		{
-			qWarning() << "Request failed:" << response->errorString();
+			qWarning() << "Request failed:" << userResponse->errorString();
 			return;
 		}
 
-		const UserData &userData = response->value<UserData>();
+		const UserData &userData = userResponse->value<UserData>();
+		userResponse->deleteLater();
+
 		qDebug().nospace() << "Welcome " << userData.blogName() << "!";
 	});
 
 	ApiResponse *searchResponse = mApi->search(SearchMediaType::Album,
 		QStringLiteral("Penny's Big Breakaway"));
 
-	connect(searchResponse, &ApiResponse::finished, [searchResponse]
+	connect(searchResponse, &ApiResponse::finished, [searchResponse]() -> void
 	{
 		if (!searchResponse->isValid())
 		{
@@ -59,7 +61,9 @@ auto DeezerClient::login(const QString &arl) -> bool
 			return;
 		}
 
-		const Page<SearchAlbum> page = searchResponse->value<Page<SearchAlbum>>();
+		const auto page = searchResponse->value<Page<SearchAlbum>>();
+		searchResponse->deleteLater();
+
 		qDebug() << "Results:" << page.total();
 		qDebug() << "Has next:" << page.next().isValid();
 
