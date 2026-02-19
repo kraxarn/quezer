@@ -2,11 +2,11 @@
 
 #include <QJsonObject>
 
-auto UserData::fromJson(const QJsonDocument &json) -> UserData
+auto UserData::fromJson(const QJsonObject &json) -> UserData
 {
 	UserData result;
 
-	const QJsonObject user = json.object()
+	const QJsonObject user = json
 		.value(QStringLiteral("results")).toObject()
 		.value(QStringLiteral("USER")).toObject();
 

@@ -1,13 +1,13 @@
 #pragma once
 
-#include <QJsonDocument>
+#include <QJsonObject>
 #include <QUrl>
 
 class SearchAlbum final
 {
 public:
 	[[nodiscard]]
-	static auto fromJson(const QJsonDocument &json) -> SearchAlbum;
+	static auto fromJson(const QJsonObject &json) -> SearchAlbum;
 
 	class Artist final
 	{

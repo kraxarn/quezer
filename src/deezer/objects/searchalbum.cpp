@@ -2,21 +2,19 @@
 
 #include <QJsonObject>
 
-auto SearchAlbum::fromJson(const QJsonDocument &json) -> SearchAlbum
+auto SearchAlbum::fromJson(const QJsonObject &json) -> SearchAlbum
 {
 	SearchAlbum result;
 
-	const QJsonObject album = json.object();
-
-	const QJsonObject artist = album
+	const QJsonObject artist = json
 		.value(QStringLiteral("artist")).toObject();
 
-	result.mId = album.value(QStringLiteral("id")).toInt();
-	result.mTitle = album.value(QStringLiteral("title")).toString();
-	result.mCover = album.value(QStringLiteral("cover")).toString();
-	result.mNbTracks = album.value(QStringLiteral("nb_tracks")).toInt();
-	result.mRecordType = album.value(QStringLiteral("record_type")).toString();
-	result.mExplicitLyrics = album.value(QStringLiteral("explicit_lyrics")).toBool();
+	result.mId = json.value(QStringLiteral("id")).toInt();
+	result.mTitle = json.value(QStringLiteral("title")).toString();
+	result.mCover = json.value(QStringLiteral("cover")).toString();
+	result.mNbTracks = json.value(QStringLiteral("nb_tracks")).toInt();
+	result.mRecordType = json.value(QStringLiteral("record_type")).toString();
+	result.mExplicitLyrics = json.value(QStringLiteral("explicit_lyrics")).toBool();
 
 	result.mArtist.mId = artist.value(QStringLiteral("id")).toInt();
 	result.mArtist.mName = artist.value(QStringLiteral("name")).toString();

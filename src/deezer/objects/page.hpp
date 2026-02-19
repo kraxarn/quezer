@@ -10,21 +10,19 @@ template<typename T>
 class Page
 {
 public:
-	static auto fromJson(const QJsonDocument &json) -> Page
+	static auto fromJson(const QJsonObject &json) -> Page
 	{
 		Page result;
 
-		const QJsonObject obj = json.object();
-		const QJsonArray data = obj.value(QStringLiteral("data")).toArray();
+		const QJsonArray data = json.value(QStringLiteral("data")).toArray();
 
-		result.mTotal = obj.value(QStringLiteral("total")).toInt();
-		result.mNext = obj.value(QStringLiteral("next")).toString();
+		result.mTotal = json.value(QStringLiteral("total")).toInt();
+		result.mNext = json.value(QStringLiteral("next")).toString();
 
 		result.mData.reserve(data.size());
 		for (const QJsonValueConstRef value: data)
 		{
-			// TODO: Might have to re-think this
-			result.mData.append(T::fromJson(QJsonDocument(value.toObject())));
+			result.mData.append(T::fromJson(value.toObject()));
 		}
 
 		return result;

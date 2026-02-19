@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QNetworkReply>
 #include <QObject>
 
@@ -18,7 +19,7 @@ public:
 	[[nodiscard]]
 	auto value() const -> T
 	{
-		return T::fromJson(mValue);
+		return T::fromJson(mValue.object());
 	}
 
 	[[nodiscard]]

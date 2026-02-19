@@ -1,13 +1,13 @@
 #pragma once
 
-#include <QJsonDocument>
+#include <QJsonObject>
 #include <QString>
 
 class UserData final
 {
 public:
 	[[nodiscard]]
-	static auto fromJson(const QJsonDocument &json) -> UserData;
+	static auto fromJson(const QJsonObject &json) -> UserData;
 
 	[[nodiscard]]
 	auto userId() const -> qint64;
