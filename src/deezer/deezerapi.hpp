@@ -1,5 +1,7 @@
 #pragma once
 
+#include "deezer/gwapi.hpp"
+
 #include <QHttpHeaders>
 #include <QNetworkAccessManager>
 
@@ -13,10 +15,8 @@ public:
 	auto login(const QString &arl) -> bool;
 
 private:
-	QNetworkAccessManager mHttp;
-
-	[[nodiscard]]
-	auto gwApiCall(const QString &method) -> QNetworkReply *;
+	QNetworkAccessManager *mHttp;
+	GwApi *mGwApi;
 
 	[[nodiscard]]
 	auto request(const QUrl &url) const -> QNetworkRequest;

@@ -1,7 +1,7 @@
 #include "deezer/deezerapi.hpp"
 
+#include <QCoreApplication>
 #include <QHttpHeaders>
-#include <QIODevice>
 #include <QJsonObject>
 #include <QNetworkAccessManager>
 #include <QNetworkCookie>
@@ -11,13 +11,14 @@
 
 DeezerApi::DeezerApi(QObject *parent)
 	: QObject(parent),
-	mHttp(this)
+	mHttp(new QNetworkAccessManager(this)),
+	mGwApi(new GwApi(mHttp, this))
 {
 }
 
 auto DeezerApi::login(const QString &arl) -> bool
 {
-	QNetworkCookieJar *cookies = mHttp.cookieJar();
+	QNetworkCookieJar *cookies = mHttp->cookieJar();
 
 	QNetworkCookie cookie;
 	cookie.setDomain(QStringLiteral(".deezer.com"));
@@ -31,40 +32,22 @@ auto DeezerApi::login(const QString &arl) -> bool
 		return false;
 	}
 
-	QNetworkReply *reply = gwApiCall(QStringLiteral("deezer.getUserData"));
-	connect(reply, &QNetworkReply::finished, [reply]() -> void
+	ApiResponse *response = mGwApi->userData();
+	connect(response, &ApiResponse::finished, [response]() -> void
 	{
-		if (reply->error() != QNetworkReply::NoError)
+		if (!response->isValid())
 		{
-			qWarning() << "Request failed:" << reply->errorString();
+			qWarning() << "Request failed:" << response->errorString();
+			return;
 		}
 
-		const QByteArray response = reply->readAll();
-		reply->deleteLater();
-		const QJsonDocument json = QJsonDocument::fromJson(response);
-		qDebug().nospace() << "Welcome " << json.object()
-			.value(QStringLiteral("results")).toObject()
-			.value(QStringLiteral("USER")).toObject()
-			.value(QStringLiteral("BLOG_NAME")).toString()
-			<< "!";
+		const UserData &userData = response->value<UserData>();
+		qDebug().nospace() << "Welcome " << userData.blogName() << "!";
+
+		QCoreApplication::exit(0);
 	});
 
 	return true;
-}
-
-auto DeezerApi::gwApiCall(const QString &method) -> QNetworkReply *
-{
-	QUrl url(QStringLiteral("https://www.deezer.com/ajax/gw-light.php"));
-	url.setQuery({
-		{
-			{QStringLiteral("api_version"), QStringLiteral("1.0")},
-			{QStringLiteral("api_token"), QStringLiteral("null")},
-			{QStringLiteral("input"), QStringLiteral("3")},
-			{QStringLiteral("method"), method},
-		},
-	});
-
-	return mHttp.post(request(url), QStringLiteral("{}").toUtf8());
 }
 
 auto DeezerApi::request(const QUrl &url) const -> QNetworkRequest
