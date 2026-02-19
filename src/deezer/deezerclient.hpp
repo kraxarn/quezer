@@ -1,7 +1,7 @@
 #pragma once
 
+#include "deezer/deezerapi.hpp"
 #include "deezer/gwapi.hpp"
-#include "enums/searchmediatype.hpp"
 
 #include <QHttpHeaders>
 #include <QNetworkAccessManager>
@@ -15,11 +15,10 @@ public:
 
 	auto login(const QString &arl) -> bool;
 
-	void search(SearchMediaType mediaType, const QString &query);
-
 private:
 	QNetworkAccessManager *mHttp;
-	GwApi *mGwApi;
+	GwApi *mGw;
+	DeezerApi *mApi;
 
 	[[nodiscard]]
 	auto request(const QUrl &url) const -> QNetworkRequest;

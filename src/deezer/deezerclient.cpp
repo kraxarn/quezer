@@ -12,7 +12,8 @@
 DeezerClient::DeezerClient(QObject *parent)
 	: QObject(parent),
 	mHttp(new QNetworkAccessManager(this)),
-	mGwApi(new GwApi(mHttp, this))
+	mGw(new GwApi(mHttp, this)),
+	mApi(new DeezerApi(mHttp, this))
 {
 }
 
@@ -32,7 +33,7 @@ auto DeezerClient::login(const QString &arl) -> bool
 		return false;
 	}
 
-	ApiResponse *response = mGwApi->userData();
+	ApiResponse *response = mGw->userData();
 	connect(response, &ApiResponse::finished, [response]() -> void
 	{
 		if (!response->isValid())
