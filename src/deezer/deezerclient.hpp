@@ -1,7 +1,7 @@
 #pragma once
 
-#include "deezer/deezerapi.hpp"
-#include "deezer/deezergw.hpp"
+#include "deezer/api/deezerapi.hpp"
+#include "deezer/api/deezergw.hpp"
 
 #include <QHttpHeaders>
 #include <QNetworkAccessManager>

@@ -1,4 +1,4 @@
-#include "deezer/deezergw.hpp"
+#include "deezer/api/deezergw.hpp"
 
 #include <QUrlQuery>
 

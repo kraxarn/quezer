@@ -1,4 +1,4 @@
-#include "deezer/deezerapi.hpp"
+#include "deezer/api/deezerapi.hpp"
 
 DeezerApi::DeezerApi(QNetworkAccessManager *http, QObject *parent)
 	: QObject(parent),
