@@ -20,4 +20,11 @@ private:
 
 	qint64 mUserId;
 	QString mBlogName;
+	QString mUserPicture;
+	QString mLicenseToken;
+	bool mCanStreamHq;
+	bool mCanStreamLossless;
+	QString mCountry;
+	QString mLanguage;
+	QString mLovedTracks;
 };
