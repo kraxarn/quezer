@@ -1,20 +1,20 @@
-#include "deezer/gwapi.hpp"
+#include "deezer/deezergw.hpp"
 
 #include <QUrlQuery>
 
-GwApi::GwApi(QNetworkAccessManager *http, QObject *parent)
+DeezerGw::DeezerGw(QNetworkAccessManager *http, QObject *parent)
 	: QObject(parent),
 	mHttp(http)
 {
 }
 
-auto GwApi::userData() -> ApiResponse *
+auto DeezerGw::userData() -> ApiResponse *
 {
 	QNetworkReply *reply = call(QStringLiteral("deezer.getUserData"));
 	return new ApiResponse(reply, this);
 }
 
-auto GwApi::call(const QString &method) const -> QNetworkReply *
+auto DeezerGw::call(const QString &method) const -> QNetworkReply *
 {
 	QUrl url(QStringLiteral("https://www.deezer.com/ajax/gw-light.php"));
 	url.setQuery({

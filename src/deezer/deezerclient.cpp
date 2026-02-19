@@ -12,7 +12,7 @@
 DeezerClient::DeezerClient(QObject *parent)
 	: QObject(parent),
 	mHttp(new QNetworkAccessManager(this)),
-	mGw(new GwApi(mHttp, this)),
+	mGw(new DeezerGw(mHttp, this)),
 	mApi(new DeezerApi(mHttp, this))
 {
 }

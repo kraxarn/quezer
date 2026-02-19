@@ -6,12 +6,12 @@
 #include <QNetworkAccessManager>
 #include <QObject>
 
-class GwApi : public QObject
+class DeezerGw : public QObject
 {
 	Q_OBJECT
 
 public:
-	GwApi(QNetworkAccessManager *http, QObject *parent);
+	DeezerGw(QNetworkAccessManager *http, QObject *parent);
 
 	[[nodiscard]]
 	auto userData() -> ApiResponse*;

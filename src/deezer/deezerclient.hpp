@@ -1,7 +1,7 @@
 #pragma once
 
 #include "deezer/deezerapi.hpp"
-#include "deezer/gwapi.hpp"
+#include "deezer/deezergw.hpp"
 
 #include <QHttpHeaders>
 #include <QNetworkAccessManager>
@@ -17,7 +17,7 @@ public:
 
 private:
 	QNetworkAccessManager *mHttp;
-	GwApi *mGw;
+	DeezerGw *mGw;
 	DeezerApi *mApi;
 
 	[[nodiscard]]
