@@ -1,3 +1,8 @@
+#include "deezer/deezerclient.hpp"
+#include "deezer/objects/album.hpp"
+#include "deezer/objects/page.hpp"
+#include "deezer/objects/searchalbum.hpp"
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -18,6 +23,47 @@ namespace
 		engine.rootContext()->setContextProperty(QStringLiteral("BuildDate"),
 			QStringLiteral(__DATE__));
 	}
+
+	void testStuff(const DeezerClient &client)
+	{
+		qDebug() << "Logging in to Deezer...";
+		if (!client.login(qEnvironmentVariable("ARL")))
+		{
+			qCritical() << "Failed to login!";
+		}
+
+		{
+			ApiResponse *response = client.userData();
+			QObject::connect(response, &ApiResponse::finished, [response]() -> void
+			{
+				const UserData &userData = response->value<UserData>();
+				response->deleteLater();
+
+				qDebug().nospace() << "Welcome " << userData.blogName() << "!";
+			});
+		}
+		{
+			ApiResponse *response = client.search(SearchMediaType::Album,
+				QStringLiteral("Penny's Big Breakaway"));
+
+			QObject::connect(response, &ApiResponse::finished, [response]() -> void
+			{
+				const auto page = response->value<Page<SearchAlbum>>();
+				response->deleteLater();
+
+				qDebug() << "Results:" << page.total();
+				qDebug() << "Has next:" << page.next().isValid();
+			});
+		}
+		{
+			ApiResponse *response = client.album(547868882);
+			QObject::connect(response, &ApiResponse::finished, [response]() -> void
+			{
+				const Album album = response->value<Album>();
+				qDebug() << "Album:" << album.id() << album.title();
+			});
+		}
+	}
 }
 
 auto main(int argc, char *argv[]) -> int
@@ -34,9 +80,13 @@ auto main(int argc, char *argv[]) -> int
 	defineTypes(engine);
 
 	engine.loadFromModule(
-		QCoreApplication::applicationName(),
+		QStringLiteral("kraxarn.%1")
+		.arg(QCoreApplication::applicationName()),
 		QStringLiteral("Main")
 	);
+
+	const DeezerClient client(nullptr);
+	testStuff(client);
 
 	return app.exec();
 }
