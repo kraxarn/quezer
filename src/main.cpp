@@ -51,8 +51,9 @@ namespace
 				const auto page = response->value<Page<SearchAlbum>>();
 				response->deleteLater();
 
-				qDebug() << "Results:" << page.total();
-				qDebug() << "Has next:" << page.next().isValid();
+				qDebug()
+					<< "Results:" << page.total()
+					<< "- Has next:" << page.next().isValid();
 			});
 		}
 		{
