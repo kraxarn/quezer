@@ -25,7 +25,7 @@ namespace
 			QStringLiteral(__DATE__));
 	}
 
-	void testStuff(const DeezerClient &client)
+	void testStuff(DeezerClient &client)
 	{
 		qDebug() << "Logging in to Deezer...";
 		if (!client.login(qEnvironmentVariable("ARL")))
@@ -59,7 +59,7 @@ namespace
 			});
 		}
 		{
-			ApiResponse *response = client.album(547868882);
+			ApiResponse *response = client.api().album(547868882);
 			QObject::connect(response, &ApiResponse::finished, [response]() -> void
 			{
 				const auto album = response->value<Album>();
@@ -110,7 +110,7 @@ auto main(int argc, char *argv[]) -> int
 		QStringLiteral("Main")
 	);
 
-	const DeezerClient client(nullptr);
+	DeezerClient client(nullptr);
 	testStuff(client);
 
 	return app.exec();
