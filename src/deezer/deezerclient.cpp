@@ -39,22 +39,6 @@ auto DeezerClient::login(const QString &arl) const -> bool
 	return cookies->insertCookie(cookie);
 }
 
-auto DeezerClient::userData() const -> ApiResponse *
-{
-	return mGw->userData();
-}
-
-auto DeezerClient::search(const SearchMediaType mediaType, const QString &query,
-	const SearchMode mode, const SearchOrder order) const -> ApiResponse *
-{
-	return mApi->search(mediaType, query, mode, order);
-}
-
-auto DeezerClient::album(const qint64 albumId) const -> ApiResponse *
-{
-	return mApi->album(albumId);
-}
-
 auto DeezerClient::gw() const -> DeezerGw &
 {
 	return *mGw;
