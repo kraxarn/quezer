@@ -17,7 +17,6 @@ auto Album::fromJson(const QJsonObject &json) -> Album
 		json.value(QStringLiteral("genres")).toObject()
 	);
 	result.mLabel = json.value(QStringLiteral("label")).toString();
-	result.mProvider = json.value(QStringLiteral("provider")).toString();
 	result.mNbTracks = json.value(QStringLiteral("nb_tracks")).toInt();
 	result.mDuration = json.value(QStringLiteral("duration")).toInteger();
 	result.mFans = json.value(QStringLiteral("fans")).toInteger();
@@ -67,6 +66,31 @@ auto Album::Contributor::fromJson(const QJsonObject &json) -> Contributor
 	return result;
 }
 
+auto Album::Contributor::id() const -> qint64
+{
+	return mId;
+}
+
+auto Album::Contributor::name() const -> const QString &
+{
+	return mName;
+}
+
+auto Album::Contributor::picture() const -> const QUrl &
+{
+	return mPicture;
+}
+
+auto Album::Contributor::radio() const -> bool
+{
+	return mRadio;
+}
+
+auto Album::Contributor::role() const -> const QString &
+{
+	return mRole;
+}
+
 auto Album::Artist::fromJson(const QJsonObject &json) -> Artist
 {
 	Artist result;
@@ -76,6 +100,21 @@ auto Album::Artist::fromJson(const QJsonObject &json) -> Artist
 	result.mPicture = json.value(QStringLiteral("picture")).toString();
 
 	return result;
+}
+
+auto Album::Artist::id() const -> qint64
+{
+	return mId;
+}
+
+auto Album::Artist::name() const -> const QString &
+{
+	return mName;
+}
+
+auto Album::Artist::picture() const -> const QUrl &
+{
+	return mPicture;
 }
 
 auto Album::Track::fromJson(const QJsonObject &json) -> Track
@@ -93,6 +132,41 @@ auto Album::Track::fromJson(const QJsonObject &json) -> Track
 	return result;
 }
 
+auto Album::Track::id() const -> qint64
+{
+	return mId;
+}
+
+auto Album::Track::readable() const -> bool
+{
+	return mReadable;
+}
+
+auto Album::Track::title() const -> const QString &
+{
+	return mTitle;
+}
+
+auto Album::Track::titleShort() const -> const QString &
+{
+	return mTitleShort;
+}
+
+auto Album::Track::duration() const -> qint32
+{
+	return mDuration;
+}
+
+auto Album::Track::rank() const -> qint64
+{
+	return mRank;
+}
+
+auto Album::Track::explicitLyrics() const -> bool
+{
+	return mExplicitLyrics;
+}
+
 auto Album::id() const -> qint64
 {
 	return mId;
@@ -101,4 +175,79 @@ auto Album::id() const -> qint64
 auto Album::title() const -> const QString &
 {
 	return mTitle;
+}
+
+auto Album::cover() const -> const QUrl &
+{
+	return mCover;
+}
+
+auto Album::genres() const -> const Page<Genre> &
+{
+	return mGenres;
+}
+
+auto Album::label() const -> const QString &
+{
+	return mLabel;
+}
+
+auto Album::nbTracks() const -> qint32
+{
+	return mNbTracks;
+}
+
+auto Album::duration() const -> qint64
+{
+	return mDuration;
+}
+
+auto Album::fans() const -> qint64
+{
+	return mFans;
+}
+
+auto Album::releaseDate() const -> const QDate &
+{
+	return mReleaseDate;
+}
+
+auto Album::recordType() const -> const QString &
+{
+	return mRecordType;
+}
+
+auto Album::available() const -> bool
+{
+	return mAvailable;
+}
+
+auto Album::explicitLyrics() const -> bool
+{
+	return mExplicitLyrics;
+}
+
+auto Album::explicitContentLyrics() const -> ExplicitContent
+{
+	return mExplicitContentLyrics;
+}
+
+auto Album::explicitContentCover() const -> ExplicitContent
+{
+	return mExplicitContentCover;
+}
+
+auto Album::contributors() const -> const QList<Contributor> &
+{
+	return mContributors;
+}
+
+auto Album::artist() const -> const Artist &
+{
+	return mArtist;
+}
+
+auto Album::tracks() const -> const QList<Track> &
+{
+	return mTracks;
 }

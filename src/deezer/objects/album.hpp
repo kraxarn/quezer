@@ -19,6 +19,21 @@ public:
 		[[nodiscard]]
 		static auto fromJson(const QJsonObject &json) -> Contributor;
 
+		[[nodiscard]]
+		auto id() const -> qint64;
+
+		[[nodiscard]]
+		auto name() const -> const QString &;
+
+		[[nodiscard]]
+		auto picture() const -> const QUrl &;
+
+		[[nodiscard]]
+		auto radio() const -> bool;
+
+		[[nodiscard]]
+		auto role() const -> const QString &;
+
 	private:
 		Contributor() = default;
 
@@ -37,6 +52,15 @@ public:
 		[[nodiscard]]
 		static auto fromJson(const QJsonObject &json) -> Artist;
 
+		[[nodiscard]]
+		auto id() const -> qint64;
+
+		[[nodiscard]]
+		auto name() const -> const QString &;
+
+		[[nodiscard]]
+		auto picture() const -> const QUrl &;
+
 	private:
 		Artist() = default;
 
@@ -52,6 +76,27 @@ public:
 	public:
 		[[nodiscard]]
 		static auto fromJson(const QJsonObject &json) -> Track;
+
+		[[nodiscard]]
+		auto id() const -> qint64;
+
+		[[nodiscard]]
+		auto readable() const -> bool;
+
+		[[nodiscard]]
+		auto title() const -> const QString &;
+
+		[[nodiscard]]
+		auto titleShort() const -> const QString &;
+
+		[[nodiscard]]
+		auto duration() const -> qint32;
+
+		[[nodiscard]]
+		auto rank() const -> qint64;
+
+		[[nodiscard]]
+		auto explicitLyrics() const -> bool;
 
 	private:
 		Track() = default;
@@ -73,6 +118,51 @@ public:
 	[[nodiscard]]
 	auto title() const -> const QString &;
 
+	[[nodiscard]]
+	auto cover() const -> const QUrl &;
+
+	[[nodiscard]]
+	auto genres() const -> const Page<Genre> &;
+
+	[[nodiscard]]
+	auto label() const -> const QString &;
+
+	[[nodiscard]]
+	auto nbTracks() const -> qint32;
+
+	[[nodiscard]]
+	auto duration() const -> qint64;
+
+	[[nodiscard]]
+	auto fans() const -> qint64;
+
+	[[nodiscard]]
+	auto releaseDate() const -> const QDate &;
+
+	[[nodiscard]]
+	auto recordType() const -> const QString &;
+
+	[[nodiscard]]
+	auto available() const -> bool;
+
+	[[nodiscard]]
+	auto explicitLyrics() const -> bool;
+
+	[[nodiscard]]
+	auto explicitContentLyrics() const -> ExplicitContent;
+
+	[[nodiscard]]
+	auto explicitContentCover() const -> ExplicitContent;
+
+	[[nodiscard]]
+	auto contributors() const -> const QList<Contributor> &;
+
+	[[nodiscard]]
+	auto artist() const -> const Artist &;
+
+	[[nodiscard]]
+	auto tracks() const -> const QList<Track> &;
+
 private:
 	Album() = default;
 
@@ -81,7 +171,6 @@ private:
 	QUrl mCover;
 	Page<Genre> mGenres;
 	QString mLabel;
-	QString mProvider;
 	qint32 mNbTracks;
 	qint64 mDuration;
 	qint64 mFans;
