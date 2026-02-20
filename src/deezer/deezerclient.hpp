@@ -16,18 +16,15 @@ public:
 	auto login(const QString &arl) const -> bool;
 
 	[[nodiscard]]
-	auto album(qint64 albumId) const -> ApiResponse *;
+	auto gw() -> DeezerGw &;
 
 	[[nodiscard]]
-	auto gw() const -> DeezerGw &;
-
-	[[nodiscard]]
-	auto api() const -> DeezerApi &;
+	auto api() -> DeezerApi &;
 
 private:
 	QNetworkAccessManager *mHttp;
-	DeezerGw *mGw;
-	DeezerApi *mApi;
+	DeezerGw mGw;
+	DeezerApi mApi;
 
 	[[nodiscard]]
 	auto request(const QUrl &url) const -> QNetworkRequest;

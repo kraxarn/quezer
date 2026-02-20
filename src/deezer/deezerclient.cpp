@@ -15,8 +15,8 @@
 DeezerClient::DeezerClient(QObject *parent)
 	: QObject(parent),
 	mHttp(new QNetworkAccessManager(this)),
-	mGw(new DeezerGw(mHttp, this)),
-	mApi(new DeezerApi(mHttp, this))
+	mGw(mHttp, this),
+	mApi(mHttp, this)
 {
 }
 
@@ -39,14 +39,14 @@ auto DeezerClient::login(const QString &arl) const -> bool
 	return cookies->insertCookie(cookie);
 }
 
-auto DeezerClient::gw() const -> DeezerGw &
+auto DeezerClient::gw() -> DeezerGw &
 {
-	return *mGw;
+	return mGw;
 }
 
-auto DeezerClient::api() const -> DeezerApi &
+auto DeezerClient::api() -> DeezerApi &
 {
-	return *mApi;
+	return mApi;
 }
 
 auto DeezerClient::request(const QUrl &url) const -> QNetworkRequest
