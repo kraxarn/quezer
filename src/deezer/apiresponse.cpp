@@ -17,6 +17,11 @@ auto ApiResponse::isValid() const -> bool
 		&& !mValue.isNull();
 }
 
+auto ApiResponse::object() const -> QJsonObject
+{
+	return mValue.object();
+}
+
 auto ApiResponse::errorString() const -> QString
 {
 	if (mReply->error() != QNetworkReply::NoError)

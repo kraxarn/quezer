@@ -26,6 +26,9 @@ public:
 	[[nodiscard]]
 	auto album(qint64 albumId) const -> ApiResponse *;
 
+	[[nodiscard]]
+	auto gw() const -> DeezerGw &;
+
 private:
 	QNetworkAccessManager *mHttp;
 	DeezerGw *mGw;

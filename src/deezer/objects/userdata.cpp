@@ -6,8 +6,10 @@ auto UserData::fromJson(const QJsonObject &json) -> UserData
 {
 	UserData result;
 
-	const QJsonObject user = json
-		.value(QStringLiteral("results")).toObject()
+	const QJsonObject results = json
+		.value(QStringLiteral("results")).toObject();
+
+	const QJsonObject user = results
 		.value(QStringLiteral("USER")).toObject();
 
 	const QJsonObject options = user
@@ -31,6 +33,8 @@ auto UserData::fromJson(const QJsonObject &json) -> UserData
 	result.mCanStreamLossless = options.value(QStringLiteral("web_lossless")).toBool()
 		|| options.value(QStringLiteral("mobile_lossless")).toBool();
 
+	result.mCheckForm = results.value(QStringLiteral("checkForm")).toString();
+
 	return result;
 }
 
@@ -39,7 +43,12 @@ auto UserData::userId() const -> qint64
 	return mUserId;
 }
 
-auto UserData::blogName() const -> QString
+auto UserData::blogName() const -> const QString &
 {
 	return mBlogName;
+}
+
+auto UserData::checkForm() const -> const QString &
+{
+	return mCheckForm;
 }

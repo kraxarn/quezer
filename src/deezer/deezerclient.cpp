@@ -55,6 +55,11 @@ auto DeezerClient::album(const qint64 albumId) const -> ApiResponse *
 	return mApi->album(albumId);
 }
 
+auto DeezerClient::gw() const -> DeezerGw &
+{
+	return *mGw;
+}
+
 auto DeezerClient::request(const QUrl &url) const -> QNetworkRequest
 {
 	QNetworkRequest request(url);

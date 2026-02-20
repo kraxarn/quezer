@@ -2,6 +2,7 @@
 #include "deezer/objects/album.hpp"
 #include "deezer/objects/page.hpp"
 #include "deezer/objects/searchalbum.hpp"
+#include "deezer/objects/songdata.hpp"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -34,12 +35,13 @@ namespace
 
 		{
 			ApiResponse *response = client.userData();
-			QObject::connect(response, &ApiResponse::finished, [response]() -> void
+			QObject::connect(response, &ApiResponse::finished, [&client, response]() -> void
 			{
 				const UserData &userData = response->value<UserData>();
 				response->deleteLater();
 
 				qDebug().nospace() << "Welcome " << userData.blogName() << "!";
+				client.gw().setCheckForm(userData.checkForm());
 			});
 		}
 		{
@@ -64,6 +66,26 @@ namespace
 				response->deleteLater();
 
 				qDebug() << "Album:" << album.id() << album.title();
+			});
+		}
+		{
+			while (client.gw().checkForm().isEmpty())
+			{
+				QCoreApplication::processEvents();
+			}
+
+			ApiResponse *response = client.gw().songData(2662655242);
+			QObject::connect(response, &ApiResponse::finished, [response]() -> void
+			{
+				if (!response->isValid())
+				{
+					qCritical() << "Error:" << response->errorString();
+					response->deleteLater();
+					return;
+				}
+
+				const auto songData = response->value<SongData>();
+				response->deleteLater();
 			});
 		}
 	}

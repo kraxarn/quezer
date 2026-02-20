@@ -19,8 +19,11 @@ public:
 	[[nodiscard]]
 	auto value() const -> T
 	{
-		return T::fromJson(mValue.object());
+		return T::fromJson(object());
 	}
+
+	[[nodiscard]]
+	auto object() const -> QJsonObject;
 
 	[[nodiscard]]
 	auto errorString() const -> QString;

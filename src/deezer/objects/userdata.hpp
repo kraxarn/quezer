@@ -13,7 +13,10 @@ public:
 	auto userId() const -> qint64;
 
 	[[nodiscard]]
-	auto blogName() const -> QString;
+	auto blogName() const -> const QString &;
+
+	[[nodiscard]]
+	auto checkForm() const -> const QString &;
 
 private:
 	UserData() = default;
@@ -27,4 +30,5 @@ private:
 	QString mCountry;
 	QString mLanguage;
 	QString mLovedTracks;
+	QString mCheckForm;
 };
