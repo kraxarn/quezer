@@ -7,9 +7,6 @@ auto Album::fromJson(const QJsonObject &json) -> Album
 	const QJsonArray contributors = json
 		.value(QStringLiteral("contributors")).toArray();
 
-	const QJsonArray tracks = json
-		.value(QStringLiteral("tracks")).toArray();
-
 	result.mId = json.value(QStringLiteral("id")).toInteger();
 	result.mTitle = json.value(QStringLiteral("title")).toString();
 	result.mCover = json.value(QStringLiteral("cover")).toString();
@@ -43,12 +40,9 @@ auto Album::fromJson(const QJsonObject &json) -> Album
 	result.mArtist = Artist::fromJson(
 		json.value(QStringLiteral("artist")).toObject()
 	);
-
-	result.mTracks.reserve(tracks.size());
-	for (const QJsonValueConstRef track: tracks)
-	{
-		result.mTracks.append(Track::fromJson(track.toObject()));
-	}
+	result.mTracks = Page<Track>::fromJson(
+		json.value(QStringLiteral("tracks")).toObject()
+	);
 
 	return result;
 }
@@ -247,7 +241,7 @@ auto Album::artist() const -> const Artist &
 	return mArtist;
 }
 
-auto Album::tracks() const -> const QList<Track> &
+auto Album::tracks() const -> const Page<Track> &
 {
 	return mTracks;
 }

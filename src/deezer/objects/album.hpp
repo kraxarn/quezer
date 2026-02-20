@@ -161,7 +161,7 @@ public:
 	auto artist() const -> const Artist &;
 
 	[[nodiscard]]
-	auto tracks() const -> const QList<Track> &;
+	auto tracks() const -> const Page<Track> &;
 
 private:
 	Album() = default;
@@ -182,5 +182,5 @@ private:
 	ExplicitContent mExplicitContentCover;
 	QList<Contributor> mContributors;
 	Artist mArtist;
-	QList<Track> mTracks;
+	Page<Track> mTracks;
 };
