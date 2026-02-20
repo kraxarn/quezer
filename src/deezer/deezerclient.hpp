@@ -17,6 +17,9 @@ public:
 	auto login(const QString &arl) const -> bool;
 
 	[[nodiscard]]
+	auto get(const QUrl &url) -> ApiResponse *;
+
+	[[nodiscard]]
 	auto gw() -> DeezerGw &;
 
 	[[nodiscard]]

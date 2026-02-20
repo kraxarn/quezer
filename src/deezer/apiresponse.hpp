@@ -23,6 +23,9 @@ public:
 	}
 
 	[[nodiscard]]
+	auto data() const -> const QByteArray &;
+
+	[[nodiscard]]
 	auto object() const -> QJsonObject;
 
 	[[nodiscard]]
@@ -33,6 +36,7 @@ signals:
 
 private:
 	QNetworkReply *mReply;
+	QByteArray mData;
 	QJsonParseError mParseError;
 	QJsonDocument mValue;
 

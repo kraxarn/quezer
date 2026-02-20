@@ -40,6 +40,13 @@ auto DeezerClient::login(const QString &arl) const -> bool
 	return cookies->insertCookie(cookie);
 }
 
+auto DeezerClient::get(const QUrl &url) -> ApiResponse *
+{
+	const QNetworkRequest request(url);
+	QNetworkReply *reply = mHttp->get(request);
+	return new ApiResponse(reply, this);
+}
+
 auto DeezerClient::gw() -> DeezerGw &
 {
 	return mGw;

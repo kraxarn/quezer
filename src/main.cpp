@@ -9,6 +9,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QFile>
 
 namespace
 {
@@ -37,6 +38,7 @@ namespace
 
 		UserData userData = UserData::fromJson({});
 		SongData songData = SongData::fromJson({});
+		MediaUrl mediaUrl = MediaUrl::fromJson({});
 
 		{
 			ApiResponse *response = client.gw().userData();
@@ -99,19 +101,31 @@ namespace
 			}
 
 			ApiResponse *response = client.media().url(userData, songData, MediaFormat::LowQuality);
-			QObject::connect(response, &ApiResponse::finished, [response]() -> void
+			QObject::connect(response, &ApiResponse::finished, [&mediaUrl, response]() -> void
 			{
-				if (!response->isValid())
+				mediaUrl = response->value<MediaUrl>();
+				response->deleteLater();
+			});
+		}
+		{
+			while (mediaUrl.sources().isEmpty())
+			{
+				QCoreApplication::processEvents();
+			}
+
+			ApiResponse *response = client.get(mediaUrl.sources().at(0).url());
+			QObject::connect(response, &ApiResponse::finished, [&mediaUrl, response]() -> void
+			{
+				const QByteArray &data = response->data();
+
+				if (QFile file(QStringLiteral("file.mp3")); file.open(QIODevice::WriteOnly))
 				{
-					qCritical() << "Error:" << response->errorString();
-					response->deleteLater();
-					return;
+					file.write(data);
+					file.close();
 				}
 
-				const auto url = response->value<MediaUrl>();
 				response->deleteLater();
-
-				qDebug() << "URL:" << url.sources().at(0).url();
+				qInfo() << "File saved!";
 			});
 		}
 	}

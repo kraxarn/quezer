@@ -18,6 +18,11 @@ auto ApiResponse::isValid() const -> bool
 		&& mValue.object().value(QStringLiteral("error")).toObject().isEmpty();
 }
 
+auto ApiResponse::data() const -> const QByteArray &
+{
+	return mData;
+}
+
 auto ApiResponse::object() const -> QJsonObject
 {
 	return mValue.object();
@@ -55,11 +60,11 @@ void ApiResponse::onReplyFinished()
 
 	QThreadPool::globalInstance()->start([this]() -> void
 	{
-		const QByteArray data = mReply->readAll();
+		mData = mReply->readAll();
 		mReply->deleteLater();
 		mReply = nullptr;
 
-		mValue = QJsonDocument::fromJson(data, &mParseError);
+		mValue = QJsonDocument::fromJson(mData, &mParseError);
 		emit finished();
 	});
 }
