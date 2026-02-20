@@ -34,7 +34,7 @@ namespace
 		}
 
 		{
-			ApiResponse *response = client.userData();
+			ApiResponse *response = client.gw().userData();
 			QObject::connect(response, &ApiResponse::finished, [&client, response]() -> void
 			{
 				const UserData &userData = response->value<UserData>();
@@ -45,7 +45,7 @@ namespace
 			});
 		}
 		{
-			ApiResponse *response = client.search(SearchMediaType::Album,
+			ApiResponse *response = client.api().search(SearchMediaType::Album,
 				QStringLiteral("Penny's Big Breakaway"));
 
 			QObject::connect(response, &ApiResponse::finished, [response]() -> void

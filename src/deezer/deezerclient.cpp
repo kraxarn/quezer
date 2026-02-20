@@ -60,6 +60,11 @@ auto DeezerClient::gw() const -> DeezerGw &
 	return *mGw;
 }
 
+auto DeezerClient::api() const -> DeezerApi &
+{
+	return *mApi;
+}
+
 auto DeezerClient::request(const QUrl &url) const -> QNetworkRequest
 {
 	QNetworkRequest request(url);

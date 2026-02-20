@@ -16,18 +16,13 @@ public:
 	auto login(const QString &arl) const -> bool;
 
 	[[nodiscard]]
-	auto userData() const -> ApiResponse *;
-
-	[[nodiscard]]
-	auto search(SearchMediaType mediaType, const QString &query,
-		SearchMode mode = SearchMode::Fuzzy,
-		SearchOrder order = SearchOrder::Ranking) const -> ApiResponse *;
-
-	[[nodiscard]]
 	auto album(qint64 albumId) const -> ApiResponse *;
 
 	[[nodiscard]]
 	auto gw() const -> DeezerGw &;
+
+	[[nodiscard]]
+	auto api() const -> DeezerApi &;
 
 private:
 	QNetworkAccessManager *mHttp;

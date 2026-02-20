@@ -17,7 +17,8 @@ public:
 
 	[[nodiscard]]
 	auto search(SearchMediaType mediaType, const QString &query,
-		SearchMode mode, SearchOrder order) -> ApiResponse *;
+		SearchMode mode = SearchMode::Fuzzy,
+		SearchOrder order = SearchOrder::Ranking) -> ApiResponse *;
 
 	[[nodiscard]]
 	auto album(qint64 albumId) -> ApiResponse *;
