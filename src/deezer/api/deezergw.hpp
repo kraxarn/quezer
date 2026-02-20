@@ -22,19 +22,19 @@ public:
 	auto userData() -> ApiResponse *;
 
 	[[nodiscard]]
-	auto songData(qint64 sngId) -> ApiResponse *;
+	auto songData(const UserData &userData, qint64 sngId) -> ApiResponse *;
 
 private:
 	QNetworkAccessManager *mHttp;
-
-	QString mCheckForm;
 
 	[[nodiscard]]
 	auto call(const QString &method) const -> QNetworkReply *;
 
 	[[nodiscard]]
-	auto call(const QString &method, const QJsonDocument &body) const -> QNetworkReply *;
+	auto call(const QString &method, const QJsonDocument &body,
+		const QString &token) const -> QNetworkReply *;
 
 	[[nodiscard]]
-	auto call(const QString &method, const QByteArray &body) const -> QNetworkReply *;
+	auto call(const QString &method, const QByteArray &body,
+		const QString &token) const -> QNetworkReply *;
 };

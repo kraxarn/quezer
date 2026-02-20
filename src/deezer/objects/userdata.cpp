@@ -48,6 +48,11 @@ auto UserData::blogName() const -> const QString &
 	return mBlogName;
 }
 
+auto UserData::licenseToken() const -> const QString &
+{
+	return mLicenseToken;
+}
+
 auto UserData::checkForm() const -> const QString &
 {
 	return mCheckForm;

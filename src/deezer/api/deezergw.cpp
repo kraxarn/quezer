@@ -8,47 +8,37 @@ DeezerGw::DeezerGw(QNetworkAccessManager *http, QObject *parent)
 {
 }
 
-auto DeezerGw::checkForm() const -> const QString &
-{
-	return mCheckForm;
-}
-
-void DeezerGw::setCheckForm(const QString &checkForm)
-{
-	mCheckForm = checkForm;
-}
-
 auto DeezerGw::userData() -> ApiResponse *
 {
 	QNetworkReply *reply = call(QStringLiteral("deezer.getUserData"));
 	return new ApiResponse(reply, this);
 }
 
-auto DeezerGw::songData(const qint64 sngId) -> ApiResponse *
+auto DeezerGw::songData(const UserData &userData, const qint64 sngId) -> ApiResponse *
 {
 	QJsonObject body;
 	body[QStringLiteral("SNG_ID")] = sngId;
 
-	QNetworkReply *reply = call(QStringLiteral("song.getData"), QJsonDocument(body));
+	QNetworkReply *reply = call(QStringLiteral("song.getData"),
+		QJsonDocument(body), userData.checkForm());
+
 	return new ApiResponse(reply, this);
 }
 
 auto DeezerGw::call(const QString &method) const -> QNetworkReply *
 {
-	return call(method, QStringLiteral("{}").toUtf8());
+	return call(method, QStringLiteral("{}").toUtf8(), {});
 }
 
-auto DeezerGw::call(const QString &method, const QJsonDocument &body) const -> QNetworkReply *
+auto DeezerGw::call(const QString &method, const QJsonDocument &body,
+	const QString &token) const -> QNetworkReply *
 {
-	return call(method, body.toJson(QJsonDocument::Compact));
+	return call(method, body.toJson(QJsonDocument::Compact), token);
 }
 
-auto DeezerGw::call(const QString &method, const QByteArray &body) const -> QNetworkReply *
+auto DeezerGw::call(const QString &method, const QByteArray &body,
+	const QString &token) const -> QNetworkReply *
 {
-	const QString token = mCheckForm.isEmpty()
-		? QStringLiteral("null")
-		: mCheckForm;
-
 	QUrl url(QStringLiteral("https://www.deezer.com/ajax/gw-light.php"));
 	url.setQuery({
 		{

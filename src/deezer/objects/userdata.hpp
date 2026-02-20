@@ -16,6 +16,9 @@ public:
 	auto blogName() const -> const QString &;
 
 	[[nodiscard]]
+	auto licenseToken() const -> const QString &;
+
+	[[nodiscard]]
 	auto checkForm() const -> const QString &;
 
 private:

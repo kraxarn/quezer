@@ -1,5 +1,7 @@
 #include "deezer/deezerclient.hpp"
+#include "deezer/enums/mediaformat.hpp"
 #include "deezer/objects/album.hpp"
+#include "deezer/objects/mediaurl.hpp"
 #include "deezer/objects/page.hpp"
 #include "deezer/objects/searchalbum.hpp"
 #include "deezer/objects/songdata.hpp"
@@ -33,15 +35,17 @@ namespace
 			qCritical() << "Failed to login!";
 		}
 
+		UserData userData = UserData::fromJson({});
+		SongData songData = SongData::fromJson({});
+
 		{
 			ApiResponse *response = client.gw().userData();
-			QObject::connect(response, &ApiResponse::finished, [&client, response]() -> void
+			QObject::connect(response, &ApiResponse::finished, [&client, &userData, response]() -> void
 			{
-				const UserData &userData = response->value<UserData>();
+				userData = response->value<UserData>();
 				response->deleteLater();
 
 				qDebug().nospace() << "Welcome " << userData.blogName() << "!";
-				client.gw().setCheckForm(userData.checkForm());
 			});
 		}
 		{
@@ -69,12 +73,32 @@ namespace
 			});
 		}
 		{
-			while (client.gw().checkForm().isEmpty())
+			while (userData.checkForm().isEmpty())
 			{
 				QCoreApplication::processEvents();
 			}
 
-			ApiResponse *response = client.gw().songData(2662655242);
+			ApiResponse *response = client.gw().songData(userData, 2662655242);
+			QObject::connect(response, &ApiResponse::finished, [&songData, response]() -> void
+			{
+				if (!response->isValid())
+				{
+					qCritical() << "Error:" << response->errorString();
+					response->deleteLater();
+					return;
+				}
+
+				songData = response->value<SongData>();
+				response->deleteLater();
+			});
+		}
+		{
+			while (songData.trackToken().isEmpty() || userData.licenseToken().isEmpty())
+			{
+				QCoreApplication::processEvents();
+			}
+
+			ApiResponse *response = client.media().url(userData, songData, MediaFormat::LowQuality);
 			QObject::connect(response, &ApiResponse::finished, [response]() -> void
 			{
 				if (!response->isValid())
@@ -84,8 +108,10 @@ namespace
 					return;
 				}
 
-				const auto songData = response->value<SongData>();
+				const auto url = response->value<MediaUrl>();
 				response->deleteLater();
+
+				qDebug() << "URL:" << url.sources().at(0).url();
 			});
 		}
 	}

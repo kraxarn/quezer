@@ -2,6 +2,7 @@
 
 #include "deezer/api/deezerapi.hpp"
 #include "deezer/api/deezergw.hpp"
+#include "deezer/api/deezermedia.hpp"
 
 #include <QHttpHeaders>
 #include <QNetworkAccessManager>
@@ -21,10 +22,14 @@ public:
 	[[nodiscard]]
 	auto api() -> DeezerApi &;
 
+	[[nodiscard]]
+	auto media() -> DeezerMedia &;
+
 private:
 	QNetworkAccessManager *mHttp;
 	DeezerGw mGw;
 	DeezerApi mApi;
+	DeezerMedia mMedia;
 
 	[[nodiscard]]
 	auto request(const QUrl &url) const -> QNetworkRequest;

@@ -16,7 +16,8 @@ DeezerClient::DeezerClient(QObject *parent)
 	: QObject(parent),
 	mHttp(new QNetworkAccessManager(this)),
 	mGw(mHttp, this),
-	mApi(mHttp, this)
+	mApi(mHttp, this),
+	mMedia(mHttp, this)
 {
 }
 
@@ -47,6 +48,11 @@ auto DeezerClient::gw() -> DeezerGw &
 auto DeezerClient::api() -> DeezerApi &
 {
 	return mApi;
+}
+
+auto DeezerClient::media() -> DeezerMedia &
+{
+	return mMedia;
 }
 
 auto DeezerClient::request(const QUrl &url) const -> QNetworkRequest

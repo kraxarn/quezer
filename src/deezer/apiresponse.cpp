@@ -14,7 +14,8 @@ auto ApiResponse::isValid() const -> bool
 {
 	return mReply == nullptr
 		&& mParseError.error == QJsonParseError::NoError
-		&& !mValue.isNull();
+		&& !mValue.isNull()
+		&& mValue.object().value(QStringLiteral("error")).toObject().isEmpty();
 }
 
 auto ApiResponse::object() const -> QJsonObject
@@ -24,7 +25,7 @@ auto ApiResponse::object() const -> QJsonObject
 
 auto ApiResponse::errorString() const -> QString
 {
-	if (mReply->error() != QNetworkReply::NoError)
+	if (mReply != nullptr && mReply->error() != QNetworkReply::NoError)
 	{
 		return mReply->errorString();
 	}
@@ -32,6 +33,13 @@ auto ApiResponse::errorString() const -> QString
 	if (mParseError.error != QJsonParseError::NoError)
 	{
 		return mParseError.errorString();
+	}
+
+	if (!mValue.object().value(QStringLiteral("error")).toObject().isEmpty())
+	{
+		return mValue.object()
+			.value(QStringLiteral("error")).toObject()
+			.constBegin().value().toString();
 	}
 
 	return QString();
