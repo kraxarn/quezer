@@ -1,3 +1,4 @@
+#include "deezer/cypher.hpp"
 #include "deezer/deezerclient.hpp"
 #include "deezer/enums/mediaformat.hpp"
 #include "deezer/objects/album.hpp"
@@ -6,10 +7,10 @@
 #include "deezer/objects/searchalbum.hpp"
 #include "deezer/objects/songdata.hpp"
 
+#include <QFile>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QFile>
 
 namespace
 {
@@ -118,15 +119,41 @@ namespace
 			{
 				const QByteArray &data = response->data();
 
-				if (QFile file(QStringLiteral("file.mp3")); file.open(QIODevice::WriteOnly))
+				if (QFile file(QStringLiteral("file.enc.mp3")); file.open(QIODevice::WriteOnly))
 				{
 					file.write(data);
 					file.close();
 				}
 
+				const QByteArray key = Cypher::generateKey(2662655242);
+				const std::array<quint8, 8> iv = {
+					0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+				};
+				const QByteArray decData = Cypher::decrypt(key, iv, data);
+
+				if (QFile file(QStringLiteral("file.mp3")); file.open(QIODevice::WriteOnly))
+				{
+					file.write(decData);
+					file.close();
+				}
+
 				response->deleteLater();
-				qInfo() << "File saved!";
+				qInfo() << "Files saved!";
 			});
+		}
+		{
+			const QByteArray key = Cypher::generateKey(2662655242);
+			qInfo() << "Key:" << key.toHex();
+		}
+		{
+			const QByteArray enc = QByteArray::fromHex(QStringLiteral("4ad1330051e3630935cdb4186a94398d").toUtf8());
+			const QByteArray key = QStringLiteral("0123456789abcdef").toUtf8();
+			const std::array<quint8, 8> iv = {
+				'0', '1', '2', '3', '4', '5', '6', '7',
+			};
+
+			const QByteArray decrypted = Cypher::decryptChunk(key, iv, enc);
+			qDebug() << "Decrypted:" << QString::fromUtf8(decrypted);
 		}
 	}
 }
