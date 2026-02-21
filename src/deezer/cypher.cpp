@@ -68,12 +68,11 @@ auto Cypher::decryptChunk(const QByteArray &key,
 
 	auto *plaintext = new uint8_t[data.length()];
 
+	if (!blowfish.decrypt(reinterpret_cast<const uint8_t *>(data.data()),
+		plaintext, data.length()))
 	{
-		if (!blowfish.decrypt(data, plaintext, data.length()))
-		{
-			qCritical() << "Failed to decrypt data";
-			return {};
-		}
+		qCritical() << "Failed to decrypt data";
+		return {};
 	}
 
 	QByteArray result;

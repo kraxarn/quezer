@@ -12,7 +12,7 @@ class Blowfish final
 public:
 	Blowfish(const QByteArray &key, const IV &iv);
 
-	auto decrypt(const QByteArray &in, uint8_t *out, size_t length) -> bool;
+	auto decrypt(const uint8_t *in, uint8_t *out, size_t length) -> bool;
 
 private:
 	std::array<std::array<quint32, 256>, 4> S;
