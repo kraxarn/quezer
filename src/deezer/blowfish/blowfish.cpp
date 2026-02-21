@@ -143,8 +143,10 @@ void Blowfish::decrypt(const uint8_t *in, uint8_t *out) const
 	*reinterpret_cast<quint32 *>(out + 4) = qFromBigEndian(rx);
 }
 
-auto Blowfish::decrypt(const uint8_t *in, uint8_t *out, size_t length) -> bool
+auto Blowfish::decrypt(const QByteArray &in, uint8_t *out, size_t length) -> bool
 {
+	auto current = reinterpret_cast<const uint8_t *>(in.data());
+
 	std::array<uint8_t, blockSize> tempPt;
 	std::array<uint8_t, blockSize> tempIv;
 
@@ -157,7 +159,7 @@ auto Blowfish::decrypt(const uint8_t *in, uint8_t *out, size_t length) -> bool
 
 	while (length >= blockSize)
 	{
-		decrypt(in, tempPt.data());
+		decrypt(current, tempPt.data());
 
 		for (qsizetype i = 0; i < blockSize; i++)
 		{
@@ -168,7 +170,7 @@ auto Blowfish::decrypt(const uint8_t *in, uint8_t *out, size_t length) -> bool
 		memcpy(out, tempPt.data(), blockSize);
 
 		length -= blockSize;
-		in += blockSize;
+		current += blockSize;
 		out += blockSize;
 	}
 
