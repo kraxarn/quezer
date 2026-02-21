@@ -34,7 +34,6 @@ endif ()
 add_subdirectory(src)
 
 include(qml.cmake)
-include(deps/pycryptodome.cmake)
 
 target_include_directories(${APP_NAME} PRIVATE
 	"${CMAKE_CURRENT_SOURCE_DIR}/src"

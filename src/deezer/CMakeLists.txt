@@ -1,4 +1,5 @@
 add_subdirectory(api)
+add_subdirectory(blowfish)
 add_subdirectory(objects)
 
 target_sources(${APP_NAME} PRIVATE

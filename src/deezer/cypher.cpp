@@ -1,5 +1,5 @@
 #include "deezer/cypher.hpp"
-#include "deezer/blowfish/blowfishcbc.h"
+#include "deezer/blowfish/blowfish.hpp"
 
 #include <QCryptographicHash>
 
@@ -27,11 +27,12 @@ auto Cypher::generateKey(const qint64 seed) -> QByteArray
 	return result;
 }
 
-auto Cypher::decrypt(const QByteArray &key, const QByteArray &iv, const QByteArray &data) -> QByteArray
+auto Cypher::decrypt(const QByteArray &key, const std::array<quint8, 8> &iv,
+	const QByteArray &data) -> QByteArray
 {
 	if (data.isEmpty())
 	{
-		return QByteArray();
+		return {};
 	}
 
 	QByteArray result;
@@ -61,66 +62,20 @@ auto Cypher::decrypt(const QByteArray &key, const QByteArray &iv, const QByteArr
 }
 
 auto Cypher::decryptChunk(const QByteArray &key,
-	const QByteArray &iv, const QByteArray &data) -> QByteArray
+	const std::array<quint8, 8> &iv, const QByteArray &data) -> QByteArray
 {
-	Blowfish_State *cypherState = nullptr;
-	{
-		const int result = Blowfish_start_operation(
-			reinterpret_cast<const uint8_t *>(key.constData()),
-			key.length(), &cypherState
-		);
-
-		if (result != 0)
-		{
-			qCritical() << "Failed to initiate blowfish: error" << result;
-			return {};
-		}
-	}
-
-	if (iv.length() != 8)
-	{
-		qCritical() << "Invalid IV length (must be 8 bytes)";
-		return {};
-	}
-
-	CbcModeState *cbcState = nullptr;
-	{
-		const int result = CBC_start_operation(
-			reinterpret_cast<BlockBase *>(cypherState),
-			reinterpret_cast<const uint8_t *>(iv.constData()),
-			iv.length(),
-			&cbcState
-		);
-
-		if (result != 0)
-		{
-			qCritical() << "Failed to initiate CBC mode: error" << result;
-			return {};
-		}
-	}
+	Blowfish blowfish(key, iv);
 
 	auto *plaintext = new uint8_t[data.length()];
 
 	{
-		const int result = CBC_decrypt(cbcState,
-			reinterpret_cast<const uint8_t *>(data.data()),
-			plaintext,data.length()
-		);
-
-		if (result == 3)
+		if (!blowfish.decrypt(reinterpret_cast<const uint8_t *>(data.data()),
+			plaintext, data.length()))
 		{
-			qCritical() << "Data must be padded to 8 byte boundry";
-			return {};
-		}
-
-		if (result != 0)
-		{
-			qCritical() << "Failed to decrypt data: error" << result;
+			qCritical() << "Failed to decrypt data";
 			return {};
 		}
 	}
-
-	CBC_stop_operation(cbcState);
 
 	QByteArray result;
 	result.reserve(data.length());
