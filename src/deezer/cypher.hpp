@@ -2,7 +2,7 @@
 
 #include <QString>
 
-class Crypto
+class Cypher
 {
 public:
 	[[nodiscard]]

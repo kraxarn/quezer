@@ -1,4 +1,4 @@
-#include "deezer/blowfish.hpp"
+#include "deezer/cypher.hpp"
 #include "deezer/blowfish/blowfishcbc.h"
 
 #include <QCryptographicHash>
@@ -8,7 +8,7 @@
 
 static auto secret = QStringLiteral("g4el58wc0zvf9na1");
 
-auto Crypto::generateKey(const qint64 seed) -> QByteArray
+auto Cypher::generateKey(const qint64 seed) -> QByteArray
 {
 	const QByteArray hash = QCryptographicHash::hash(
 		QString::number(seed).toUtf8(), QCryptographicHash::Md5
@@ -27,7 +27,7 @@ auto Crypto::generateKey(const qint64 seed) -> QByteArray
 	return result;
 }
 
-auto Crypto::decrypt(const QByteArray &key, const QByteArray &iv, const QByteArray &data) -> QByteArray
+auto Cypher::decrypt(const QByteArray &key, const QByteArray &iv, const QByteArray &data) -> QByteArray
 {
 	if (data.isEmpty())
 	{
@@ -60,7 +60,7 @@ auto Crypto::decrypt(const QByteArray &key, const QByteArray &iv, const QByteArr
 	return result;
 }
 
-auto Crypto::decryptChunk(const QByteArray &key,
+auto Cypher::decryptChunk(const QByteArray &key,
 	const QByteArray &iv, const QByteArray &data) -> QByteArray
 {
 	Blowfish_State *cypherState = nullptr;
