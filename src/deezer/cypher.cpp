@@ -88,7 +88,7 @@ auto Cypher::decryptChunk(const QByteArray &key,
 		const int result = CBC_start_operation(
 			reinterpret_cast<BlockBase *>(cypherState),
 			reinterpret_cast<const uint8_t *>(iv.constData()),
-			iv.length(), // block_size
+			iv.length(),
 			&cbcState
 		);
 

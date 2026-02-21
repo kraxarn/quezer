@@ -14,6 +14,4 @@ public:
 	[[nodiscard]]
 	static auto decryptChunk(const QByteArray &key,
 		const QByteArray &iv, const QByteArray &data) -> QByteArray;
-
-private:
 };
