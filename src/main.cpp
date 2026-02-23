@@ -161,11 +161,7 @@ auto main(int argc, char *argv[]) -> int
 	QQmlApplicationEngine engine;
 	defineTypes(engine);
 
-	engine.loadFromModule(
-		QStringLiteral("kraxarn.%1")
-		.arg(QCoreApplication::applicationName()),
-		QStringLiteral("Main")
-	);
+	engine.load(QStringLiteral(":/qml/Main.qml"));
 
 	return app.exec();
 }
