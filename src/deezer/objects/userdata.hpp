@@ -21,6 +21,9 @@ public:
 	[[nodiscard]]
 	auto checkForm() const -> const QString &;
 
+	[[nodiscard]]
+	auto checkFormLogin() const -> const QString &;
+
 private:
 	UserData() = default;
 
@@ -34,4 +37,5 @@ private:
 	QString mLanguage;
 	QString mLovedTracks;
 	QString mCheckForm;
+	QString mCheckFormLogin;
 };

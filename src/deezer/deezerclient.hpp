@@ -3,6 +3,7 @@
 #include "deezer/api/deezerapi.hpp"
 #include "deezer/api/deezergw.hpp"
 #include "deezer/api/deezermedia.hpp"
+#include "deezer/enums/loginerror.hpp"
 
 #include <QHttpHeaders>
 #include <QNetworkAccessManager>
@@ -14,7 +15,7 @@ class DeezerClient : public QObject
 public:
 	explicit DeezerClient(QObject *parent);
 
-	auto login(const QString &arl) const -> bool;
+	void login(const QString &email, const QString &password);
 
 	[[nodiscard]]
 	auto get(const QUrl &url) -> ApiResponse *;
@@ -28,6 +29,10 @@ public:
 	[[nodiscard]]
 	auto media() -> DeezerMedia &;
 
+signals:
+	void loginSuccess();
+	void loginFailed(LoginError error);
+
 private:
 	QNetworkAccessManager *mHttp;
 	DeezerGw mGw;
@@ -35,8 +40,11 @@ private:
 	DeezerMedia mMedia;
 
 	[[nodiscard]]
-	auto request(const QUrl &url) const -> QNetworkRequest;
+	auto login(const QString &arl) const -> bool;
 
 	[[nodiscard]]
-	auto headers() const -> QHttpHeaders;
+	static auto request(const QUrl &url) -> QNetworkRequest;
+
+	[[nodiscard]]
+	static auto headers() -> QHttpHeaders;
 };

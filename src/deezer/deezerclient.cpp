@@ -1,6 +1,6 @@
 #include "deezer/deezerclient.hpp"
+#include "deezer/objects/album.hpp"
 #include "deezer/objects/page.hpp"
-#include "deezer/objects/searchalbum.hpp"
 
 #include <QCoreApplication>
 #include <QHttpHeaders>
@@ -9,8 +9,6 @@
 #include <QNetworkCookieJar>
 #include <QNetworkReply>
 #include <QUrlQuery>
-
-#include "objects/album.hpp"
 
 DeezerClient::DeezerClient(QObject *parent)
 	: QObject(parent),
@@ -40,6 +38,85 @@ auto DeezerClient::login(const QString &arl) const -> bool
 	return cookies->insertCookie(cookie);
 }
 
+void DeezerClient::login(const QString &email, const QString &password)
+{
+	ApiResponse *response = gw().userData();
+	connect(response, &ApiResponse::finished, this, [this, response, email, password]() -> void
+	{
+		if (!response->isValid())
+		{
+			response->deleteLater();
+			emit loginFailed(LoginError::NoUserData);
+			return;
+		}
+
+		const UserData userData = response->value<UserData>();
+		response->deleteLater();
+
+		if (userData.checkFormLogin().isEmpty())
+		{
+			emit loginFailed(LoginError::NoCheckFormLogin);
+			return;
+		}
+
+		const QUrl url(QStringLiteral("https://www.deezer.com/ajax/action.php"));
+
+		const QString body = QStringLiteral("type=login&mail=%1&password=%2&checkFormLogin=%3")
+			.arg(email, password, userData.checkFormLogin());
+
+		QNetworkRequest request(url);
+		request.setHeader(
+			QNetworkRequest::ContentTypeHeader,
+			QStringLiteral("application/x-www-form-urlencoded; charset=UTF-8")
+		);
+
+		QNetworkReply *reply = mHttp->post(request, body.toUtf8());
+		connect(reply, &QNetworkReply::finished, reply, [this, reply]() -> void
+		{
+			if (reply->error() != QNetworkReply::NoError)
+			{
+				reply->deleteLater();
+				emit loginFailed(LoginError::NetworkError);
+				return;
+			}
+
+			if (QString::fromUtf8(reply->readAll()) != QStringLiteral("success"))
+			{
+				reply->deleteLater();
+				emit loginFailed(LoginError::InvalidCredentials);
+				return;
+			}
+
+			for (const QByteArray &data: reply->headers().values(QHttpHeaders::WellKnownHeader::SetCookie))
+			{
+				const QString value = QString::fromUtf8(data);
+
+				const qsizetype begin = value.indexOf(QStringLiteral("arl="));
+				if (begin < 0)
+				{
+					continue;
+				}
+
+				const qsizetype end = value.indexOf(QStringLiteral(";"), begin);
+
+				if (!login(value.mid(begin + 4, end - begin - 4)))
+				{
+					reply->deleteLater();
+					emit loginFailed(LoginError::InvalidCookie);
+					return;
+				}
+
+				reply->deleteLater();
+				emit loginSuccess();
+				return;
+			}
+
+			reply->deleteLater();
+			emit loginFailed(LoginError::NoArl);
+		});
+	});
+}
+
 auto DeezerClient::get(const QUrl &url) -> ApiResponse *
 {
 	const QNetworkRequest request(url);
@@ -62,14 +139,14 @@ auto DeezerClient::media() -> DeezerMedia &
 	return mMedia;
 }
 
-auto DeezerClient::request(const QUrl &url) const -> QNetworkRequest
+auto DeezerClient::request(const QUrl &url) -> QNetworkRequest
 {
 	QNetworkRequest request(url);
 	request.setHeaders(headers());
 	return request;
 }
 
-auto DeezerClient::headers() const -> QHttpHeaders
+auto DeezerClient::headers() -> QHttpHeaders
 {
 	QHttpHeaders headers;
 

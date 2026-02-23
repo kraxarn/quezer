@@ -34,6 +34,7 @@ auto UserData::fromJson(const QJsonObject &json) -> UserData
 		|| options.value(QStringLiteral("mobile_lossless")).toBool();
 
 	result.mCheckForm = results.value(QStringLiteral("checkForm")).toString();
+	result.mCheckFormLogin = results.value(QStringLiteral("checkFormLogin")).toString();
 
 	return result;
 }
@@ -56,4 +57,9 @@ auto UserData::licenseToken() const -> const QString &
 auto UserData::checkForm() const -> const QString &
 {
 	return mCheckForm;
+}
+
+auto UserData::checkFormLogin() const -> const QString &
+{
+	return mCheckFormLogin;
 }

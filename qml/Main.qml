@@ -35,7 +35,7 @@ ApplicationWindow {
 		}
 
 		Label {
-			text: "Username"
+			text: "Email"
 		}
 
 		TextField {

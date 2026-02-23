@@ -29,13 +29,31 @@ namespace
 			QStringLiteral(__DATE__));
 	}
 
+	void testLogin(DeezerClient &client)
+	{
+		const QString email = qEnvironmentVariable("DEEZER_EMAIL");
+		const QString password = qEnvironmentVariable("DEEZER_PASSWORD");
+
+		QObject::connect(&client, &DeezerClient::loginSuccess, []() -> void
+		{
+			qInfo() << "Logged in successfully!";
+		});
+
+		QObject::connect(&client, &DeezerClient::loginFailed, [](const LoginError error) -> void
+		{
+			qWarning() << "Loging failed: error" << static_cast<quint8>(error);
+		});
+
+		client.login(email, password);
+	}
+
 	void testStuff(DeezerClient &client)
 	{
 		qDebug() << "Logging in to Deezer...";
-		if (!client.login(qEnvironmentVariable("ARL")))
-		{
-			qCritical() << "Failed to login!";
-		}
+		// if (!client.login(qEnvironmentVariable("ARL")))
+		// {
+		// 	qCritical() << "Failed to login!";
+		// }
 
 		UserData userData = UserData::fromJson({});
 		SongData songData = SongData::fromJson({});
@@ -160,6 +178,9 @@ auto main(int argc, char *argv[]) -> int
 
 	QQmlApplicationEngine engine;
 	defineTypes(engine);
+
+	DeezerClient client(nullptr);
+	testLogin(client);
 
 	engine.load(QStringLiteral(":/qml/Main.qml"));
 
