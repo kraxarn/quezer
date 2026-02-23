@@ -88,7 +88,7 @@ void Blowfish::xorP(const QByteArray &key)
 	pIdx = 0;
 	for (qsizetype i = 0; i < 18; i++)
 	{
-		mP.at(i) ^= qToBigEndian(*reinterpret_cast<uint32_t *>(pBuf.data() + pIdx));
+		mP.at(i) ^= qToBigEndian(*reinterpret_cast<quint32 *>(pBuf.data() + pIdx));
 		pIdx += 4;
 	}
 }
@@ -133,10 +133,10 @@ auto Blowfish::initBlock(const QByteArray &key) -> bool
 	return true;
 }
 
-void Blowfish::decrypt(const uint8_t *in, uint8_t *out) const
+void Blowfish::decrypt(const quint8 *in, quint8 *out) const
 {
-	quint32 lx = qToBigEndian(*reinterpret_cast<const uint32_t *>(in));
-	quint32 rx = qToBigEndian(*reinterpret_cast<const uint32_t *>(in + 4));
+	quint32 lx = qToBigEndian(*reinterpret_cast<const quint32 *>(in));
+	quint32 rx = qToBigEndian(*reinterpret_cast<const quint32 *>(in + 4));
 
 	decrypt(&lx, &rx);
 
@@ -146,8 +146,8 @@ void Blowfish::decrypt(const uint8_t *in, uint8_t *out) const
 
 auto Blowfish::decrypt(const QByteArray &data) -> QByteArray
 {
-	std::array<uint8_t, blockSize> tempPt;
-	std::array<uint8_t, blockSize> tempIv;
+	std::array<quint8, blockSize> tempPt;
+	std::array<quint8, blockSize> tempIv;
 
 	QByteArray result;
 	result.reserve(data.length());

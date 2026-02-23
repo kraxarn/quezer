@@ -33,5 +33,5 @@ private:
 
 	auto initBlock(const QByteArray &key) -> bool;
 
-	void decrypt(const uint8_t *in, uint8_t *out) const;
+	void decrypt(const quint8 *in, quint8 *out) const;
 };
