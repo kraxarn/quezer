@@ -10,7 +10,7 @@
 constexpr quint8 blockSize = 8;
 
 Blowfish::Blowfish(const QByteArray &key, const IV &iv)
-	: iv(iv)
+	: mIv(iv)
 {
 	if (!initBlock(key))
 	{
@@ -20,76 +20,76 @@ Blowfish::Blowfish(const QByteArray &key, const IV &iv)
 
 auto Blowfish::f(const quint32 x) const -> quint32
 {
-	const auto a = static_cast<uint8_t>(x >> 24);
-	const auto b = static_cast<uint8_t>(x >> 16);
-	const auto c = static_cast<uint8_t>(x >> 8);
-	const auto d = static_cast<uint8_t>(x >> 0);
+	const auto a = static_cast<quint8>(x >> 24);
+	const auto b = static_cast<quint8>(x >> 16);
+	const auto c = static_cast<quint8>(x >> 8);
+	const auto d = static_cast<quint8>(x >> 0);
 
-	quint32 result = S[0][a] + S[1][b];
-	result ^= S[2][c];
-	result += S[3][d];
+	quint32 result = mS[0][a] + mS[1][b];
+	result ^= mS[2][c];
+	result += mS[3][d];
 
 	return result;
 }
 
-void Blowfish::encrypt(quint32 *Lx, quint32 *Rx) const
+void Blowfish::encrypt(quint32 *lx, quint32 *rx) const
 {
-	quint32 L = *Lx;
-	quint32 R = *Rx;
+	quint32 l = *lx;
+	quint32 r = *rx;
 
 	for (qsizetype i = 0; i < 16; i++)
 	{
-		L ^= P[i];
-		R ^= f(L);
-		std::swap(L, R);
+		l ^= mP[i];
+		r ^= f(l);
+		std::swap(l, r);
 	}
 
-	std::swap(L, R);
-	R ^= P[16];
-	L ^= P[17];
+	std::swap(l, r);
+	r ^= mP[16];
+	l ^= mP[17];
 
-	*Lx = L;
-	*Rx = R;
+	*lx = l;
+	*rx = r;
 }
 
-void Blowfish::decrypt(quint32 *Lx, quint32 *Rx) const
+void Blowfish::decrypt(quint32 *lx, quint32 *rx) const
 {
-	quint32 L = *Lx;
-	quint32 R = *Rx;
+	quint32 l = *lx;
+	quint32 r = *rx;
 
-	L ^= P[17];
-	R ^= P[16];
-	std::swap(L, R);
+	l ^= mP[17];
+	r ^= mP[16];
+	std::swap(l, r);
 
 	for (qsizetype i = 0; i < 16; i++)
 	{
-		std::swap(L, R);
-		R ^= f(L);
-		L ^= P[15 - i];
+		std::swap(l, r);
+		r ^= f(l);
+		l ^= mP[15 - i];
 	}
 
-	*Lx = L;
-	*Rx = R;
+	*lx = l;
+	*rx = r;
 }
 
 void Blowfish::xorP(const QByteArray &key)
 {
-	std::array<uint8_t, 4 * 18> P_buf;
+	std::array<quint8, 4 * 18> pBuf;
 
-	size_t P_idx = 0;
-	while (P_idx < P_buf.size())
+	size_t pIdx = 0;
+	while (pIdx < pBuf.size())
 	{
-		const qsizetype tc = qMin(key.length(), static_cast<qsizetype>(sizeof(P_buf) - P_idx));
-		memcpy(P_buf.data() + P_idx, key.constData(), tc);
+		const qsizetype tc = qMin(key.length(), static_cast<qsizetype>(sizeof(pBuf) - pIdx));
+		memcpy(pBuf.data() + pIdx, key.constData(), tc);
 
-		P_idx += tc;
+		pIdx += tc;
 	}
 
-	P_idx = 0;
+	pIdx = 0;
 	for (qsizetype i = 0; i < 18; i++)
 	{
-		P.at(i) ^= qToBigEndian(*reinterpret_cast<uint32_t *>(P_buf.data() + P_idx));
-		P_idx += 4;
+		mP.at(i) ^= qToBigEndian(*reinterpret_cast<uint32_t *>(pBuf.data() + pIdx));
+		pIdx += 4;
 	}
 }
 
@@ -97,22 +97,23 @@ void Blowfish::encrypt(const QByteArray &key)
 {
 	xorP(key);
 
-	quint32 L = 0;
-	quint32 R = 0;
+	quint32 l = 0;
+	quint32 r = 0;
 
 	for (qsizetype i = 0; i < 18; i += 2)
 	{
-		encrypt(&L, &R);
-		P[i] = L;
-		P[i + 1] = R;
+		encrypt(&l, &r);
+		mP[i] = l;
+		mP[i + 1] = r;
 	}
+
 	for (qsizetype j = 0; j < 4; j++)
 	{
 		for (qsizetype i = 0; i < 256; i += 2)
 		{
-			encrypt(&L, &R);
-			S[j][i] = L;
-			S[j][i + 1] = R;
+			encrypt(&l, &r);
+			mS[j][i] = l;
+			mS[j][i + 1] = r;
 		}
 	}
 }
@@ -124,8 +125,8 @@ auto Blowfish::initBlock(const QByteArray &key) -> bool
 		return false;
 	}
 
-	S = S_init;
-	P = P_init;
+	mS = S_init;
+	mP = P_init;
 
 	encrypt(key);
 
@@ -154,7 +155,7 @@ auto Blowfish::decrypt(const QByteArray &data) -> QByteArray
 	auto current = reinterpret_cast<const quint8 *>(data.constData());
 	qsizetype length = data.length();
 
-	tempIv = iv;
+	tempIv = mIv;
 
 	while (length >= blockSize)
 	{
@@ -172,7 +173,7 @@ auto Blowfish::decrypt(const QByteArray &data) -> QByteArray
 		current += blockSize;
 	}
 
-	iv = tempIv;
+	mIv = tempIv;
 
 	if (length > 0)
 	{

@@ -16,16 +16,16 @@ public:
 	auto decrypt(const QByteArray &data) -> QByteArray;
 
 private:
-	std::array<std::array<quint32, 256>, 4> S;
-	std::array<quint32, 18> P;
-	IV iv;
+	std::array<std::array<quint32, 256>, 4> mS;
+	std::array<quint32, 18> mP;
+	IV mIv;
 
 	[[nodiscard]]
 	auto f(quint32 x) const -> quint32;
 
-	void encrypt(quint32 *Lx, quint32 *Rx) const;
+	void encrypt(quint32 *lx, quint32 *rx) const;
 
-	void decrypt(quint32 *Lx, quint32 *Rx) const;
+	void decrypt(quint32 *lx, quint32 *rx) const;
 
 	void xorP(const QByteArray &key);
 
