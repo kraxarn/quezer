@@ -30,8 +30,7 @@ public:
 	auto media() -> DeezerMedia &;
 
 signals:
-	void loginSuccess();
-	void loginFailed(LoginError error);
+	void loginFinished(LoginError error);
 
 private:
 	QNetworkAccessManager *mHttp;

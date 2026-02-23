@@ -46,7 +46,7 @@ void DeezerClient::login(const QString &email, const QString &password)
 		if (!response->isValid())
 		{
 			response->deleteLater();
-			emit loginFailed(LoginError::NoUserData);
+			emit loginFinished(LoginError::NoUserData);
 			return;
 		}
 
@@ -55,7 +55,7 @@ void DeezerClient::login(const QString &email, const QString &password)
 
 		if (userData.checkFormLogin().isEmpty())
 		{
-			emit loginFailed(LoginError::NoCheckFormLogin);
+			emit loginFinished(LoginError::NoCheckFormLogin);
 			return;
 		}
 
@@ -76,14 +76,14 @@ void DeezerClient::login(const QString &email, const QString &password)
 			if (reply->error() != QNetworkReply::NoError)
 			{
 				reply->deleteLater();
-				emit loginFailed(LoginError::NetworkError);
+				emit loginFinished(LoginError::NetworkError);
 				return;
 			}
 
 			if (QString::fromUtf8(reply->readAll()) != QStringLiteral("success"))
 			{
 				reply->deleteLater();
-				emit loginFailed(LoginError::InvalidCredentials);
+				emit loginFinished(LoginError::InvalidCredentials);
 				return;
 			}
 
@@ -102,17 +102,17 @@ void DeezerClient::login(const QString &email, const QString &password)
 				if (!login(value.mid(begin + 4, end - begin - 4)))
 				{
 					reply->deleteLater();
-					emit loginFailed(LoginError::InvalidCookie);
+					emit loginFinished(LoginError::InvalidCookie);
 					return;
 				}
 
 				reply->deleteLater();
-				emit loginSuccess();
+				emit loginFinished(LoginError::NoError);
 				return;
 			}
 
 			reply->deleteLater();
-			emit loginFailed(LoginError::NoArl);
+			emit loginFinished(LoginError::NoArl);
 		});
 	});
 }

@@ -34,14 +34,15 @@ namespace
 		const QString email = qEnvironmentVariable("DEEZER_EMAIL");
 		const QString password = qEnvironmentVariable("DEEZER_PASSWORD");
 
-		QObject::connect(&client, &DeezerClient::loginSuccess, []() -> void
+		QObject::connect(&client, &DeezerClient::loginFinished, [](const LoginError error) -> void
 		{
-			qInfo() << "Logged in successfully!";
-		});
+			if (error != LoginError::NoError)
+			{
+				qWarning() << "Loging failed: error" << static_cast<quint8>(error);
+				return;
+			}
 
-		QObject::connect(&client, &DeezerClient::loginFailed, [](const LoginError error) -> void
-		{
-			qWarning() << "Loging failed: error" << static_cast<quint8>(error);
+			qInfo() << "Logged in successfully!";
 		});
 
 		client.login(email, password);
