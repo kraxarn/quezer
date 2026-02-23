@@ -46,10 +46,8 @@ auto Cypher::decrypt(const QByteArray &key, const std::array<quint8, 8> &iv,
 
 		if (chunk.length() >= 2048)
 		{
-			const QByteArray encChunk = chunk.left(2048);
-			const QByteArray decChunk = decryptChunk(key, iv, encChunk);
-
-			result.append(decChunk);
+			// We need a new instance to reset the state
+			result.append(Blowfish(key, iv).decrypt(chunk.left(2048)));
 			result.append(chunk.mid(2048));
 		}
 		else
@@ -61,23 +59,3 @@ auto Cypher::decrypt(const QByteArray &key, const std::array<quint8, 8> &iv,
 	return result;
 }
 
-auto Cypher::decryptChunk(const QByteArray &key,
-	const std::array<quint8, 8> &iv, const QByteArray &data) -> QByteArray
-{
-	Blowfish blowfish(key, iv);
-
-	auto *plaintext = new uint8_t[data.length()];
-
-	if (!blowfish.decrypt(data, plaintext))
-	{
-		qCritical() << "Failed to decrypt data";
-		return {};
-	}
-
-	QByteArray result;
-	result.reserve(data.length());
-	result.append(reinterpret_cast<const char *>(plaintext), data.length());
-	delete[] plaintext;
-
-	return result;
-}

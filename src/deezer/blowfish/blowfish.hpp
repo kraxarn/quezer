@@ -12,7 +12,8 @@ class Blowfish final
 public:
 	Blowfish(const QByteArray &key, const IV &iv);
 
-	auto decrypt(const QByteArray &in, uint8_t *out) -> bool;
+	[[nodiscard]]
+	auto decrypt(const QByteArray &data) -> QByteArray;
 
 private:
 	std::array<std::array<quint32, 256>, 4> S;
