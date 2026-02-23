@@ -167,8 +167,5 @@ auto main(int argc, char *argv[]) -> int
 		QStringLiteral("Main")
 	);
 
-	DeezerClient client(nullptr);
-	testStuff(client);
-
 	return app.exec();
 }
