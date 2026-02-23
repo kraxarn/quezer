@@ -31,7 +31,7 @@ private:
 
 	void encrypt(const QByteArray &key);
 
-	auto initBlock(const QByteArray &key) -> bool;
+	void initBlock(const QByteArray &key);
 
 	void decrypt(const quint8 *in, quint8 *out) const;
 };

@@ -12,10 +12,13 @@ constexpr quint8 blockSize = 8;
 Blowfish::Blowfish(const QByteArray &key, const IV &iv)
 	: mIv(iv)
 {
-	if (!initBlock(key))
+	if (key.length() < 4 || key.length() > 56)
 	{
+		qWarning() << "Invalid key size:" << key.length();
 		return;
 	}
+
+	initBlock(key);
 }
 
 auto Blowfish::f(const quint32 x) const -> quint32
@@ -118,19 +121,12 @@ void Blowfish::encrypt(const QByteArray &key)
 	}
 }
 
-auto Blowfish::initBlock(const QByteArray &key) -> bool
+void Blowfish::initBlock(const QByteArray &key)
 {
-	if (key.length() < 4 || key.length() > 56)
-	{
-		return false;
-	}
-
 	mS = S_init;
 	mP = P_init;
 
 	encrypt(key);
-
-	return true;
 }
 
 void Blowfish::decrypt(const quint8 *in, quint8 *out) const
