@@ -31,7 +31,7 @@ ApplicationWindow {
 		}
 
 		Item {
-			height: root.height * 0.075
+			height: 32
 		}
 
 		Label {
