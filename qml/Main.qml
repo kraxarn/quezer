@@ -17,7 +17,7 @@ ApplicationWindow {
 
 	Component {
 		id: loginPage
-		LoginPage {
+		Login {
 		}
 	}
 }

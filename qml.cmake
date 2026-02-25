@@ -10,6 +10,7 @@ qt_add_qml_module(${APP_NAME}
 
 	QML_FILES
 	qml/Main.qml
+	qml/Login.qml
 
 	RESOURCES
 	res/logo/quezer.svg
