@@ -3,6 +3,7 @@
 #include "deezer/enums/mediaformat.hpp"
 #include "deezer/objects/album.hpp"
 #include "deezer/objects/mediaurl.hpp"
+#include "deezer/objects/options.hpp"
 #include "deezer/objects/page.hpp"
 #include "deezer/objects/searchalbum.hpp"
 #include "deezer/objects/songdata.hpp"
@@ -34,7 +35,9 @@ namespace
 		const QString email = qEnvironmentVariable("DEEZER_EMAIL");
 		const QString password = qEnvironmentVariable("DEEZER_PASSWORD");
 
-		QObject::connect(&client, &DeezerClient::loginFinished, [](const LoginError error) -> void
+		auto loggedIn = false;
+
+		QObject::connect(&client, &DeezerClient::loginFinished, [&loggedIn](const LoginError error) -> void
 		{
 			if (error != LoginError::NoError)
 			{
@@ -43,9 +46,23 @@ namespace
 			}
 
 			qInfo() << "Logged in successfully!";
+			loggedIn = true;
 		});
-
 		client.login(email, password);
+
+		{
+			while (!loggedIn)
+			{
+				QCoreApplication::processEvents();
+			}
+
+			ApiResponse *response = client.api().options();
+			QObject::connect(response, &ApiResponse::finished, [response]() -> void
+			{
+				const auto options = response->value<Options>();
+				response->deleteLater();
+			});
+		}
 	}
 
 	void testStuff(DeezerClient &client)

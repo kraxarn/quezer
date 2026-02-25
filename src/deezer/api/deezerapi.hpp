@@ -23,8 +23,14 @@ public:
 	[[nodiscard]]
 	auto album(qint64 albumId) -> ApiResponse *;
 
+	[[nodiscard]]
+	auto options() -> ApiResponse *;
+
 private:
 	QNetworkAccessManager *mHttp;
+
+	[[nodiscard]]
+	auto call(const QString &path) const -> QNetworkReply *;
 
 	[[nodiscard]]
 	auto call(const QString &path, const QUrlQuery &args) const -> QNetworkReply *;

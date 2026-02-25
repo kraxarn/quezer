@@ -36,6 +36,18 @@ auto DeezerApi::album(const qint64 albumId) -> ApiResponse *
 	return new ApiResponse(reply, this);
 }
 
+auto DeezerApi::options() -> ApiResponse *
+{
+	const auto path = QStringLiteral("options");
+	QNetworkReply *reply = call(path);
+	return new ApiResponse(reply, this);
+}
+
+auto DeezerApi::call(const QString &path) const -> QNetworkReply *
+{
+	return call(path, QUrlQuery());
+}
+
 auto DeezerApi::call(const QString &path, const QUrlQuery &args) const -> QNetworkReply *
 {
 	QUrl url(QStringLiteral("https://api.deezer.com/%1").arg(path));
