@@ -7,6 +7,7 @@
 #include "deezer/objects/page.hpp"
 #include "deezer/objects/searchalbum.hpp"
 #include "deezer/objects/songdata.hpp"
+#include "qml/loginpage.hpp"
 
 #include <QFile>
 #include <QGuiApplication>
@@ -28,6 +29,8 @@ namespace
 
 		engine.rootContext()->setContextProperty(QStringLiteral("BuildDate"),
 			QStringLiteral(__DATE__));
+
+		qmlRegisterType<LoginPage>("LoginPage", 1, 0, "LoginPage");
 	}
 
 	void testLogin(DeezerClient &client)

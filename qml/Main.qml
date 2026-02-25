@@ -2,6 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import LoginPage
+
 ApplicationWindow {
 	id: root
 	width: 1280
@@ -16,6 +18,10 @@ ApplicationWindow {
 			bottom: parent.bottom
 			left: parent.left
 			leftMargin: parent.width * 0.15
+		}
+
+		LoginPage {
+			id: page
 		}
 
 		Item {
@@ -48,6 +54,7 @@ ApplicationWindow {
 		TextField {
 			id: email
 			Layout.fillWidth: true
+			onAccepted: login.click()
 		}
 
 		Item {
@@ -62,6 +69,7 @@ ApplicationWindow {
 			id: password
 			Layout.fillWidth: true
 			echoMode: TextInput.Password
+			onAccepted: login.click()
 		}
 
 		Item {
@@ -69,9 +77,11 @@ ApplicationWindow {
 		}
 
 		Button {
+			id: login
 			Layout.fillWidth: true
 			text: "Login"
 			enabled: email.text.length > 0 && password.text.length > 0
+			onPressed: page.login(email.text, password.text)
 		}
 
 		Item {
