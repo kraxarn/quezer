@@ -35,10 +35,18 @@ ApplicationWindow {
 		}
 
 		Label {
+			text: "No error"
+			color: "red"
+			bottomPadding: 12
+			visible: false
+		}
+
+		Label {
 			text: "Email"
 		}
 
 		TextField {
+			id: email
 			Layout.fillWidth: true
 		}
 
@@ -51,7 +59,9 @@ ApplicationWindow {
 		}
 
 		TextField {
+			id: password
 			Layout.fillWidth: true
+			echoMode: TextInput.Password
 		}
 
 		Item {
@@ -61,6 +71,7 @@ ApplicationWindow {
 		Button {
 			Layout.fillWidth: true
 			text: "Login"
+			enabled: email.text.length > 0 && password.text.length > 0
 		}
 
 		Item {
