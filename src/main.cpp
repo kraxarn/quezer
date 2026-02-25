@@ -29,6 +29,7 @@ auto main(int argc, char *argv[]) -> int
 {
 	QCoreApplication::setApplicationName(QStringLiteral(APP_NAME));
 	QCoreApplication::setApplicationVersion(QStringLiteral(APP_VERSION));
+	QCoreApplication::setOrganizationName(QStringLiteral(ORG_NAME));
 
 	// For now at least
 	QGuiApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
