@@ -1,5 +1,7 @@
 #pragma once
 
+#include "deezer/enums/loginerror.hpp"
+
 #include <QObject>
 #include "qqmlintegration.h"
 
@@ -14,10 +16,17 @@ public:
 	explicit LoginPage(QObject *parent = nullptr);
 
 	[[nodiscard]]
-	auto errorMessage() const -> QString;
+	auto errorMessage() const -> const QString &;
 
 	Q_INVOKABLE void login(const QString &email, const QString &password);
 
 signals:
 	void errorMessageChanged();
+
+private:
+	QString mErrorMessage;
+
+	void setErrorMessage(const QString &message);
+
+	void onLoginFinished(LoginError error);
 };

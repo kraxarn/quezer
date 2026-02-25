@@ -41,10 +41,10 @@ ApplicationWindow {
 		}
 
 		Label {
-			text: "No error"
+			text: page.errorMessage
 			color: "red"
 			bottomPadding: 12
-			visible: false
+			visible: text.length > 0
 		}
 
 		Label {
