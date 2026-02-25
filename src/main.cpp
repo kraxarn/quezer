@@ -24,7 +24,7 @@ namespace
 		engine.rootContext()->setContextProperty(QStringLiteral("BuildDate"),
 			QStringLiteral(__DATE__));
 
-		registerType(LoginPage);
+		qmlRegisterType<LoginPage>("Pages.Login", 1, 0, "Login");
 	}
 }
 
