@@ -1,12 +1,3 @@
-#include "deezer/cypher.hpp"
-#include "deezer/deezerclient.hpp"
-#include "deezer/enums/mediaformat.hpp"
-#include "deezer/objects/album.hpp"
-#include "deezer/objects/mediaurl.hpp"
-#include "deezer/objects/options.hpp"
-#include "deezer/objects/page.hpp"
-#include "deezer/objects/searchalbum.hpp"
-#include "deezer/objects/songdata.hpp"
 #include "qml/loginpage.hpp"
 
 #include <QFile>
