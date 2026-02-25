@@ -3,7 +3,7 @@
 #include "deezer/enums/loginerror.hpp"
 
 #include <QObject>
-#include "qqmlintegration.h"
+#include <qqmlintegration.h>
 
 class LoginPage : public QObject
 {
