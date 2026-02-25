@@ -42,6 +42,13 @@ auto main(int argc, char *argv[]) -> int
 	QQmlApplicationEngine engine;
 	defineTypes(engine);
 
+	QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
+		&app, [](const QUrl &url) -> void
+		{
+			qCritical() << "Failed to load:" << url.toString();
+			QCoreApplication::exit(-1);
+		}, Qt::QueuedConnection);
+
 	DeezerClient::createInstance(&engine);
 
 	engine.load(QStringLiteral(":/qml/Main.qml"));
