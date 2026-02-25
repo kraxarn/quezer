@@ -7,10 +7,12 @@
 
 #include <QHttpHeaders>
 #include <QNetworkAccessManager>
+#include <qqmlintegration.h>
 
 class DeezerClient : public QObject
 {
 	Q_OBJECT
+	QML_ELEMENT
 
 public:
 	explicit DeezerClient(QObject *parent);

@@ -1,9 +1,12 @@
+#include "qml/deezerclient.hpp"
 #include "qml/loginpage.hpp"
 
 #include <QFile>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+
+#define registerType(t) qmlRegisterType<t>(#t,1,0,#t)
 
 namespace
 {
@@ -21,7 +24,8 @@ namespace
 		engine.rootContext()->setContextProperty(QStringLiteral("BuildDate"),
 			QStringLiteral(__DATE__));
 
-		qmlRegisterType<LoginPage>("LoginPage", 1, 0, "LoginPage");
+		registerType(DeezerClient);
+		registerType(LoginPage);
 	}
 }
 
