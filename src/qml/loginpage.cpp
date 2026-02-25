@@ -1,5 +1,6 @@
 #include "qml/loginpage.hpp"
 #include "deezer/deezerclient.hpp"
+#include "deezer/objects/options.hpp"
 
 LoginPage::LoginPage(QObject *parent)
 	: QObject(parent)
@@ -29,12 +30,40 @@ void LoginPage::login(const QString &email, const QString &password)
 
 void LoginPage::onLoginFinished(const LoginError error)
 {
+	if (error == LoginError::NoError)
+	{
+		ApiResponse *response = DeezerClient::instance()->api().options();
+		connect(response, &ApiResponse::finished, [this, response]() -> void
+		{
+			if (!response->isValid())
+			{
+				setErrorMessage(response->errorString());
+				response->deleteLater();
+				return;
+			}
+
+			const Options options = response->value<Options>();
+			response->deleteLater();
+
+			if (options.adsDisplay())
+			{
+				setErrorMessage(QStringLiteral("A paid Deezer plan is required"));
+				return;
+			}
+
+			if (!options.streaming())
+			{
+				setErrorMessage(QStringLiteral("Streaming is not supported in your region"));
+				return;
+			}
+
+			emit loggedIn();
+		});
+		return;
+	}
+
 	switch (error)
 	{
-		case LoginError::NoError:
-			setErrorMessage(QStringLiteral("Login successful"));
-			break;
-
 		case LoginError::NoUserData:
 			setErrorMessage(QStringLiteral("Request failed: No user data"));
 			break;
@@ -57,6 +86,9 @@ void LoginPage::onLoginFinished(const LoginError error)
 
 		case LoginError::NoArl:
 			setErrorMessage(QStringLiteral("Request failed: No ARL cookie"));
+			break;
+
+		default:
 			break;
 	}
 }

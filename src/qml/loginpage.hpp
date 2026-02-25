@@ -22,6 +22,7 @@ public:
 
 signals:
 	void errorMessageChanged();
+	void loggedIn();
 
 private:
 	QString mErrorMessage;
