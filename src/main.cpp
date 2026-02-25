@@ -1,3 +1,4 @@
+#include "deezer/deezerclient.hpp"
 #include "qml/loginpage.hpp"
 
 #include <QFile>
@@ -40,6 +41,8 @@ auto main(int argc, char *argv[]) -> int
 
 	QQmlApplicationEngine engine;
 	defineTypes(engine);
+
+	DeezerClient::createInstance(&engine);
 
 	engine.load(QStringLiteral(":/qml/Main.qml"));
 

@@ -10,6 +10,8 @@
 #include <QNetworkReply>
 #include <QUrlQuery>
 
+DeezerClient *DeezerClient::sInstance = nullptr;
+
 DeezerClient::DeezerClient(QObject *parent)
 	: QObject(parent),
 	mHttp(new QNetworkAccessManager(this)),
@@ -158,4 +160,14 @@ auto DeezerClient::headers() -> QHttpHeaders
 	);
 
 	return headers;
+}
+
+void DeezerClient::createInstance(QObject *parent)
+{
+	sInstance = new DeezerClient(parent);
+}
+
+auto DeezerClient::instance() -> DeezerClient *
+{
+	return sInstance;
 }

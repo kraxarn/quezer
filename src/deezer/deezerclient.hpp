@@ -46,4 +46,13 @@ private:
 
 	[[nodiscard]]
 	static auto headers() -> QHttpHeaders;
+
+public:
+	static void createInstance(QObject *parent);
+
+	[[nodiscard]]
+	static auto instance() -> DeezerClient *;
+
+private:
+	static DeezerClient *sInstance;
 };
