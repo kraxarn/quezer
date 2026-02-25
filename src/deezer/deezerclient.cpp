@@ -50,7 +50,7 @@ void DeezerClient::login(const QString &email, const QString &password)
 			return;
 		}
 
-		const UserData userData = response->value<UserData>();
+		const auto userData = response->value<UserData>();
 		response->deleteLater();
 
 		if (userData.checkFormLogin().isEmpty())
