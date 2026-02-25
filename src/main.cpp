@@ -1,4 +1,3 @@
-#include "qml/deezerclient.hpp"
 #include "qml/loginpage.hpp"
 
 #include <QFile>
@@ -24,7 +23,6 @@ namespace
 		engine.rootContext()->setContextProperty(QStringLiteral("BuildDate"),
 			QStringLiteral(__DATE__));
 
-		registerType(DeezerClient);
 		registerType(LoginPage);
 	}
 }

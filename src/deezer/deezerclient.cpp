@@ -1,4 +1,4 @@
-#include "qml/deezerclient.hpp"
+#include "deezer/deezerclient.hpp"
 #include "deezer/objects/album.hpp"
 #include "deezer/objects/page.hpp"
 
