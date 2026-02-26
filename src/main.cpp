@@ -1,5 +1,6 @@
 #include "deezer/deezerclient.hpp"
 #include "qml/loginpage.hpp"
+#include "qml/settings.hpp"
 
 #include <QFile>
 #include <QGuiApplication>
@@ -23,6 +24,8 @@ namespace
 
 		engine.rootContext()->setContextProperty(QStringLiteral("BuildDate"),
 			QStringLiteral(__DATE__));
+
+		registerType(Settings);
 
 		qmlRegisterType<LoginPage>("Pages.Login", 1, 0, "Login");
 	}
