@@ -129,6 +129,16 @@ void DeezerClient::login(const QString &email, const QString &password)
 	});
 }
 
+auto DeezerClient::arl() const -> QString
+{
+	return QString::fromUtf8(arlCookie().value());
+}
+
+auto DeezerClient::arlExpiration() const -> QDateTime
+{
+	return arlCookie().expirationDate();
+}
+
 auto DeezerClient::get(const QUrl &url) -> ApiResponse *
 {
 	const QNetworkRequest request(url);
@@ -188,6 +198,22 @@ auto DeezerClient::cookieValue(const QString &value, const QString &key) -> QStr
 
 	const qsizetype prefixLength = key.length() + 1;
 	return value.mid(begin + prefixLength, end - begin - prefixLength);
+}
+
+auto DeezerClient::arlCookie() const -> QNetworkCookie
+{
+	const QUrl url(QStringLiteral("https://www.deezer.com"));
+	for (const QNetworkCookie &cookie: mHttp->cookieJar()->cookiesForUrl(url))
+	{
+		if (cookie.name() != QStringLiteral("arl").toUtf8())
+		{
+			continue;
+		}
+
+		return cookie;
+	}
+
+	return QNetworkCookie();
 }
 
 void DeezerClient::createInstance(QObject *parent)

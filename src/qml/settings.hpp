@@ -12,7 +12,7 @@ class Settings : public QObject
 	Q_PROPERTY(QDateTime arlExpiration READ arlExpiration NOTIFY arlExpirationChanged)
 
 public:
-	explicit Settings(QObject *parent);
+	explicit Settings(QObject *parent = nullptr);
 
 	[[nodiscard]]
 	auto arl() const -> QString;

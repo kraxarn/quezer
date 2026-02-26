@@ -1,6 +1,7 @@
 #include "qml/loginpage.hpp"
 #include "deezer/deezerclient.hpp"
 #include "deezer/objects/options.hpp"
+#include "qml/settings.hpp"
 
 LoginPage::LoginPage(QObject *parent)
 	: QObject(parent)
@@ -56,6 +57,10 @@ void LoginPage::onLoginFinished(const LoginError error)
 				setErrorMessage(QStringLiteral("Streaming is not supported in your region"));
 				return;
 			}
+
+			Settings settings(nullptr);
+			settings.setArl(DeezerClient::instance()->arl());
+			settings.setArlExpiration(DeezerClient::instance()->arlExpiration());
 
 			emit loggedIn();
 		});

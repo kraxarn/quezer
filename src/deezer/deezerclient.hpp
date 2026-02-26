@@ -18,6 +18,12 @@ public:
 	void login(const QString &email, const QString &password);
 
 	[[nodiscard]]
+	auto arl() const -> QString;
+
+	[[nodiscard]]
+	auto arlExpiration() const -> QDateTime;
+
+	[[nodiscard]]
 	auto get(const QUrl &url) -> ApiResponse *;
 
 	[[nodiscard]]
@@ -49,6 +55,9 @@ private:
 
 	[[nodiscard]]
 	static auto cookieValue(const QString &value, const QString &key) -> QString;
+
+	[[nodiscard]]
+	auto arlCookie() const -> QNetworkCookie;
 
 public:
 	static void createInstance(QObject *parent);

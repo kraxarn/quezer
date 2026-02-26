@@ -9,8 +9,10 @@ qt_add_qml_module(${APP_NAME}
 	NO_RESOURCE_TARGET_PATH
 
 	QML_FILES
-	qml/Main.qml
 	qml/Login.qml
+	qml/Main.qml
+	qml/Player.qml
+	qml/PlayerFooter.qml
 
 	RESOURCES
 	res/logo/quezer.svg

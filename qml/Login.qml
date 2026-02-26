@@ -18,6 +18,8 @@ Item {
 
 		Login {
 			id: page
+
+			onLoggedIn: content.replace(playerPage)
 		}
 
 		Item {
