@@ -45,6 +45,7 @@ target_compile_definitions(${APP_NAME} PRIVATE
 	APP_NAME="${APP_NAME}"
 	APP_VERSION="v${PROJECT_VERSION}"
 	ORG_NAME="kraxarn"
+	ORG_DOMAIN="kraxarn.com"
 	# Qt config
 	QT_NO_CAST_FROM_ASCII
 	QT_NO_CAST_TO_ASCII
