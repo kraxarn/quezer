@@ -39,7 +39,7 @@ private:
 	DeezerMedia mMedia;
 
 	[[nodiscard]]
-	auto login(const QString &arl) const -> bool;
+	auto login(const QString &arl, const QDateTime &expiration) const -> bool;
 
 	[[nodiscard]]
 	static auto request(const QUrl &url) -> QNetworkRequest;
