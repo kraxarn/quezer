@@ -98,27 +98,20 @@ void DeezerClient::login(const QString &email, const QString &password)
 			{
 				const QString value = QString::fromUtf8(data);
 
-				const qsizetype arlBegin = value.indexOf(QStringLiteral("arl="));
-				if (arlBegin < 0)
+				const QString arl = cookieValue(value, QStringLiteral("arl"));
+				if (arl.isEmpty())
 				{
 					continue;
 				}
 
-				const qsizetype arlEnd = value.indexOf(QStringLiteral(";"), arlBegin);
-
-				const qsizetype expiresBegin = value.indexOf(QStringLiteral("expires="));
-				const qsizetype expiresEnd = value.indexOf(QStringLiteral(";"), expiresBegin);
-
 				QDateTime arlExpiration;
-				if (expiresBegin >= 0 && expiresEnd >= 0)
+				if (const QString expires = cookieValue(value, QStringLiteral("expires")); !expires.isEmpty())
 				{
-					arlExpiration = QDateTime::fromString(
-						value.mid(expiresBegin + 8, expiresEnd - expiresBegin - 8),
-						QStringLiteral("ddd, dd MMM yyyy HH:mm:ss tttt")
-					);
+					arlExpiration = QDateTime::fromString(expires,
+						QStringLiteral("ddd, dd MMM yyyy HH:mm:ss tttt"));
 				}
 
-				if (!login(value.mid(arlBegin + 4, arlEnd - arlBegin - 4), arlExpiration))
+				if (!login(arl, arlExpiration))
 				{
 					reply->deleteLater();
 					emit loginFinished(LoginError::InvalidCookie);
@@ -177,6 +170,24 @@ auto DeezerClient::headers() -> QHttpHeaders
 	);
 
 	return headers;
+}
+
+auto DeezerClient::cookieValue(const QString &value, const QString &key) -> QString
+{
+	const qsizetype begin = value.indexOf(QStringLiteral("%1=").arg(key));
+	if (begin < 0)
+	{
+		return {};
+	}
+
+	const qsizetype end = value.indexOf(QStringLiteral(";"), begin);
+	if (end < 0)
+	{
+		return {};
+	}
+
+	const qsizetype prefixLength = key.length() + 1;
+	return value.mid(begin + prefixLength, end - begin - prefixLength);
 }
 
 void DeezerClient::createInstance(QObject *parent)

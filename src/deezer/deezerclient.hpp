@@ -47,6 +47,9 @@ private:
 	[[nodiscard]]
 	static auto headers() -> QHttpHeaders;
 
+	[[nodiscard]]
+	static auto cookieValue(const QString &value, const QString &key) -> QString;
+
 public:
 	static void createInstance(QObject *parent);
 
