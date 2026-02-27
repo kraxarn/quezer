@@ -1,4 +1,5 @@
 #include "deezer/deezerclient.hpp"
+#include "settings.hpp"
 #include "deezer/objects/album.hpp"
 #include "deezer/objects/page.hpp"
 
@@ -19,6 +20,18 @@ DeezerClient::DeezerClient(QObject *parent)
 	mApi(mHttp, this),
 	mMedia(mHttp, this)
 {
+	Settings settings;
+	const QString arl = settings.arl();
+	const QDateTime expiration = settings.arlExpiration();
+
+	if (!arl.isEmpty() && expiration.isValid())
+	{
+		if (!login(arl, expiration))
+		{
+			settings.removeArl();
+			settings.removeArlExpiration();
+		}
+	}
 }
 
 auto DeezerClient::login(const QString &arl, const QDateTime &expiration) const -> bool

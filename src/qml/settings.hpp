@@ -19,10 +19,14 @@ public:
 
 	void setArl(const QString &value);
 
+	void removeArl();
+
 	[[nodiscard]]
 	auto arlExpiration() const -> QDateTime;
 
 	void setArlExpiration(const QDateTime &value);
+
+	void removeArlExpiration();
 
 signals:
 	void arlChanged();
