@@ -14,11 +14,6 @@ public:
 	DeezerGw(QNetworkAccessManager *http, QObject *parent);
 
 	[[nodiscard]]
-	auto checkForm() const -> const QString &;
-
-	void setCheckForm(const QString &checkForm);
-
-	[[nodiscard]]
 	auto userData() -> ApiResponse *;
 
 	[[nodiscard]]
