@@ -2,6 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import Models.Sidebar
+
 Item {
 	anchors {
 		left: parent.left
@@ -13,33 +15,16 @@ Item {
 	ListView {
 		anchors.fill: parent
 
-		model: ListModel {
-			ListElement {
-				icon: "go-home"
-				text: "Home"
-			}
-
-			ListElement {
-				icon: "audio-card" // TODO
-				text: "Explore"
-			}
-
-			ListElement {
-				icon: "mail-mark-important" // TODO
-				text: "Favourites"
-			}
-
-			ListElement {
-				text: "Playlists"
-			}
+		model: SidebarModel {
 		}
+
 		delegate: ItemDelegate {
 			height: 40
 			width: parent.width
 			text: model.text
 			highlighted: ListView.isCurrentItem
 			icon {
-				name: model.icon
+				name: model.action || model.icon
 			}
 			font {
 				bold: true
@@ -52,8 +37,8 @@ Item {
 					right: parent.right
 					verticalCenter: parent.verticalCenter
 				}
-				icon.name: "document-new"
-				visible: !model.icon
+				icon.name: model.icon
+				visible: model.action
 			}
 		}
 	}

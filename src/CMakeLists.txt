@@ -1,4 +1,6 @@
 add_subdirectory(deezer)
+add_subdirectory(items)
+add_subdirectory(models)
 add_subdirectory(qml)
 
 target_sources(${APP_NAME} PRIVATE
