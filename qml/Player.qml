@@ -39,6 +39,10 @@ Item {
 			}
 
 			RoundButton {
+				icon.name: "mail-mark-read" // TODO
+			}
+
+			RoundButton {
 				icon.name: "user-offline"
 			}
 		}
