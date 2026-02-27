@@ -38,17 +38,12 @@ Item {
 		}
 	}
 
-	RowLayout {
+	Row {
 		id: buttons
 
 		anchors {
-			left: progress.left
-			right: progress.right
 			top: parent.top
-		}
-
-		Item {
-			Layout.fillWidth: true
+			horizontalCenter: progress.horizontalCenter
 		}
 
 		ToolButton {
@@ -69,10 +64,6 @@ Item {
 
 		ToolButton {
 			icon.name: "media-playlist-repeat"
-		}
-
-		Item {
-			Layout.fillWidth: true
 		}
 	}
 
