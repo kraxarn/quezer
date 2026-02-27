@@ -15,7 +15,7 @@ Item {
 			left: parent.left
 			top: parent.top
 			bottom: parent.bottom
-			leftMargin: 240 + 2 // TODO: Sidebar + margin
+			leftMargin: album.width + 14
 		}
 
 		Item {
