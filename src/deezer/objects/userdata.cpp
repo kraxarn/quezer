@@ -49,6 +49,17 @@ auto UserData::blogName() const -> const QString &
 	return mBlogName;
 }
 
+auto UserData::userPicture() const -> const QString &
+{
+	return mUserPicture;
+}
+
+auto UserData::userPictureUrl() const -> QUrl
+{
+	return QStringLiteral("https://cdn-images.dzcdn.net/images/user/%1/100x100-000000-80-0-0.jpg")
+		.arg(userPicture());
+}
+
 auto UserData::licenseToken() const -> const QString &
 {
 	return mLicenseToken;

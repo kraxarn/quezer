@@ -16,6 +16,12 @@ public:
 	auto blogName() const -> const QString &;
 
 	[[nodiscard]]
+	auto userPicture() const -> const QString &;
+
+	[[nodiscard]]
+	auto userPictureUrl() const -> QUrl;
+
+	[[nodiscard]]
 	auto licenseToken() const -> const QString &;
 
 	[[nodiscard]]
