@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Material
 import QtQuick.Layouts
 
 import Settings
@@ -10,6 +11,9 @@ ApplicationWindow {
 	height: 720
 	visible: true
 	title: `${AppName}`
+
+	Material.theme: Material.Dark
+	Material.accent: "#a238ff"
 
 	Settings {
 		id: settings

@@ -7,6 +7,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQuickStyle>
 
 #define registerType(t) qmlRegisterType<t>(#t,1,0,#t)
 
@@ -47,6 +48,9 @@ auto main(int argc, char *argv[]) -> int
 
 	QQmlApplicationEngine engine;
 	defineTypes(engine);
+
+	// TODO: Use system style
+	QQuickStyle::setStyle(QStringLiteral("Material"));
 
 	QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
 		&app, [](const QUrl &url) -> void
