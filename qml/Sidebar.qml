@@ -8,5 +8,5 @@ Item {
 		top: parent.top
 		bottom: parent.bottom
 	}
-	width: 260
+	width: 240
 }
