@@ -45,7 +45,6 @@ Item {
 			left: progress.left
 			right: progress.right
 			top: parent.top
-			topMargin: 8
 		}
 
 		Item {
@@ -85,7 +84,6 @@ Item {
 			bottom: parent.bottom
 			leftMargin: parent.width * 0.4
 			rightMargin: parent.width * 0.4
-			bottomMargin: 12
 		}
 	}
 
