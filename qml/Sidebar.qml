@@ -37,6 +37,7 @@ Item {
 			height: 40
 			width: parent.width
 			text: model.text
+			highlighted: ListView.isCurrentItem
 			icon {
 				name: model.icon
 			}
