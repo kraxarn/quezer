@@ -26,6 +26,7 @@ Item {
 
 			RoundButton {
 				icon.name: "go-previous"
+				enabled: false
 			}
 
 			RoundButton {
