@@ -11,9 +11,6 @@ ApplicationWindow {
 	visible: true
 	title: `${AppName}`
 
-	footer: PlayerFooter {
-	}
-
 	Settings {
 		id: settings
 	}

@@ -5,8 +5,6 @@ import QtQuick.Layouts
 import Pages.Login
 
 Item {
-	anchors.fill: parent
-
 	ColumnLayout {
 		id: loginLayout
 		anchors {
