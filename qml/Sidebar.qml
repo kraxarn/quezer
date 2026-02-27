@@ -33,32 +33,16 @@ Item {
 				text: "Playlists"
 			}
 		}
-		delegate: Item {
+		delegate: ItemDelegate {
 			height: 40
 			width: parent.width
-
-			Icon {
-				id: icon
-				anchors {
-					left: parent.left
-					verticalCenter: parent.verticalCenter
-				}
+			text: model.text
+			icon {
 				name: model.icon
-				size: model.icon ? 45 : 0
 			}
-
-			Label {
-				id: label
-				anchors {
-					left: icon.right
-					leftMargin: model.icon ? 0 : 8
-					verticalCenter: parent.verticalCenter
-				}
-				font {
-					pointSize: 14
-					bold: true
-				}
-				text: model.text
+			font {
+				bold: true
+				pointSize: 14
 			}
 
 			ToolButton {
