@@ -24,14 +24,14 @@ Item {
 			text: model.text
 			highlighted: ListView.isCurrentItem
 			icon {
-				source: model.action
-					? ""
-					: `qrc:/mdi/${model.icon}${ListView.isCurrentItem ? "" : "-outline"}.svg`
+				source: model.action ? "" : `qrc:/mdi/${iconName}.svg`
 			}
 			font {
 				bold: true
 				pointSize: 14
 			}
+
+			property var iconName: `${model.icon}${ListView.isCurrentItem ? "" : "-outline"}`
 
 			ToolButton {
 				id: action
