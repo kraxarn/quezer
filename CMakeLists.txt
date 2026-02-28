@@ -34,6 +34,8 @@ endif ()
 
 add_subdirectory(src)
 
+include(deps/mdi.cmake)
+
 include(qml.cmake)
 
 target_include_directories(${APP_NAME} PRIVATE
