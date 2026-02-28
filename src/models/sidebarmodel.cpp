@@ -3,9 +3,9 @@
 SidebarModel::SidebarModel(QObject *parent)
 	: QAbstractListModel(parent),
 	mItems({
-		SidebarItem(QStringLiteral("home"), QStringLiteral("Home"), false),
-		SidebarItem(QStringLiteral("compass"), QStringLiteral("Explore"), false),       // TODO: Temporary icon
-		SidebarItem(QStringLiteral("heart"), QStringLiteral("Favourites"), false), // TODO: Temporary icon
+		SidebarItem(QStringLiteral("home-outline"), QStringLiteral("Home"), false),
+		SidebarItem(QStringLiteral("compass-outline"), QStringLiteral("Explore"), false),       // TODO: Temporary icon
+		SidebarItem(QStringLiteral("heart-outline"), QStringLiteral("Favourites"), false), // TODO: Temporary icon
 		SidebarItem(QStringLiteral("plus"), QStringLiteral("Playlists"), true)
 	})
 {
