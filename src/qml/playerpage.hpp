@@ -3,7 +3,10 @@
 #include "deezer/apiresponse.hpp"
 #include "deezer/objects/userdata.hpp"
 
+#include <QAudioOutput>
+#include <QBuffer>
 #include <QImage>
+#include <QMediaPlayer>
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <qqmlintegration.h>
@@ -21,17 +24,33 @@ public:
 	[[nodiscard]]
 	auto userImage() const -> const QImage &;
 
+	Q_INVOKABLE void play(qint64 trackId);
+
 signals:
 	void userImageChanged();
 
 private:
 	QNetworkAccessManager mHttp;
-
+	QMediaPlayer mMediaPlayer;
+	QAudioOutput mAudioOutput;
+	QByteArray mAudioData;
+	QBuffer mAudioBuffer;
 	QImage mUserImage;
 
+	UserData mUserData;
+	qint64 mCurrentTrackId;
+
 	void refreshUserData();
+
+	void onMediaPlayerErrorOccurred(QMediaPlayer::Error error, const QString &errorString);
 
 	void onUserDataResponse();
 
 	void onUserPictureResponse();
+
+	void onSongData() const;
+
+	void onMediaUrl();
+
+	void onMediaDownloaded();
 };

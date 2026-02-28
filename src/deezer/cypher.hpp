@@ -1,5 +1,7 @@
 #pragma once
 
+#include "deezer/blowfish/blowfish.hpp"
+
 #include <QString>
 
 class Cypher
@@ -9,6 +11,9 @@ public:
 	static auto generateKey(qint64 seed) -> QByteArray;
 
 	[[nodiscard]]
-	static auto decrypt(const QByteArray &key, const std::array<quint8, 8> &iv,
+	static auto generateIv() -> IV;
+
+	[[nodiscard]]
+	static auto decrypt(const QByteArray &key, const IV &iv,
 		const QByteArray &data) -> QByteArray;
 };

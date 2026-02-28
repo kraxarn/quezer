@@ -6,6 +6,8 @@
 class UserData final
 {
 public:
+	UserData() = default;
+
 	[[nodiscard]]
 	static auto fromJson(const QJsonObject &json) -> UserData;
 
@@ -31,8 +33,6 @@ public:
 	auto checkFormLogin() const -> const QString &;
 
 private:
-	UserData() = default;
-
 	qint64 mUserId;
 	QString mBlogName;
 	QString mUserPicture;

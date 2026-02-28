@@ -27,6 +27,11 @@ auto Cypher::generateKey(const qint64 seed) -> QByteArray
 	return result;
 }
 
+auto Cypher::generateIv() -> IV
+{
+	return {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
+}
+
 auto Cypher::decrypt(const QByteArray &key, const std::array<quint8, 8> &iv,
 	const QByteArray &data) -> QByteArray
 {
@@ -58,4 +63,3 @@ auto Cypher::decrypt(const QByteArray &key, const std::array<quint8, 8> &iv,
 
 	return result;
 }
-
