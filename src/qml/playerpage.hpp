@@ -1,13 +1,11 @@
 #pragma once
 
 #include "deezer/apiresponse.hpp"
+#include "deezer/mediaplayer.hpp"
 #include "deezer/enums/mediaformat.hpp"
 #include "deezer/objects/userdata.hpp"
 
-#include <QAudioOutput>
-#include <QBuffer>
 #include <QImage>
-#include <QMediaPlayer>
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <qqmlintegration.h>
@@ -32,27 +30,13 @@ signals:
 
 private:
 	QNetworkAccessManager mHttp;
-	QMediaPlayer mMediaPlayer;
-	QAudioOutput mAudioOutput;
-	QByteArray mAudioData;
-	QBuffer mAudioBuffer;
+	MediaPlayer mMediaPlayer;
 	QImage mUserImage;
-
 	UserData mUserData;
-	qint64 mCurrentTrackId;
-	MediaFormat mCurrentMediaFormat;
 
 	void refreshUserData();
-
-	void onMediaPlayerErrorOccurred(QMediaPlayer::Error error, const QString &errorString);
 
 	void onUserDataResponse();
 
 	void onUserPictureResponse();
-
-	void onSongData();
-
-	void onMediaUrl();
-
-	void onMediaDownloaded();
 };
