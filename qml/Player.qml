@@ -33,13 +33,13 @@ Item {
 			}
 
 			RoundButton {
-				icon.name: "go-previous"
+				icon.source: "qrc:/mdi/chevron-left.svg"
 				enabled: false
 			}
 
 			RoundButton {
 				Layout.leftMargin: parent.margin * 0.5
-				icon.name: "system-search"
+				icon.source: "qrc:/mdi/magnify.svg"
 			}
 
 			Item {
@@ -47,11 +47,11 @@ Item {
 			}
 
 			RoundButton {
-				icon.name: "mail-mark-read" // TODO
+				icon.source: "qrc:/mdi/bell-outline.svg"
 			}
 
 			RoundButton {
-				icon.name: "user-offline"
+				icon.source: "qrc:/mdi/account-circle.svg"
 				contentItem: ImagePaintedItem {
 					image: page.userImage
 				}

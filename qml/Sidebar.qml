@@ -24,7 +24,7 @@ Item {
 			text: model.text
 			highlighted: ListView.isCurrentItem
 			icon {
-				name: model.action || model.icon
+				source: model.action || `qrc:/mdi/${model.icon}.svg`
 			}
 			font {
 				bold: true
@@ -37,7 +37,7 @@ Item {
 					right: parent.right
 					verticalCenter: parent.verticalCenter
 				}
-				icon.name: model.icon
+				icon.source: `qrc:/mdi/${model.icon}.svg`
 				visible: model.action
 			}
 		}

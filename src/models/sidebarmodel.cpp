@@ -3,10 +3,10 @@
 SidebarModel::SidebarModel(QObject *parent)
 	: QAbstractListModel(parent),
 	mItems({
-		SidebarItem(QStringLiteral("go-home"), QStringLiteral("Home"), false),
-		SidebarItem(QStringLiteral("audio-card"), QStringLiteral("Explore"), false),       // TODO: Temporary icon
-		SidebarItem(QStringLiteral("mail-mark-important"), QStringLiteral("Home"), false), // TODO: Temporary icon
-		SidebarItem(QStringLiteral("document-new"), QStringLiteral("Playlists"), true)
+		SidebarItem(QStringLiteral("home"), QStringLiteral("Home"), false),
+		SidebarItem(QStringLiteral("compass"), QStringLiteral("Explore"), false),       // TODO: Temporary icon
+		SidebarItem(QStringLiteral("heart"), QStringLiteral("Favourites"), false), // TODO: Temporary icon
+		SidebarItem(QStringLiteral("plus"), QStringLiteral("Playlists"), true)
 	})
 {
 }

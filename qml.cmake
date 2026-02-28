@@ -34,6 +34,7 @@ qt_add_resources(${APP_NAME} MDI
 	"${MDI_DIR}/chevron-left.svg"
 	"${MDI_DIR}/compass.svg"
 	"${MDI_DIR}/format-list-numbered.svg"
+	"${MDI_DIR}/heart.svg"
 	"${MDI_DIR}/home.svg"
 	"${MDI_DIR}/magnify.svg"
 	"${MDI_DIR}/microphone-variant.svg"

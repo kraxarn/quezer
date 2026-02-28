@@ -47,23 +47,23 @@ Item {
 		}
 
 		ToolButton {
-			icon.name: "media-playlist-shuffle"
+			icon.source: "qrc:/mdi/shuffle-disabled.svg"
 		}
 
 		ToolButton {
-			icon.name: "media-skip-backward"
+			icon.source: "qrc:/mdi/skip-previous.svg"
 		}
 
 		ToolButton {
-			icon.name: "media-playback-start"
+			icon.source: "qrc:/mdi/play.svg"
 		}
 
 		ToolButton {
-			icon.name: "media-skip-forward"
+			icon.source: "qrc:/mdi/skip-next.svg"
 		}
 
 		ToolButton {
-			icon.name: "media-playlist-repeat"
+			icon.source: "qrc:/mdi/repeat-off.svg"
 		}
 	}
 
@@ -91,7 +91,7 @@ Item {
 				top: parent.top
 				bottom: parent.bottom
 			}
-			icon.name: "audio-input-microphone"
+			icon.source: "qrc:/mdi/microphone-variant.svg"
 		}
 
 		ToolButton {
@@ -99,7 +99,7 @@ Item {
 				top: parent.top
 				bottom: parent.bottom
 			}
-			icon.name: "format-justify-fill" // TODO
+			icon.source: "qrc:/mdi/format-list-numbered.svg"
 		}
 
 		Item {
@@ -112,7 +112,7 @@ Item {
 				top: parent.top
 				bottom: parent.bottom
 			}
-			icon.name: "audio-volume-high"
+			icon.source: "qrc:/mdi/volume-high.svg"
 		}
 
 		Slider {
