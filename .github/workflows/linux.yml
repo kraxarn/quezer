@@ -41,7 +41,7 @@ jobs:
           modules: "qtmultimedia qtwaylandcompositor"
 
       - name: Install Dependencies
-        run: sudo apt install libxkbcommon-x11-dev libxcb-cursor-dev -y
+        run: sudo apt install -y libgstreamer-plugins-bad1.0-0
 
       - name: Configure CMake
         run: cmake -S . -B build -D CMAKE_BUILD_TYPE=$BUILD_TYPE -D CMAKE_INSTALL_PREFIX=/usr
