@@ -15,7 +15,7 @@ PlayerPage::PlayerPage(QObject *parent)
 	mMediaPlayer.setSourceDevice(&mAudioBuffer);
 
 	connect(&mMediaPlayer, &QMediaPlayer::errorOccurred,
-		this, &PlayerPage::onMediaPlayerErrorOccured);
+		this, &PlayerPage::onMediaPlayerErrorOccurred);
 
 	refreshUserData();
 }
