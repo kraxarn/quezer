@@ -1,8 +1,16 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
 
+import Pages.Player
+import ImagePaintedItem
+
 Item {
+	Player {
+		id: page
+	}
+
 	Rectangle {
 		id: main
 		anchors {
@@ -44,6 +52,9 @@ Item {
 
 			RoundButton {
 				icon.name: "user-offline"
+				contentItem: ImagePaintedItem {
+					image: page.userImage
+				}
 			}
 		}
 	}
