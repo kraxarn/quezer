@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 REQUIRED COMPONENTS
 	Core
 	Multimedia
+	Gui
 	Quick
 	QuickControls2
 )
@@ -69,6 +70,7 @@ set_target_properties(${APP_NAME} PROPERTIES
 target_link_libraries(${APP_NAME} PRIVATE
 	Qt6::Core
 	Qt6::Multimedia
+	Qt6::Gui
 	Qt6::Quick
 	Qt6::QuickControls2
 )
