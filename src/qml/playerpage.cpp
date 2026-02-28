@@ -8,11 +8,10 @@ PlayerPage::PlayerPage(QObject *parent)
 	: QObject(parent),
 	mHttp(this),
 	mMediaPlayer(this),
-	mAudioOutput(this)
+	mAudioOutput(this),
+	mCurrentMediaFormat(MediaFormat::LowQuality)
 {
 	mMediaPlayer.setAudioOutput(&mAudioOutput);
-	mAudioBuffer.setBuffer(&mAudioData);
-	mMediaPlayer.setSourceDevice(&mAudioBuffer);
 
 	connect(&mMediaPlayer, &QMediaPlayer::errorOccurred,
 		this, &PlayerPage::onMediaPlayerErrorOccurred);
@@ -82,12 +81,12 @@ void PlayerPage::onUserPictureResponse()
 	emit userImageChanged();
 }
 
-void PlayerPage::onSongData() const
+void PlayerPage::onSongData()
 {
 	auto response = qobject_cast<ApiResponse *>(sender());
 	if (!response->isValid())
 	{
-		qWarning() << "Failed to play track:" << response->errorString();
+		qWarning() << "Failed to get song data:" << response->errorString();
 		response->deleteLater();
 		return;
 	}
@@ -96,7 +95,7 @@ void PlayerPage::onSongData() const
 	response->deleteLater();
 
 	DeezerClient *client = DeezerClient::instance();
-	response = client->media().url(mUserData, songData, MediaFormat::LowQuality);
+	response = client->media().url(mUserData, songData, mCurrentMediaFormat);
 
 	connect(response, &ApiResponse::finished,
 		this, &PlayerPage::onMediaUrl);
@@ -107,7 +106,7 @@ void PlayerPage::onMediaUrl()
 	const auto response = qobject_cast<ApiResponse *>(sender());
 	if (!response->isValid())
 	{
-		qWarning() << "Failed to play track:" << response->errorString();
+		qWarning() << "Failed to get media url:" << response->errorString();
 		response->deleteLater();
 		return;
 	}
@@ -127,7 +126,7 @@ void PlayerPage::onMediaDownloaded()
 	const auto reply = qobject_cast<QNetworkReply *>(sender());
 	if (reply->error() != QNetworkReply::NoError)
 	{
-		qWarning() << "Failed to play track:" << reply->errorString();
+		qWarning() << "Failed to download media:" << reply->errorString();
 		reply->deleteLater();
 		return;
 	}
@@ -139,8 +138,17 @@ void PlayerPage::onMediaDownloaded()
 	const IV iv = Cypher::generateIv();
 
 	mMediaPlayer.stop();
-	{
-		mAudioData = Cypher::decrypt(key, iv, data);
-	}
+	mAudioBuffer.close();
+
+	mAudioData = Cypher::decrypt(key, iv, data);
+	mAudioBuffer.setBuffer(&mAudioData);
+
+	mMediaPlayer.setSourceDevice(&mAudioBuffer,QStringLiteral("%1.%2")
+		.arg(mCurrentTrackId)
+		.arg(mCurrentMediaFormat == MediaFormat::Lossless
+			? QStringLiteral("flac")
+			: QStringLiteral("mp3")));
+
+	mAudioBuffer.open(QIODevice::ReadOnly);
 	mMediaPlayer.play();
 }

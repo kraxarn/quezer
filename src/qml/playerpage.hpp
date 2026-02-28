@@ -1,6 +1,7 @@
 #pragma once
 
 #include "deezer/apiresponse.hpp"
+#include "deezer/enums/mediaformat.hpp"
 #include "deezer/objects/userdata.hpp"
 
 #include <QAudioOutput>
@@ -39,6 +40,7 @@ private:
 
 	UserData mUserData;
 	qint64 mCurrentTrackId;
+	MediaFormat mCurrentMediaFormat;
 
 	void refreshUserData();
 
@@ -48,7 +50,7 @@ private:
 
 	void onUserPictureResponse();
 
-	void onSongData() const;
+	void onSongData();
 
 	void onMediaUrl();
 
