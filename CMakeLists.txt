@@ -7,6 +7,8 @@ project(quezer-app
 
 set(APP_NAME "quezer")
 
+option(USE_FFMPEG "Use Qt ffmpeg backend" OFF)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -68,6 +70,25 @@ set_target_properties(${APP_NAME} PROPERTIES
 	# Windows
 	WIN32_EXECUTABLE TRUE
 )
+
+if (USE_FFMPEG)
+	set(MEDIA_BACKEND "ffmpeg")
+elseif (APPLE)
+	set(MEDIA_BACKEND "darwin")
+elseif (UNIX)
+	set(MEDIA_BACKEND "gstreamer")
+elseif (WIN32)
+	set(MEDIA_BACKEND "windows")
+elseif (ANDROID)
+	set(MEDIA_BACKEND "android")
+endif ()
+
+if (MEDIA_BACKEND)
+	message(STATUS "Qt media backend: ${MEDIA_BACKEND}")
+	set_target_properties(${APP_NAME} PROPERTIES
+		QT_DEFAULT_MEDIA_BACKEND "${MEDIA_BACKEND}"
+	)
+endif ()
 
 target_link_libraries(${APP_NAME} PRIVATE
 	Qt6::Core
