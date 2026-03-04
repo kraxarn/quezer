@@ -1,4 +1,4 @@
-#include "deezer/mediaplayer.hpp"
+#include "player/mediaplayer.hpp"
 #include "deezer/apiresponse.hpp"
 #include "deezer/cypher.hpp"
 #include "deezer/deezerclient.hpp"

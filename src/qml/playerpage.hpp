@@ -1,9 +1,9 @@
 #pragma once
 
 #include "deezer/apiresponse.hpp"
-#include "deezer/mediaplayer.hpp"
 #include "deezer/enums/mediaformat.hpp"
 #include "deezer/objects/userdata.hpp"
+#include "player/mediaplayer.hpp"
 
 #include <QImage>
 #include <QNetworkAccessManager>
