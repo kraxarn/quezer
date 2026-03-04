@@ -24,15 +24,15 @@ private:
 	{
 		qint64 trackId;
 		MediaFormat mediaFormat;
+		QUrl mediaUrl;
+		QByteArray audioData;
 	};
 
 	QNetworkAccessManager mHttp;
 	QAudioDecoder mAudioDecoder;
 	QAudioSink mAudioSink;
 
-	QByteArray mAudioData;
 	QBuffer mAudioBuffer;
-
 	QByteArray mDecodedAudioData;
 	QBuffer mDecodedAudioBuffer;
 

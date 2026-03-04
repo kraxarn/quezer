@@ -94,7 +94,8 @@ void MediaPlayer::onMediaUrl()
 	const auto mediaUrl = response->value<MediaUrl>();
 	response->deleteLater();
 
-	const QNetworkRequest request(mediaUrl.sources().at(0).url());
+	mQueue.head().mediaUrl = mediaUrl.sources().at(0).url();
+	const QNetworkRequest request(mQueue.head().mediaUrl);
 	const QNetworkReply *reply = mHttp.get(request);
 
 	connect(reply, &QNetworkReply::finished,
@@ -119,7 +120,7 @@ void MediaPlayer::onMediaDownloaded()
 
 	mAudioBuffer.close();
 
-	mAudioData = Cypher::decrypt(key, iv, data);
+	mQueue.head().audioData = Cypher::decrypt(key, iv, data);
 
 	if (mQueue.head().mediaFormat != MediaFormat::Lossless)
 	{
@@ -129,10 +130,10 @@ void MediaPlayer::onMediaDownloaded()
 			0x00,                   // Flags
 			0x00, 0x00, 0x00, 0x00, // Tag size
 		};
-		mAudioData.prepend(id3Header);
+		mQueue.head().audioData.prepend(id3Header);
 	}
 
-	mAudioBuffer.setBuffer(&mAudioData);
+	mAudioBuffer.setBuffer(&mQueue.head().audioData);
 	mAudioDecoder.setSourceDevice(&mAudioBuffer);
 	mAudioBuffer.open(QIODevice::ReadOnly);
 
