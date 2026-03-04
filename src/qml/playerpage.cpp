@@ -17,9 +17,9 @@ auto PlayerPage::userImage() const -> const QImage &
 	return mUserImage;
 }
 
-void PlayerPage::play(const qint64 trackId)
+void PlayerPage::enqueue(const qint64 trackId)
 {
-	mMediaPlayer.playTrack(mUserData, trackId, MediaFormat::LowQuality);
+	mMediaPlayer.enqueue(mUserData, trackId, MediaFormat::LowQuality);
 }
 
 void PlayerPage::refreshUserData()

@@ -7,6 +7,7 @@
 #include <QAudioSink>
 #include <QBuffer>
 #include <QNetworkAccessManager>
+#include <QQueue>
 
 class MediaPlayer final : public QObject
 {
@@ -15,10 +16,16 @@ class MediaPlayer final : public QObject
 public:
 	explicit MediaPlayer(QObject *parent);
 
-	void playTrack(const UserData &userData,
+	void enqueue(const UserData &userData,
 		qint64 trackId, MediaFormat mediaFormat);
 
 private:
+	struct QueueItem final
+	{
+		qint64 trackId;
+		MediaFormat mediaFormat;
+	};
+
 	QNetworkAccessManager mHttp;
 	QAudioDecoder mAudioDecoder;
 	QAudioSink mAudioSink;
@@ -30,8 +37,7 @@ private:
 	QBuffer mDecodedAudioBuffer;
 
 	UserData mCurrentUserData;
-	qint64 mCurrentTrackId;
-	MediaFormat mCurrentMediaFormat;
+	QQueue<QueueItem> mQueue;
 
 	void logAudioConfig() const;
 

@@ -11,9 +11,7 @@ MediaPlayer::MediaPlayer(QObject *parent)
 	: QObject(parent),
 	mAudioDecoder(this),
 	mAudioSink({}, this),
-	mDecodedAudioBuffer(&mDecodedAudioData, this),
-	mCurrentTrackId(0),
-	mCurrentMediaFormat(MediaFormat::LowQuality)
+	mDecodedAudioBuffer(&mDecodedAudioData, this)
 {
 	connect(&mAudioDecoder, &QAudioDecoder::bufferReady,
 		this, &MediaPlayer::onAudioDecoderBufferReady);
@@ -24,12 +22,14 @@ MediaPlayer::MediaPlayer(QObject *parent)
 	logAudioConfig();
 }
 
-void MediaPlayer::playTrack(const UserData &userData,
+void MediaPlayer::enqueue(const UserData &userData,
 	const qint64 trackId, const MediaFormat mediaFormat)
 {
 	mCurrentUserData = userData;
-	mCurrentTrackId = trackId;
-	mCurrentMediaFormat = mediaFormat;
+	mQueue.enqueue({
+		.trackId = trackId,
+		.mediaFormat = mediaFormat,
+	});
 
 	DeezerClient *client = DeezerClient::instance();
 	const ApiResponse *response = client->gw().songData(userData, trackId);
@@ -75,7 +75,7 @@ void MediaPlayer::onSongData()
 	response->deleteLater();
 
 	DeezerClient *client = DeezerClient::instance();
-	response = client->media().url(mCurrentUserData, songData, mCurrentMediaFormat);
+	response = client->media().url(mCurrentUserData, songData, mQueue.head().mediaFormat);
 
 	connect(response, &ApiResponse::finished,
 		this, &MediaPlayer::onMediaUrl);
@@ -114,14 +114,14 @@ void MediaPlayer::onMediaDownloaded()
 	const QByteArray data = reply->readAll();
 	reply->deleteLater();
 
-	const QByteArray key = Cypher::generateKey(mCurrentTrackId);
+	const QByteArray key = Cypher::generateKey(mQueue.head().trackId);
 	const IV iv = Cypher::generateIv();
 
 	mAudioBuffer.close();
 
 	mAudioData = Cypher::decrypt(key, iv, data);
 
-	if (mCurrentMediaFormat != MediaFormat::Lossless)
+	if (mQueue.head().mediaFormat != MediaFormat::Lossless)
 	{
 		constexpr std::array<char, 10> id3Header = {
 			0x49, 0x44, 0x33,       // "ID3" identifier
