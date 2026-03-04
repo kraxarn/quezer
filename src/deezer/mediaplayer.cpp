@@ -51,7 +51,7 @@ void MediaPlayer::onAudioDecoderError([[maybe_unused]] const QAudioDecoder::Erro
 
 void MediaPlayer::onSongData()
 {
-	auto response = qobject_cast<ApiResponse *>(sender());
+	auto *response = qobject_cast<ApiResponse *>(sender());
 	if (!response->isValid())
 	{
 		qWarning() << "Failed to get song data:" << response->errorString();
@@ -59,7 +59,7 @@ void MediaPlayer::onSongData()
 		return;
 	}
 
-	const SongData songData = response->value<SongData>();
+	const auto songData = response->value<SongData>();
 	response->deleteLater();
 
 	DeezerClient *client = DeezerClient::instance();
@@ -71,7 +71,7 @@ void MediaPlayer::onSongData()
 
 void MediaPlayer::onMediaUrl()
 {
-	const auto response = qobject_cast<ApiResponse *>(sender());
+	auto *const response = qobject_cast<ApiResponse *>(sender());
 	if (!response->isValid())
 	{
 		qWarning() << "Failed to get media url:" << response->errorString();
@@ -79,7 +79,7 @@ void MediaPlayer::onMediaUrl()
 		return;
 	}
 
-	const MediaUrl mediaUrl = response->value<MediaUrl>();
+	const auto mediaUrl = response->value<MediaUrl>();
 	response->deleteLater();
 
 	const QNetworkRequest request(mediaUrl.sources().at(0).url());
@@ -91,7 +91,7 @@ void MediaPlayer::onMediaUrl()
 
 void MediaPlayer::onMediaDownloaded()
 {
-	const auto reply = qobject_cast<QNetworkReply *>(sender());
+	auto *const reply = qobject_cast<QNetworkReply *>(sender());
 	if (reply->error() != QNetworkReply::NoError)
 	{
 		qWarning() << "Failed to download media:" << reply->errorString();
