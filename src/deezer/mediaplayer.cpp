@@ -37,11 +37,6 @@ void MediaPlayer::onAudioDecoderBufferReady()
 {
 	const QAudioBuffer buffer = mAudioDecoder.read();
 	mDecodedAudioData.append(buffer.constData<const char>(), buffer.byteCount());
-
-	if (mAudioSink.state() == QtAudio::StoppedState)
-	{
-		mAudioSink.start(&mDecodedAudioBuffer);
-	}
 }
 
 void MediaPlayer::onAudioDecoderError([[maybe_unused]] const QAudioDecoder::Error error) const
@@ -129,4 +124,6 @@ void MediaPlayer::onMediaDownloaded()
 	mDecodedAudioBuffer.close();
 	mDecodedAudioData.clear();
 	mDecodedAudioBuffer.open(QIODevice::ReadOnly);
+
+	mAudioSink.start(&mDecodedAudioBuffer);
 }
