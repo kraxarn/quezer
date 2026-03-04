@@ -35,12 +35,6 @@ private:
 
 	void logAudioConfig() const;
 
-	[[nodiscard]]
-	static auto channelConfigString(QAudioFormat::ChannelConfig channelConfig) -> QString;
-
-	[[nodiscard]]
-	static auto sampleFormatString(QAudioFormat::SampleFormat sampleFormat) -> QString;
-
 	void onAudioDecoderBufferReady();
 
 	void onAudioDecoderError(QAudioDecoder::Error error) const;
