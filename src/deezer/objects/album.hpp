@@ -1,8 +1,8 @@
 #pragma once
 
+#include "deezer/apipage.hpp"
 #include "deezer/enums/explicitcontent.hpp"
 #include "deezer/objects/genre.hpp"
-#include "deezer/objects/page.hpp"
 
 #include <QString>
 #include <QUrl>
@@ -122,7 +122,7 @@ public:
 	auto cover() const -> const QUrl &;
 
 	[[nodiscard]]
-	auto genres() const -> const Page<Genre> &;
+	auto genres() const -> const ApiPage<Genre> &;
 
 	[[nodiscard]]
 	auto label() const -> const QString &;
@@ -161,7 +161,7 @@ public:
 	auto artist() const -> const Artist &;
 
 	[[nodiscard]]
-	auto tracks() const -> const Page<Track> &;
+	auto tracks() const -> const ApiPage<Track> &;
 
 private:
 	Album() = default;
@@ -169,7 +169,7 @@ private:
 	qint64 mId;
 	QString mTitle;
 	QUrl mCover;
-	Page<Genre> mGenres;
+	ApiPage<Genre> mGenres;
 	QString mLabel;
 	qint32 mNbTracks;
 	qint64 mDuration;
@@ -182,5 +182,5 @@ private:
 	ExplicitContent mExplicitContentCover;
 	QList<Contributor> mContributors;
 	Artist mArtist;
-	Page<Track> mTracks;
+	ApiPage<Track> mTracks;
 };

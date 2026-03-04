@@ -1,7 +1,7 @@
 #include "deezer/deezerclient.hpp"
 #include "settings.hpp"
+#include "deezer/apipage.hpp"
 #include "deezer/objects/album.hpp"
-#include "deezer/objects/page.hpp"
 
 #include <QCoreApplication>
 #include <QHttpHeaders>

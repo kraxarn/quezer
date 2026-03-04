@@ -10,7 +10,7 @@ auto Album::fromJson(const QJsonObject &json) -> Album
 	result.mId = json.value(QStringLiteral("id")).toInteger();
 	result.mTitle = json.value(QStringLiteral("title")).toString();
 	result.mCover = json.value(QStringLiteral("cover")).toString();
-	result.mGenres = Page<Genre>::fromJson(
+	result.mGenres = ApiPage<Genre>::fromJson(
 		json.value(QStringLiteral("genres")).toObject()
 	);
 	result.mLabel = json.value(QStringLiteral("label")).toString();
@@ -40,7 +40,7 @@ auto Album::fromJson(const QJsonObject &json) -> Album
 	result.mArtist = Artist::fromJson(
 		json.value(QStringLiteral("artist")).toObject()
 	);
-	result.mTracks = Page<Track>::fromJson(
+	result.mTracks = ApiPage<Track>::fromJson(
 		json.value(QStringLiteral("tracks")).toObject()
 	);
 
@@ -176,7 +176,7 @@ auto Album::cover() const -> const QUrl &
 	return mCover;
 }
 
-auto Album::genres() const -> const Page<Genre> &
+auto Album::genres() const -> const ApiPage<Genre> &
 {
 	return mGenres;
 }
@@ -241,7 +241,7 @@ auto Album::artist() const -> const Artist &
 	return mArtist;
 }
 
-auto Album::tracks() const -> const Page<Track> &
+auto Album::tracks() const -> const ApiPage<Track> &
 {
 	return mTracks;
 }

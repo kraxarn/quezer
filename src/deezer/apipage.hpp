@@ -1,21 +1,20 @@
 #pragma once
 
 #include <QJsonArray>
-#include <QJsonDocument>
 #include <QJsonObject>
 #include <QList>
 #include <QUrl>
 
 template<typename T>
-class Page
+class ApiPage
 {
 public:
-	Page() = default;
+	ApiPage() = default;
 
 	[[nodiscard]]
-	static auto fromJson(const QJsonObject &json) -> Page
+	static auto fromJson(const QJsonObject &json) -> ApiPage
 	{
-		Page result;
+		ApiPage result;
 
 		const QJsonArray data = json.value(QStringLiteral("data")).toArray();
 
