@@ -6,16 +6,17 @@
 
 MediaPlayer::MediaPlayer(QObject *parent)
 	: QObject(parent),
-	mMediaPlayer(this),
-	mAudioOutput(this),
-	mCurrentUserData(UserData()),
+	mAudioDecoder(this),
+	mAudioSink({}, this),
+	mDecodedAudioBuffer(&mDecodedAudioData, this),
 	mCurrentTrackId(0),
 	mCurrentMediaFormat(MediaFormat::LowQuality)
 {
-	mMediaPlayer.setAudioOutput(&mAudioOutput);
+	connect(&mAudioDecoder, &QAudioDecoder::bufferReady,
+		this, &MediaPlayer::onAudioDecoderBufferReady);
 
-	connect(&mMediaPlayer, &QMediaPlayer::errorOccurred,
-		this, &MediaPlayer::onMediaPlayerErrorOccurred);
+	connect(&mAudioDecoder, qOverload<QAudioDecoder::Error>(&QAudioDecoder::error),
+		this, &MediaPlayer::onAudioDecoderError);
 }
 
 void MediaPlayer::playTrack(const UserData &userData,
@@ -32,9 +33,20 @@ void MediaPlayer::playTrack(const UserData &userData,
 		this, &MediaPlayer::onSongData);
 }
 
-void MediaPlayer::onMediaPlayerErrorOccurred(QMediaPlayer::Error error, const QString &errorString)
+void MediaPlayer::onAudioDecoderBufferReady()
 {
-	qWarning() << "Media player error:" << errorString;
+	const QAudioBuffer buffer = mAudioDecoder.read();
+	mDecodedAudioData.append(buffer.constData<const char>(), buffer.byteCount());
+
+	if (mAudioSink.state() == QtAudio::StoppedState)
+	{
+		mAudioSink.start(&mDecodedAudioBuffer);
+	}
+}
+
+void MediaPlayer::onAudioDecoderError([[maybe_unused]] const QAudioDecoder::Error error) const
+{
+	qWarning() << "Audio decoder error:" << mAudioDecoder.errorString();
 }
 
 void MediaPlayer::onSongData()
@@ -93,18 +105,17 @@ void MediaPlayer::onMediaDownloaded()
 	const QByteArray key = Cypher::generateKey(mCurrentTrackId);
 	const IV iv = Cypher::generateIv();
 
-	mMediaPlayer.stop();
 	mAudioBuffer.close();
 
 	mAudioData = Cypher::decrypt(key, iv, data);
 	mAudioBuffer.setBuffer(&mAudioData);
 
-	mMediaPlayer.setSourceDevice(&mAudioBuffer,QStringLiteral("%1.%2")
-		.arg(mCurrentTrackId)
-		.arg(mCurrentMediaFormat == MediaFormat::Lossless
-			? QStringLiteral("flac")
-			: QStringLiteral("mp3")));
-
+	mAudioDecoder.setSourceDevice(&mAudioBuffer);
 	mAudioBuffer.open(QIODevice::ReadOnly);
-	mMediaPlayer.play();
+
+	mAudioDecoder.start();
+
+	mDecodedAudioBuffer.close();
+	mDecodedAudioData.clear();
+	mDecodedAudioBuffer.open(QIODevice::ReadOnly);
 }

@@ -3,9 +3,9 @@
 #include "deezer/enums/mediaformat.hpp"
 #include "deezer/objects/userdata.hpp"
 
-#include <QAudioOutput>
+#include <QAudioDecoder>
+#include <QAudioSink>
 #include <QBuffer>
-#include <QMediaPlayer>
 #include <QNetworkAccessManager>
 
 class MediaPlayer final : public QObject
@@ -20,16 +20,22 @@ public:
 
 private:
 	QNetworkAccessManager mHttp;
-	QMediaPlayer mMediaPlayer;
-	QAudioOutput mAudioOutput;
+	QAudioDecoder mAudioDecoder;
+	QAudioSink mAudioSink;
+
 	QByteArray mAudioData;
 	QBuffer mAudioBuffer;
+
+	QByteArray mDecodedAudioData;
+	QBuffer mDecodedAudioBuffer;
 
 	UserData mCurrentUserData;
 	qint64 mCurrentTrackId;
 	MediaFormat mCurrentMediaFormat;
 
-	static void onMediaPlayerErrorOccurred(QMediaPlayer::Error error, const QString &errorString);
+	void onAudioDecoderBufferReady();
+
+	void onAudioDecoderError(QAudioDecoder::Error error) const;
 
 	void onSongData();
 
