@@ -108,8 +108,19 @@ void MediaPlayer::onMediaDownloaded()
 	mAudioBuffer.close();
 
 	mAudioData = Cypher::decrypt(key, iv, data);
-	mAudioBuffer.setBuffer(&mAudioData);
 
+	if (mCurrentMediaFormat != MediaFormat::Lossless)
+	{
+		constexpr std::array<char, 10> id3Header = {
+			0x49, 0x44, 0x33,       // "ID3" identifier
+			0x03, 0x00,             // Version (v2.3.0)
+			0x00,                   // Flags
+			0x00, 0x00, 0x00, 0x00, // Tag size
+		};
+		mAudioData.prepend(id3Header);
+	}
+
+	mAudioBuffer.setBuffer(&mAudioData);
 	mAudioDecoder.setSourceDevice(&mAudioBuffer);
 	mAudioBuffer.open(QIODevice::ReadOnly);
 
