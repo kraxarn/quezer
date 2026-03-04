@@ -19,7 +19,7 @@ auto PlayerPage::userImage() const -> const QImage &
 
 void PlayerPage::enqueue(const qint64 trackId)
 {
-	mMediaPlayer.enqueue(mUserData, trackId, MediaFormat::LowQuality);
+	mMediaPlayer.enqueue(trackId, MediaFormat::LowQuality);
 }
 
 void PlayerPage::refreshUserData()
@@ -41,6 +41,7 @@ void PlayerPage::onUserDataResponse()
 	}
 
 	mUserData = response->value<UserData>();
+	mMediaPlayer.setUserData(mUserData);
 
 	const QNetworkRequest request(mUserData.userPictureUrl());
 	const QNetworkReply *reply = mHttp.get(request);

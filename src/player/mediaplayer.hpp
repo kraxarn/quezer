@@ -16,8 +16,9 @@ class MediaPlayer final : public QObject
 public:
 	explicit MediaPlayer(QObject *parent);
 
-	void enqueue(const UserData &userData,
-		qint64 trackId, MediaFormat mediaFormat);
+	void enqueue(qint64 trackId, MediaFormat mediaFormat);
+
+	void setUserData(const UserData &userData);
 
 private:
 	struct QueueItem final

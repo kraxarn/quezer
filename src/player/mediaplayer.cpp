@@ -22,20 +22,23 @@ MediaPlayer::MediaPlayer(QObject *parent)
 	logAudioConfig();
 }
 
-void MediaPlayer::enqueue(const UserData &userData,
-	const qint64 trackId, const MediaFormat mediaFormat)
+void MediaPlayer::enqueue(const qint64 trackId, const MediaFormat mediaFormat)
 {
-	mCurrentUserData = userData;
 	mQueue.enqueue({
 		.trackId = trackId,
 		.mediaFormat = mediaFormat,
 	});
 
 	DeezerClient *client = DeezerClient::instance();
-	const ApiResponse *response = client->gw().songData(userData, trackId);
+	const ApiResponse *response = client->gw().songData(mCurrentUserData, trackId);
 
 	connect(response, &ApiResponse::finished,
 		this, &MediaPlayer::onSongData);
+}
+
+void MediaPlayer::setUserData(const UserData &userData)
+{
+	mCurrentUserData = userData;
 }
 
 void MediaPlayer::logAudioConfig() const
