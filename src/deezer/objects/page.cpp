@@ -37,6 +37,10 @@ auto Page::Section::fromJson(const QJsonObject &json) -> Section
 		section.mItems.append(Item::fromJson(item.toObject()));
 	}
 
+	section.mFilter = Filter::fromJson(
+		json.value(QStringLiteral("filter")).toObject()
+	);
+
 	return section;
 }
 
@@ -76,4 +80,32 @@ auto Page::Section::Item::Picture::fromJson(const QJsonObject &json) -> Picture
 	picture.mType = json.value(QStringLiteral("type")).toString();
 
 	return picture;
+}
+
+auto Page::Section::Filter::fromJson(const QJsonObject &json) -> Filter
+{
+	Filter filter;
+
+	const QJsonArray options = json
+		.value(QStringLiteral("options")).toArray();
+
+	filter.mDefaultOptionId = json.value(QStringLiteral("default_option_id")).toString();
+
+	filter.mOptions.reserve(options.size());
+	for (const QJsonValueConstRef option: options)
+	{
+		filter.mOptions.append(Option::fromJson(option.toObject()));
+	}
+
+	return filter;
+}
+
+auto Page::Section::Filter::Option::fromJson(const QJsonObject &json) -> Option
+{
+	Option option;
+
+	option.mId = json.value(QStringLiteral("id")).toString();
+	option.mLabel = json.value(QStringLiteral("label")).toString();
+
+	return option;
 }

@@ -41,6 +41,34 @@ public:
 			QStringList mFilterOptionIds;
 		};
 
+		class Filter final
+		{
+		public:
+			[[nodiscard]]
+			static auto fromJson(const QJsonObject &json) -> Filter;
+
+			class Option final
+			{
+			public:
+				[[nodiscard]]
+				static auto fromJson(const QJsonObject &json) -> Option;
+
+			private:
+				Option() = default;
+
+				QString mId;
+				QString mLabel;
+			};
+
+		private:
+			Filter() = default;
+
+			QString mDefaultOptionId;
+			QList<Option> mOptions;
+
+			friend class Section;
+		};
+
 	private:
 		Section() = default;
 
@@ -49,6 +77,7 @@ public:
 		QString mLayout;
 		QString mTarget;
 		QList<Item> mItems;
+		Filter mFilter;
 	};
 
 private:
