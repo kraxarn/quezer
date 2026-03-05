@@ -19,6 +19,9 @@ public:
 	[[nodiscard]]
 	auto songData(const UserData &userData, qint64 sngId) -> ApiResponse *;
 
+	[[nodiscard]]
+	auto homePage(const UserData &userData) -> ApiResponse *;
+
 private:
 	QNetworkAccessManager *mHttp;
 
@@ -26,10 +29,14 @@ private:
 	auto call(const QString &method) const -> QNetworkReply *;
 
 	[[nodiscard]]
+	auto call(const QString &method, const QString &input,
+		const QString &token) const -> QNetworkReply *;
+
+	[[nodiscard]]
 	auto call(const QString &method, const QJsonDocument &body,
 		const QString &token) const -> QNetworkReply *;
 
 	[[nodiscard]]
-	auto call(const QString &method, const QByteArray &body,
+	auto call(const QString &method, const QString &input, const QByteArray &body,
 		const QString &token) const -> QNetworkReply *;
 };

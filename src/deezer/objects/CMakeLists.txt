@@ -3,6 +3,7 @@ target_sources(${APP_NAME} PRIVATE
 	"${CMAKE_CURRENT_SOURCE_DIR}/genre.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/mediaurl.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/options.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/page.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/searchalbum.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/songdata.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/userdata.cpp"

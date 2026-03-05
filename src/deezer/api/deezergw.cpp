@@ -1,5 +1,6 @@
 #include "deezer/api/deezergw.hpp"
 
+#include <QJsonArray>
 #include <QUrlQuery>
 
 DeezerGw::DeezerGw(QNetworkAccessManager *http, QObject *parent)
@@ -25,18 +26,55 @@ auto DeezerGw::songData(const UserData &userData, const qint64 sngId) -> ApiResp
 	return new ApiResponse(reply, this);
 }
 
+auto DeezerGw::homePage(const UserData &userData) -> ApiResponse *
+{
+	const QJsonArray supportedItems({
+		QStringLiteral("artist"),
+		QStringLiteral("playlist"),
+		QStringLiteral("channel"), // genres etc.
+		QStringLiteral("album"),
+	});
+
+	QJsonObject input;
+	input[QStringLiteral("PAGE")] = QStringLiteral("home");
+	input[QStringLiteral("VERSION")] = QStringLiteral("2.5");
+	input[QStringLiteral("LANG")] = QStringLiteral("en");
+	input[QStringLiteral("OPTIONS")] = QJsonArray();
+	input[QStringLiteral("SUPPORT")] = QJsonObject({
+		{
+			QStringLiteral("filterable-grid"), QJsonArray({
+				QStringLiteral("flow"),
+			}),
+		},
+		{QStringLiteral("horizontal-grid"), supportedItems},
+		{QStringLiteral("long-card-horizontal-grid"), supportedItems},
+	});
+
+	QNetworkReply *reply = call(QStringLiteral("page.get"),
+		QString::fromUtf8(QJsonDocument(input).toJson(QJsonDocument::Compact)),
+		userData.checkForm());
+
+	return new ApiResponse(reply, this);
+}
+
 auto DeezerGw::call(const QString &method) const -> QNetworkReply *
 {
-	return call(method, QStringLiteral("{}").toUtf8(), {});
+	return call(method, QString(), QString());
+}
+
+auto DeezerGw::call(const QString &method, const QString &input,
+	const QString &token) const -> QNetworkReply *
+{
+	return call(method, input, QStringLiteral("{}").toUtf8(), token);
 }
 
 auto DeezerGw::call(const QString &method, const QJsonDocument &body,
 	const QString &token) const -> QNetworkReply *
 {
-	return call(method, body.toJson(QJsonDocument::Compact), token);
+	return call(method, {}, body.toJson(QJsonDocument::Compact), token);
 }
 
-auto DeezerGw::call(const QString &method, const QByteArray &body,
+auto DeezerGw::call(const QString &method, const QString &input, const QByteArray &body,
 	const QString &token) const -> QNetworkReply *
 {
 	QUrl url(QStringLiteral("https://www.deezer.com/ajax/gw-light.php"));
@@ -46,6 +84,7 @@ auto DeezerGw::call(const QString &method, const QByteArray &body,
 			{QStringLiteral("api_token"), token},
 			{QStringLiteral("input"), QStringLiteral("3")},
 			{QStringLiteral("method"), method},
+			{QStringLiteral("gateway_input"), input},
 		},
 	});
 
