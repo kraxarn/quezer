@@ -109,3 +109,18 @@ auto Page::Section::Filter::Option::fromJson(const QJsonObject &json) -> Option
 
 	return option;
 }
+
+auto Page::Section::title() const -> const QString &
+{
+	return mTitle;
+}
+
+auto Page::Section::subtitle() const -> const QString &
+{
+	return mSubtitle;
+}
+
+auto Page::sections() const -> const QList<Section> &
+{
+	return mSections;
+}

@@ -6,6 +6,8 @@
 class Page final
 {
 public:
+	Page() = default;
+
 	[[nodiscard]]
 	static auto fromJson(const QJsonObject &json) -> Page;
 
@@ -69,6 +71,12 @@ public:
 			friend class Section;
 		};
 
+		[[nodiscard]]
+		auto title() const -> const QString &;
+
+		[[nodiscard]]
+		auto subtitle() const -> const QString &;
+
 	private:
 		Section() = default;
 
@@ -80,8 +88,9 @@ public:
 		Filter mFilter;
 	};
 
-private:
-	Page() = default;
+	[[nodiscard]]
+	auto sections() const -> const QList<Section> &;
 
+private:
 	QList<Section> mSections;
 };

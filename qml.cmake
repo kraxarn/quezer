@@ -11,6 +11,7 @@ qt_add_qml_module(${APP_NAME}
 	QML_FILES
 	qml/Album.qml
 	qml/Footer.qml
+	qml/Home.qml
 	qml/Icon.qml
 	qml/Login.qml
 	qml/Main.qml

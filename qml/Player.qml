@@ -57,6 +57,18 @@ Item {
 				}
 			}
 		}
+
+		StackView {
+			id: mainContent
+			anchors.fill: parent
+			initialItem: home
+		}
+
+		Component {
+			id: home
+			Home {
+			}
+		}
 	}
 
 	Footer {
