@@ -1,6 +1,7 @@
 #include "models/homepagemodel.hpp"
 #include "deezer/deezerclient.hpp"
 #include "qml/pagefilteroption.hpp"
+#include "qml/pageitem.hpp"
 
 HomePageModel::HomePageModel(QObject *parent)
 	: QAbstractListModel(parent)
@@ -18,6 +19,7 @@ QHash<int, QByteArray> HomePageModel::roleNames() const
 			{static_cast<int>(ItemRole::Subtitle), "subtitle"},
 			{static_cast<int>(ItemRole::FilterOption), "filterOption"},
 			{static_cast<int>(ItemRole::FilterOptions), "filterOptions"},
+			{static_cast<int>(ItemRole::Items), "items"},
 		}
 	};
 }
@@ -57,7 +59,7 @@ auto HomePageModel::data(const QModelIndex &index, const int role) const -> QVar
 
 	if (itemRole == ItemRole::FilterOptions)
 	{
-		QList<PageFilterOption*> labels;
+		QList<PageFilterOption *> labels;
 		labels.reserve(section.filter().options().length());
 
 		for (const Page::Section::Filter::Option &option: section.filter().options())
@@ -66,6 +68,19 @@ auto HomePageModel::data(const QModelIndex &index, const int role) const -> QVar
 		}
 
 		return QVariant::fromValue(labels);
+	}
+
+	if (itemRole == ItemRole::Items)
+	{
+		QList<PageItem *> items;
+		items.reserve(section.items().length());
+
+		for (const Page::Section::Item &item: section.items())
+		{
+			items.append(new PageItem(item, parent()));
+		}
+
+		return QVariant::fromValue(items);
 	}
 
 	return {};

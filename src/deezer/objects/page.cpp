@@ -72,6 +72,16 @@ auto Page::Section::Item::fromJson(const QJsonObject &json) -> Item
 	return item;
 }
 
+auto Page::Section::Item::title() const -> const QString &
+{
+	return mTitle;
+}
+
+auto Page::Section::Item::subtitle() const -> const QString &
+{
+	return mSubtitle;
+}
+
 auto Page::Section::Item::Picture::fromJson(const QJsonObject &json) -> Picture
 {
 	Picture picture;
@@ -138,6 +148,11 @@ auto Page::Section::title() const -> const QString &
 auto Page::Section::subtitle() const -> const QString &
 {
 	return mSubtitle;
+}
+
+auto Page::Section::items() const -> const QList<Item> &
+{
+	return mItems;
 }
 
 auto Page::Section::filter() const -> const Filter &

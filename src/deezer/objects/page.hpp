@@ -20,8 +20,16 @@ public:
 		class Item final
 		{
 		public:
+			Item() = default;
+
 			[[nodiscard]]
 			static auto fromJson(const QJsonObject &json) -> Item;
+
+			[[nodiscard]]
+			auto title() const -> const QString &;
+
+			[[nodiscard]]
+			auto subtitle() const -> const QString &;
 
 			class Picture final
 			{
@@ -35,8 +43,6 @@ public:
 			};
 
 		private:
-			Item() = default;
-
 			QString mTitle;
 			QString mSubtitle;
 			QList<Picture> mPictures;
@@ -88,6 +94,9 @@ public:
 
 		[[nodiscard]]
 		auto subtitle() const -> const QString &;
+
+		[[nodiscard]]
+		auto items() const -> const QList<Item> &;
 
 		[[nodiscard]]
 		auto filter() const -> const Filter &;

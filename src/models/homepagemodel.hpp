@@ -28,6 +28,7 @@ private:
 		Subtitle,
 		FilterOption,
 		FilterOptions,
+		Items,
 	};
 
 	Page mPage;
