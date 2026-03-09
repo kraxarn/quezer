@@ -1,5 +1,6 @@
 #include "models/homepagemodel.hpp"
 #include "deezer/deezerclient.hpp"
+#include "qml/pagefilteroption.hpp"
 
 HomePageModel::HomePageModel(QObject *parent)
 	: QAbstractListModel(parent)
@@ -15,6 +16,8 @@ QHash<int, QByteArray> HomePageModel::roleNames() const
 		{
 			{static_cast<int>(ItemRole::Title), "title"},
 			{static_cast<int>(ItemRole::Subtitle), "subtitle"},
+			{static_cast<int>(ItemRole::FilterOption), "filterOption"},
+			{static_cast<int>(ItemRole::FilterOptions), "filterOptions"},
 		}
 	};
 }
@@ -27,18 +30,45 @@ auto HomePageModel::rowCount(const QModelIndex &parent) const -> int
 auto HomePageModel::data(const QModelIndex &index, const int role) const -> QVariant
 {
 	const Page::Section &section = mPage.sections().at(index.row());
+	const auto itemRole = static_cast<ItemRole>(role);
 
-	switch (static_cast<ItemRole>(role))
+	if (itemRole == ItemRole::Title)
 	{
-		case ItemRole::Title:
-			return section.title();
-
-		case ItemRole::Subtitle:
-			return section.subtitle();
-
-		default:
-			return {};
+		return section.title();
 	}
+
+	if (itemRole == ItemRole::Subtitle)
+	{
+		return section.subtitle();
+	}
+
+	if (itemRole == ItemRole::FilterOption)
+	{
+		for (const Page::Section::Filter::Option &option: section.filter().options())
+		{
+			if (option.id() == section.filter().defaultOptionId())
+			{
+				return QVariant::fromValue(new PageFilterOption(option, parent()));
+			}
+		}
+
+		return {};
+	}
+
+	if (itemRole == ItemRole::FilterOptions)
+	{
+		QList<PageFilterOption*> labels;
+		labels.reserve(section.filter().options().length());
+
+		for (const Page::Section::Filter::Option &option: section.filter().options())
+		{
+			labels.append(new PageFilterOption(option, parent()));
+		}
+
+		return QVariant::fromValue(labels);
+	}
+
+	return {};
 }
 
 void HomePageModel::onUserData() const

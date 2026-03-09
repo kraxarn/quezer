@@ -26,6 +26,8 @@ private:
 	{
 		Title = Qt::UserRole + 1,
 		Subtitle,
+		FilterOption,
+		FilterOptions,
 	};
 
 	Page mPage;

@@ -52,15 +52,27 @@ public:
 			class Option final
 			{
 			public:
+				Option() = default;
+
 				[[nodiscard]]
 				static auto fromJson(const QJsonObject &json) -> Option;
 
-			private:
-				Option() = default;
+				[[nodiscard]]
+				auto id() const -> const QString &;
 
+				[[nodiscard]]
+				auto label() const -> const QString &;
+
+			private:
 				QString mId;
 				QString mLabel;
 			};
+
+			[[nodiscard]]
+			auto defaultOptionId() const -> const QString &;
+
+			[[nodiscard]]
+			auto options() const -> const QList<Option> &;
 
 		private:
 			Filter() = default;
@@ -76,6 +88,9 @@ public:
 
 		[[nodiscard]]
 		auto subtitle() const -> const QString &;
+
+		[[nodiscard]]
+		auto filter() const -> const Filter &;
 
 	private:
 		Section() = default;

@@ -8,6 +8,12 @@ ListView {
 	model: HomePageModel {
 	}
 	delegate: Item {
+		required property string title
+		required property string subtitle
+		required property var filterOption
+		required property var filterOptions
+
+		id: delegate
 		height: 100
 		width: parent.width
 		anchors {
@@ -31,7 +37,7 @@ ListView {
 				bold: true
 				pointSize: 20
 			}
-			text: model.title
+			text: delegate.title
 		}
 
 		Label {
@@ -43,8 +49,19 @@ ListView {
 				pointSize: 14
 			}
 			opacity: 0.6
-			visible: model.subtitle
-			text: model.subtitle
+			visible: !!delegate.subtitle
+			text: delegate.subtitle
+		}
+
+		ComboBox {
+			visible: !!delegate.filterOption
+			height: 45
+			anchors {
+				top: topPadding.bottom
+				right: parent.right
+			}
+			textRole: "label"
+			model: delegate.filterOptions
 		}
 	}
 }

@@ -110,6 +110,26 @@ auto Page::Section::Filter::Option::fromJson(const QJsonObject &json) -> Option
 	return option;
 }
 
+auto Page::Section::Filter::Option::id() const -> const QString &
+{
+	return mId;
+}
+
+auto Page::Section::Filter::Option::label() const -> const QString &
+{
+	return mLabel;
+}
+
+auto Page::Section::Filter::defaultOptionId() const -> const QString &
+{
+	return mDefaultOptionId;
+}
+
+auto Page::Section::Filter::options() const -> const QList<Option> &
+{
+	return mOptions;
+}
+
 auto Page::Section::title() const -> const QString &
 {
 	return mTitle;
@@ -118,6 +138,11 @@ auto Page::Section::title() const -> const QString &
 auto Page::Section::subtitle() const -> const QString &
 {
 	return mSubtitle;
+}
+
+auto Page::Section::filter() const -> const Filter &
+{
+	return mFilter;
 }
 
 auto Page::sections() const -> const QList<Section> &
