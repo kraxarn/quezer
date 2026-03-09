@@ -69,6 +69,17 @@ set_target_properties(${APP_NAME} PROPERTIES
 	WIN32_EXECUTABLE TRUE
 )
 
+# Disable exceptions
+if (MSVC)
+	set_target_properties(${APP_NAME} PROPERTIES
+		COMPILE_FLAGS "/EHsc"
+	)
+else ()
+	set_target_properties(${APP_NAME} PROPERTIES
+		COMPILE_FLAGS "-fno-exceptions"
+	)
+endif ()
+
 target_link_libraries(${APP_NAME} PRIVATE
 	Qt6::Core
 	Qt6::Multimedia
