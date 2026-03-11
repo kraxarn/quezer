@@ -54,4 +54,8 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: quezer-wasm
-          path: ${{runner.workspace}}/quezer/build
+          path: |
+            ${{runner.workspace}}/quezer/build/*.html
+            ${{runner.workspace}}/quezer/build/*.js
+            ${{runner.workspace}}/quezer/build/*.svg
+            ${{runner.workspace}}/quezer/build/*.wasm
