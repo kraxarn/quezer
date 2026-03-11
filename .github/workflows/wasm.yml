@@ -1,0 +1,57 @@
+name: WASM
+
+on: [ push, pull_request ]
+
+env:
+  BUILD_TYPE: "MinSizeRel"
+  QT_VERSION: "6.10.2"
+  QT_ARCH: "wasm_multithread"
+  # https://doc.qt.io/qt-6/wasm.html#installing-emscripten
+  EM_VERSION: "4.0.7"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Qt (host)
+        uses: jurplel/install-qt-action@v4
+        with:
+          cache: true
+          version: ${{env.QT_VERSION}}
+          arch: "linux_gcc_64"
+          modules: "qtmultimedia"
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          cache: true
+          version: ${{env.QT_VERSION}}
+          arch: ${{env.QT_ARCH}}
+          host: "all_os"
+          target: "wasm"
+          modules: "qtmultimedia"
+
+      - name: Setup emsdk
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: ${{env.EM_VERSION}}
+          actions-cache-folder: 'emsdk-${{env.EM_VERSION}}'
+
+      - name: Configure CMake
+        env:
+          QT_HOST_PATH: ${{runner.workspace}}/Qt/${{env.QT_VERSION}}/gcc_64
+        run: |
+          chmod +x ${{runner.workspace}}/Qt/$QT_VERSION/$QT_ARCH/bin/qt-cmake
+          ${{runner.workspace}}/Qt/$QT_VERSION/$QT_ARCH/bin/qt-cmake -S . -B build -D CMAKE_BUILD_TYPE=$BUILD_TYPE
+
+      - name: Build
+        run: cmake --build build --config $BUILD_TYPE
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: quezer-wasm
+          path: ${{runner.workspace}}/quezer/build
