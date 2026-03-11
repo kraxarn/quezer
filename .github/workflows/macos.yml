@@ -32,7 +32,7 @@ jobs:
         run: macdeployqt build/quezer.app -dmg -verbose=2
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: quezer-macos-universal
           path: build/quezer.dmg

@@ -49,7 +49,7 @@ jobs:
         run: windeployqt --no-opengl-sw ${{runner.workspace}}\quezer\build\${{env.BUILD_TYPE}}\quezer.exe
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: quezer-${{matrix.name}}
           path: ${{runner.workspace}}\quezer\build\${{env.BUILD_TYPE}}
