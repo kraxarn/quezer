@@ -13,6 +13,7 @@ Item {
 
 	Rectangle {
 		id: main
+		clip: true
 		anchors {
 			left: sidebar.right
 			right: parent.right
