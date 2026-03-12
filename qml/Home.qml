@@ -67,7 +67,7 @@ ListView {
 		}
 
 		ListView {
-			visible: delegate.items.length > 0
+			visible: !delegate.items.isEmpty
 			orientation: ListView.Horizontal
 			spacing: 20
 			anchors {
