@@ -91,12 +91,18 @@ ListView {
 				spacing: 5
 
 				required property string title
+				required property url pictureUrl
 
 				Rectangle {
 					width: parent.width
 					height: parent.width
 					radius: parent.width / 2
 					color: parent.palette.window
+
+					Image {
+						anchors.fill: parent
+						source: delegate.pictureUrl
+					}
 				}
 
 				Label {

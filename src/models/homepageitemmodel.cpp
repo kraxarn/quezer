@@ -10,6 +10,7 @@ QHash<int, QByteArray> HomePageItemModel::roleNames() const
 	return {
 		{
 			{static_cast<int>(ItemRole::Title), "title"},
+			{static_cast<int>(ItemRole::PictureUrl), "pictureUrl"},
 		}
 	};
 }
@@ -27,6 +28,11 @@ auto HomePageItemModel::data(const QModelIndex &index, int role) const -> QVaria
 	{
 		case ItemRole::Title:
 			return item.title();
+
+		case ItemRole::PictureUrl:
+			return item.pictures().isEmpty()
+				? QUrl()
+				: item.pictures().first().url();
 
 		default:
 			return {};

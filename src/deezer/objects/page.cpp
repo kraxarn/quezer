@@ -82,6 +82,11 @@ auto Page::Section::Item::subtitle() const -> const QString &
 	return mSubtitle;
 }
 
+auto Page::Section::Item::pictures() const -> const QList<Picture> &
+{
+	return mPictures;
+}
+
 auto Page::Section::Item::Picture::fromJson(const QJsonObject &json) -> Picture
 {
 	Picture picture;
@@ -90,6 +95,22 @@ auto Page::Section::Item::Picture::fromJson(const QJsonObject &json) -> Picture
 	picture.mType = json.value(QStringLiteral("type")).toString();
 
 	return picture;
+}
+
+auto Page::Section::Item::Picture::md5() const -> const QString &
+{
+	return mMd5;
+}
+
+auto Page::Section::Item::Picture::type() const -> const QString &
+{
+	return mType;
+}
+
+auto Page::Section::Item::Picture::url() const -> QUrl
+{
+	return QStringLiteral("https://cdn-images.dzcdn.net/images/%1/%2/232x232-none-80-0-0.png")
+		.arg(mType, mMd5);
 }
 
 auto Page::Section::Filter::fromJson(const QJsonObject &json) -> Filter

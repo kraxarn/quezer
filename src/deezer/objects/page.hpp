@@ -25,22 +25,34 @@ public:
 			[[nodiscard]]
 			static auto fromJson(const QJsonObject &json) -> Item;
 
-			[[nodiscard]]
-			auto title() const -> const QString &;
-
-			[[nodiscard]]
-			auto subtitle() const -> const QString &;
-
 			class Picture final
 			{
 			public:
 				[[nodiscard]]
 				static auto fromJson(const QJsonObject &json) -> Picture;
 
+				[[nodiscard]]
+				auto md5() const -> const QString &;
+
+				[[nodiscard]]
+				auto type() const -> const QString &;
+
+				[[nodiscard]]
+				auto url() const -> QUrl;
+
 			private:
 				QString mMd5;
 				QString mType;
 			};
+
+			[[nodiscard]]
+			auto title() const -> const QString &;
+
+			[[nodiscard]]
+			auto subtitle() const -> const QString &;
+
+			[[nodiscard]]
+			auto pictures() const -> const QList<Picture> &;
 
 		private:
 			QString mTitle;
