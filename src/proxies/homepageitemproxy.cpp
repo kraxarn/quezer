@@ -22,8 +22,8 @@ void HomePageItemProxy::setFilterOptionId(const QString &optionId)
 	emit filterOptionIdChanged();
 }
 
-bool HomePageItemProxy::filterAcceptsRow(const int sourceRow,
-	const QModelIndex &sourceParent) const
+auto HomePageItemProxy::filterAcceptsRow(const int sourceRow,
+	[[maybe_unused]] const QModelIndex &sourceParent) const -> bool
 {
 	if (filterOptionId().isEmpty())
 	{

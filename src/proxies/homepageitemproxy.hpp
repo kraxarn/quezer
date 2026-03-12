@@ -22,8 +22,9 @@ signals:
 	void filterOptionIdChanged();
 
 protected:
-	bool filterAcceptsRow(int sourceRow,
-		const QModelIndex &sourceParent) const override;
+	[[nodiscard]]
+	auto filterAcceptsRow(int sourceRow,
+		const QModelIndex &sourceParent) const -> bool override;
 
 private:
 	QString mFilterOptionId;
