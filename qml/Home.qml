@@ -105,6 +105,7 @@ ListView {
 						right: parent.right
 					}
 					horizontalAlignment: Text.AlignHCenter
+					wrapMode: Text.WordWrap
 					text: delegate.title
 				}
 			}
