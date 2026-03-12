@@ -1,10 +1,12 @@
 #include "qml/imagepainteditem.hpp"
 
+#include <QNetworkReply>
 #include <QPainter>
 #include <QPainterPath>
 
 ImagePaintedItem::ImagePaintedItem(QQuickItem *parent)
-	: QQuickPaintedItem(parent)
+	: QQuickPaintedItem(parent),
+	mHttp(this)
 {
 }
 
@@ -42,4 +44,35 @@ void ImagePaintedItem::setImage(const QImage &image)
 	{
 		update();
 	}
+}
+
+auto ImagePaintedItem::source() const -> const QUrl &
+{
+	return mSource;
+}
+
+void ImagePaintedItem::setSource(const QUrl &source)
+{
+	mSource = source;
+	emit sourceChanged();
+
+	const QNetworkRequest request(mSource);
+	const QNetworkReply *reply = mHttp.get(request);
+
+	connect(reply, &QNetworkReply::finished,
+		this, &ImagePaintedItem::onReplyFinished);
+}
+
+void ImagePaintedItem::onReplyFinished()
+{
+	const auto reply = qobject_cast<QNetworkReply *>(sender());
+	if (reply->error() != QNetworkReply::NoError)
+	{
+		qWarning() << "Invalid source:" << reply->errorString();
+		reply->deleteLater();
+		return;
+	}
+
+	setImage(QImage::fromData(reply->readAll()));
+	reply->deleteLater();
 }
