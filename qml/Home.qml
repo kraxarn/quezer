@@ -4,6 +4,7 @@ import QtQuick.Layouts
 
 import Models.HomePage
 import Models.HomePageItem
+import ImagePaintedItem
 
 ListView {
 	anchors {
@@ -99,7 +100,7 @@ ListView {
 					radius: parent.width / 2
 					color: parent.palette.window
 
-					Image {
+					ImagePaintedItem {
 						anchors.fill: parent
 						source: delegate.pictureUrl
 					}
