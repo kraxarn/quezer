@@ -24,6 +24,7 @@ Item {
 
 		RowLayout {
 			property var margin: 10
+			z: 10
 			anchors {
 				left: parent.left
 				right: parent.right
