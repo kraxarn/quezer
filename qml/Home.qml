@@ -75,6 +75,7 @@ ListView {
 			visible: !delegate.items.isEmpty
 			orientation: ListView.Horizontal
 			spacing: 20
+			height: parent.height * 0.75
 			anchors {
 				left: parent.left
 				right: parent.right
