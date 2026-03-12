@@ -4,6 +4,7 @@ import QtQuick.Layouts
 
 import Models.HomePage
 import Models.HomePageItem
+import Proxies.HomePageItem
 import ImagePaintedItem
 
 ListView {
@@ -62,6 +63,7 @@ ListView {
 		}
 
 		ComboBox {
+			id: filter
 			visible: !!delegate.filterOption
 			height: 45
 			anchors {
@@ -73,6 +75,7 @@ ListView {
 		}
 
 		ListView {
+			id: items
 			visible: !delegate.items.isEmpty
 			orientation: ListView.Horizontal
 			spacing: 20
@@ -83,8 +86,11 @@ ListView {
 				top: subtitle.bottom
 				topMargin: 20
 			}
-			model: HomePageItemModel {
-				items: delegate.items
+			model: HomePageItemProxy {
+				sourceModel: itemModel
+				filterOptionId: filter.currentIndex < 0
+					? (delegate.filterOption && delegate.filterOption.id) || ""
+					: delegate.filterOptions[filter.currentIndex].id
 			}
 			delegate: Column {
 				id: delegate
@@ -115,6 +121,11 @@ ListView {
 					wrapMode: Text.WordWrap
 					text: delegate.title
 				}
+			}
+
+			HomePageItemModel {
+				id: itemModel
+				items: delegate.items
 			}
 		}
 	}

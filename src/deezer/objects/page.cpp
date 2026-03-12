@@ -87,6 +87,11 @@ auto Page::Section::Item::pictures() const -> const QList<Picture> &
 	return mPictures;
 }
 
+auto Page::Section::Item::filterOptionIds() const -> const QStringList &
+{
+	return mFilterOptionIds;
+}
+
 auto Page::Section::Item::Picture::fromJson(const QJsonObject &json) -> Picture
 {
 	Picture picture;

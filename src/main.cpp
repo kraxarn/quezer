@@ -2,6 +2,7 @@
 #include "models/homepageitemmodel.hpp"
 #include "models/homepagemodel.hpp"
 #include "models/sidebarmodel.hpp"
+#include "proxies/homepageitemproxy.hpp"
 #include "qml/imagepainteditem.hpp"
 #include "qml/loginpage.hpp"
 #include "qml/playerpage.hpp"
@@ -40,6 +41,8 @@ namespace
 		qmlRegisterType<SidebarModel>("Models.Sidebar", 1, 0, "SidebarModel");
 		qmlRegisterType<HomePageModel>("Models.HomePage", 1, 0, "HomePageModel");
 		qmlRegisterType<HomePageItemModel>("Models.HomePageItem", 1, 0, "HomePageItemModel");
+
+		qmlRegisterType<HomePageItemProxy>("Proxies.HomePageItem", 1, 0, "HomePageItemProxy");
 	}
 }
 

@@ -54,6 +54,9 @@ public:
 			[[nodiscard]]
 			auto pictures() const -> const QList<Picture> &;
 
+			[[nodiscard]]
+			auto filterOptionIds() const -> const QStringList &;
+
 		private:
 			QString mTitle;
 			QString mSubtitle;
