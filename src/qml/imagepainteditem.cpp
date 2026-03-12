@@ -56,6 +56,11 @@ void ImagePaintedItem::setSource(const QUrl &source)
 	mSource = source;
 	emit sourceChanged();
 
+	if (!source.isValid())
+	{
+		return;
+	}
+
 	const QNetworkRequest request(mSource);
 	const QNetworkReply *reply = mHttp.get(request);
 
