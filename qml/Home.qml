@@ -6,6 +6,11 @@ import Models.HomePage
 import Models.HomePageItem
 
 ListView {
+	anchors {
+		top: parent.top
+		bottom: parent.bottom
+		bottomMargin: 50
+	}
 	model: HomePageModel {
 	}
 	delegate: Item {
