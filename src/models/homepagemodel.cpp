@@ -1,7 +1,7 @@
 #include "models/homepagemodel.hpp"
 #include "deezer/deezerclient.hpp"
+#include "models/homepageitemmodel.hpp"
 #include "qml/pagefilteroption.hpp"
-#include "qml/pageitem.hpp"
 
 HomePageModel::HomePageModel(QObject *parent)
 	: QAbstractListModel(parent)
@@ -72,15 +72,7 @@ auto HomePageModel::data(const QModelIndex &index, const int role) const -> QVar
 
 	if (itemRole == ItemRole::Items)
 	{
-		QList<PageItem *> items;
-		items.reserve(section.items().length());
-
-		for (const Page::Section::Item &item: section.items())
-		{
-			items.append(new PageItem(item, parent()));
-		}
-
-		return QVariant::fromValue(items);
+		return QVariant::fromValue(section.items());
 	}
 
 	return {};

@@ -1,4 +1,5 @@
 #include "deezer/deezerclient.hpp"
+#include "models/homepageitemmodel.hpp"
 #include "models/homepagemodel.hpp"
 #include "models/sidebarmodel.hpp"
 #include "qml/imagepainteditem.hpp"
@@ -38,6 +39,7 @@ namespace
 
 		qmlRegisterType<SidebarModel>("Models.Sidebar", 1, 0, "SidebarModel");
 		qmlRegisterType<HomePageModel>("Models.HomePage", 1, 0, "HomePageModel");
+		qmlRegisterType<HomePageItemModel>("Models.HomePageItem", 1, 0, "HomePageItemModel");
 	}
 }
 

@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import Models.HomePage
+import Models.HomePageItem
 
 ListView {
 	model: HomePageModel {
@@ -65,8 +66,9 @@ ListView {
 			model: delegate.filterOptions
 		}
 
-		Row {
+		ListView {
 			visible: delegate.items.length > 0
+			orientation: ListView.Horizontal
 			spacing: 20
 			anchors {
 				left: parent.left
@@ -74,31 +76,30 @@ ListView {
 				top: subtitle.bottom
 				topMargin: 20
 			}
+			model: HomePageItemModel {
+				items: delegate.items
+			}
+			delegate: Column {
+				id: delegate
+				width: 80
+				spacing: 5
 
-			Repeater {
-				model: delegate.items
+				required property string title
 
-				Column {
-					width: 80
-					spacing: 5
+				Rectangle {
+					width: parent.width
+					height: parent.width
+					radius: parent.width / 2
+					color: parent.palette.window
+				}
 
-					required property var modelData
-
-					Rectangle {
-						width: parent.width
-						height: parent.width
-						radius: parent.width / 2
-						color: parent.palette.window
+				Label {
+					anchors {
+						left: parent.left
+						right: parent.right
 					}
-
-					Label {
-						anchors {
-							left: parent.left
-							right: parent.right
-						}
-						horizontalAlignment: Text.AlignHCenter
-						text: modelData.title
-					}
+					horizontalAlignment: Text.AlignHCenter
+					text: delegate.title
 				}
 			}
 		}
