@@ -48,6 +48,9 @@ public:
 			};
 
 			[[nodiscard]]
+			auto type() const -> const QString &;
+
+			[[nodiscard]]
 			auto title() const -> const QString &;
 
 			[[nodiscard]]
@@ -63,6 +66,7 @@ public:
 			auto filterOptionIds() const -> const QStringList &;
 
 		private:
+			QString mType;
 			QString mTitle;
 			QString mSubtitle;
 			QList<Picture> mPictures;

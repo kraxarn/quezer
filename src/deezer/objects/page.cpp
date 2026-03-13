@@ -54,6 +54,7 @@ auto Page::Section::Item::fromJson(const QJsonObject &json) -> Item
 	const QJsonArray filterOptionIds = json
 		.value(QStringLiteral("filter_option_ids")).toArray();
 
+	item.mType = json.value(QStringLiteral("type")).toString();
 	item.mTitle = json.value(QStringLiteral("title")).toString();
 	item.mSubtitle = json.value(QStringLiteral("subtitle")).toString();
 	item.mImageLinkedItem = Picture::fromJson(
@@ -73,6 +74,11 @@ auto Page::Section::Item::fromJson(const QJsonObject &json) -> Item
 	}
 
 	return item;
+}
+
+auto Page::Section::Item::type() const -> const QString &
+{
+	return mType;
 }
 
 auto Page::Section::Item::title() const -> const QString &
