@@ -56,6 +56,9 @@ auto Page::Section::Item::fromJson(const QJsonObject &json) -> Item
 
 	item.mTitle = json.value(QStringLiteral("title")).toString();
 	item.mSubtitle = json.value(QStringLiteral("subtitle")).toString();
+	item.mImageLinkedItem = Picture::fromJson(
+		json.value(QStringLiteral("image_linked_item")).toObject()
+	);
 
 	item.mPictures.reserve(pictures.size());
 	for (const QJsonValueConstRef picture: pictures)
@@ -85,6 +88,11 @@ auto Page::Section::Item::subtitle() const -> const QString &
 auto Page::Section::Item::pictures() const -> const QList<Picture> &
 {
 	return mPictures;
+}
+
+auto Page::Section::Item::imageLinkedItem() const -> const Picture &
+{
+	return mImageLinkedItem;
 }
 
 auto Page::Section::Item::filterOptionIds() const -> const QStringList &

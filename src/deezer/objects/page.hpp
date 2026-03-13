@@ -28,6 +28,8 @@ public:
 			class Picture final
 			{
 			public:
+				Picture() = default;
+
 				[[nodiscard]]
 				static auto fromJson(const QJsonObject &json) -> Picture;
 
@@ -55,12 +57,16 @@ public:
 			auto pictures() const -> const QList<Picture> &;
 
 			[[nodiscard]]
+			auto imageLinkedItem() const -> const Picture &;
+
+			[[nodiscard]]
 			auto filterOptionIds() const -> const QStringList &;
 
 		private:
 			QString mTitle;
 			QString mSubtitle;
 			QList<Picture> mPictures;
+			Picture mImageLinkedItem;
 			QStringList mFilterOptionIds;
 		};
 
