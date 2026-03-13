@@ -15,6 +15,7 @@ auto HomePageModel::roleNames() const -> QHash<int, QByteArray>
 {
 	return {
 		{
+			{static_cast<int>(ItemRole::ItemHeight), "itemHeight"},
 			{static_cast<int>(ItemRole::Title), "title"},
 			{static_cast<int>(ItemRole::Subtitle), "subtitle"},
 			{static_cast<int>(ItemRole::FilterOption), "filterOption"},
@@ -33,6 +34,21 @@ auto HomePageModel::data(const QModelIndex &index, const int role) const -> QVar
 {
 	const Page::Section &section = mPage.sections().at(index.row());
 	const auto itemRole = static_cast<ItemRole>(role);
+
+	if (itemRole == ItemRole::ItemHeight)
+	{
+		const int titleHeight = section.subtitle().isEmpty() ? 100 : 120;
+		const int pictureHeight = HomePageItemModel::pictureSize(section.items().first());
+		const int itemTitleHeight = std::ranges::any_of(section.items(),
+				[](const Page::Section::Item &item) -> bool
+				{
+					return !item.subtitle().isEmpty();
+				})
+			? 30
+			: 10;
+
+		return titleHeight + pictureHeight + itemTitleHeight;
+	}
 
 	if (itemRole == ItemRole::Title)
 	{

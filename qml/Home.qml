@@ -16,6 +16,7 @@ ListView {
 	model: HomePageModel {
 	}
 	delegate: Item {
+		required property int itemHeight
 		required property string title
 		required property string subtitle
 		required property var filterOption
@@ -23,7 +24,7 @@ ListView {
 		required property var items
 
 		id: delegate
-		height: 280
+		height: itemHeight
 		width: parent.width
 		anchors {
 			left: (parent || undefined) && parent.left

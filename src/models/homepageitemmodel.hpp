@@ -29,6 +29,9 @@ public:
 
 	void setItems(const QList<Page::Section::Item> &items);
 
+	[[nodiscard]]
+	static auto pictureSize(const Page::Section::Item &item) -> int;
+
 signals:
 	void itemsChanged();
 
@@ -43,7 +46,4 @@ private:
 	};
 
 	QList<Page::Section::Item> mItems;
-
-	[[nodiscard]]
-	static auto pictureSize(const Page::Section::Item &item) -> int;;
 };

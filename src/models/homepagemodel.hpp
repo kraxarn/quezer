@@ -24,7 +24,8 @@ public:
 private:
 	enum class ItemRole: quint16
 	{
-		Title = Qt::UserRole + 1,
+		ItemHeight = Qt::UserRole + 1,
+		Title,
 		Subtitle,
 		FilterOption,
 		FilterOptions,
