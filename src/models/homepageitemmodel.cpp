@@ -31,7 +31,7 @@ auto HomePageItemModel::data(const QModelIndex &index, int role) const -> QVaria
 
 		case ItemRole::PictureUrl:
 			return item.pictures().isEmpty()
-				? QUrl()
+				? item.imageLinkedItem().url()
 				: item.pictures().first().url();
 
 		default:
