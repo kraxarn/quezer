@@ -11,7 +11,7 @@ HomePageModel::HomePageModel(QObject *parent)
 		this, &HomePageModel::onUserData);
 }
 
-QHash<int, QByteArray> HomePageModel::roleNames() const
+auto HomePageModel::roleNames() const -> QHash<int, QByteArray>
 {
 	return {
 		{
@@ -24,7 +24,7 @@ QHash<int, QByteArray> HomePageModel::roleNames() const
 	};
 }
 
-auto HomePageModel::rowCount(const QModelIndex &parent) const -> int
+auto HomePageModel::rowCount([[maybe_unused]] const QModelIndex &parent) const -> int
 {
 	return static_cast<int>(mPage.sections().length());
 }
@@ -82,7 +82,7 @@ void HomePageModel::onUserData() const
 {
 	UserData userData;
 	{
-		const auto response = qobject_cast<ApiResponse *>(sender());
+		auto *response = qobject_cast<ApiResponse *>(sender());
 		if (!response->isValid())
 		{
 			qWarning() << "Failed to load user data:" << response->errorString();
@@ -102,7 +102,7 @@ void HomePageModel::onUserData() const
 
 void HomePageModel::onHomePage()
 {
-	const auto response = qobject_cast<ApiResponse *>(sender());
+	auto *response = qobject_cast<ApiResponse *>(sender());
 	if (!response->isValid())
 	{
 		qWarning() << "Failed to load home page:" << response->errorString();
@@ -112,7 +112,7 @@ void HomePageModel::onHomePage()
 
 	const auto page = response->value<Page>();
 
-	beginInsertRows({}, 0, page.sections().length() - 1);
+	beginInsertRows({}, 0, static_cast<int>(page.sections().length()) - 1);
 	{
 		mPage = page;
 	}
