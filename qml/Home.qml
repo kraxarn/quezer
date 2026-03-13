@@ -83,7 +83,7 @@ ListView {
 			anchors {
 				left: parent.left
 				right: parent.right
-				top: subtitle.bottom
+				top: subtitle.visible ? subtitle.bottom : title.bottom
 				topMargin: 20
 			}
 			model: HomePageItemProxy {
