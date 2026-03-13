@@ -36,6 +36,7 @@ private:
 	enum class ItemRole: quint16
 	{
 		Title = Qt::UserRole + 1,
+		Subtitle,
 		PictureUrl,
 		PictureSize,
 		PictureRadius,

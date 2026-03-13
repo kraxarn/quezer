@@ -10,6 +10,7 @@ auto HomePageItemModel::roleNames() const -> QHash<int, QByteArray>
 	return {
 		{
 			{static_cast<int>(ItemRole::Title), "title"},
+			{static_cast<int>(ItemRole::Subtitle), "subtitle"},
 			{static_cast<int>(ItemRole::PictureUrl), "pictureUrl"},
 			{static_cast<int>(ItemRole::PictureSize), "pictureSize"},
 			{static_cast<int>(ItemRole::PictureRadius), "pictureRadius"},
@@ -30,6 +31,11 @@ auto HomePageItemModel::data(const QModelIndex &index, int role) const -> QVaria
 	if (itemRole == ItemRole::Title)
 	{
 		return item.title();
+	}
+
+	if (itemRole == ItemRole::Subtitle)
+	{
+		return item.subtitle();
 	}
 
 	if (itemRole == ItemRole::PictureUrl)

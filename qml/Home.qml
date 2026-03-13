@@ -23,7 +23,7 @@ ListView {
 		required property var items
 
 		id: delegate
-		height: 260
+		height: 280
 		width: parent.width
 		anchors {
 			left: (parent || undefined) && parent.left
@@ -94,6 +94,7 @@ ListView {
 			}
 			delegate: Column {
 				required property string title
+				required property string subtitle
 				required property url pictureUrl
 				required property int pictureSize
 				required property int pictureRadius
@@ -115,13 +116,34 @@ ListView {
 				}
 
 				Label {
+					id: title
 					anchors {
 						left: parent.left
 						right: parent.right
 					}
+					font {
+						pointSize: 14
+					}
 					horizontalAlignment: Text.AlignHCenter
 					wrapMode: Text.WordWrap
 					text: delegate.title
+				}
+
+				Label {
+					id: subtitle
+					anchors {
+						left: parent.left
+						right: parent.right
+					}
+					font {
+						pointSize: 12
+					}
+					visible: delegate.subtitle.length > 0
+						&& delegate.title !== delegate.subtitle
+					horizontalAlignment: Text.AlignHCenter
+					wrapMode: Text.WordWrap
+					opacity: 0.6
+					text: delegate.subtitle
 				}
 			}
 
