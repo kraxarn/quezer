@@ -122,9 +122,6 @@ ListView {
 						left: parent.left
 						right: parent.right
 					}
-					font {
-						pointSize: 14
-					}
 					horizontalAlignment: Text.AlignHCenter
 					wrapMode: Text.WordWrap
 					text: delegate.title
@@ -137,7 +134,7 @@ ListView {
 						right: parent.right
 					}
 					font {
-						pointSize: 12
+						pointSize: title.font.pointSize * 0.85
 					}
 					visible: delegate.subtitle.length > 0
 						&& delegate.title !== delegate.subtitle
