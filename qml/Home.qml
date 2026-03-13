@@ -96,15 +96,16 @@ ListView {
 				required property string title
 				required property url pictureUrl
 				required property int pictureSize
+				required property int pictureRadius
 
 				id: delegate
 				width: pictureSize
 				spacing: 5
 
 				Rectangle {
-					width: parent.width
-					height: parent.width
-					radius: parent.width / 2
+					width: delegate.pictureSize
+					height: delegate.pictureSize
+					radius: delegate.pictureRadius
 					color: parent.palette.window
 
 					ImagePaintedItem {

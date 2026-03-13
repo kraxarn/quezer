@@ -38,7 +38,11 @@ private:
 		Title = Qt::UserRole + 1,
 		PictureUrl,
 		PictureSize,
+		PictureRadius,
 	};
 
 	QList<Page::Section::Item> mItems;
+
+	[[nodiscard]]
+	static auto pictureSize(const Page::Section::Item &item) -> int;;
 };

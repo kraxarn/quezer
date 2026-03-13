@@ -12,6 +12,7 @@ auto HomePageItemModel::roleNames() const -> QHash<int, QByteArray>
 			{static_cast<int>(ItemRole::Title), "title"},
 			{static_cast<int>(ItemRole::PictureUrl), "pictureUrl"},
 			{static_cast<int>(ItemRole::PictureSize), "pictureSize"},
+			{static_cast<int>(ItemRole::PictureRadius), "pictureRadius"},
 		}
 	};
 }
@@ -48,15 +49,20 @@ auto HomePageItemModel::data(const QModelIndex &index, int role) const -> QVaria
 
 	if (itemRole == ItemRole::PictureSize)
 	{
-		static constexpr auto sizeSmall = 80;
-		static constexpr auto sizeLarge = 140;
+		return pictureSize(item);
+	}
 
-		if (item.type() == QStringLiteral("flow"))
+	if (itemRole == ItemRole::PictureRadius)
+	{
+		static constexpr auto radiusDefault = 6;
+
+		if (item.type() == QStringLiteral("flow")
+			|| item.type() == QStringLiteral("artist"))
 		{
-			return sizeSmall;
+			return pictureSize(item) / 2;
 		}
 
-		return sizeLarge;
+		return radiusDefault;
 	}
 
 	return {};
@@ -83,4 +89,17 @@ void HomePageItemModel::setItems(const QList<Page::Section::Item> &items)
 		mItems.append(items);
 	}
 	endInsertRows();
+}
+
+auto HomePageItemModel::pictureSize(const Page::Section::Item &item) -> int
+{
+	static constexpr auto sizeSmall = 80;
+	static constexpr auto sizeLarge = 140;
+
+	if (item.type() == QStringLiteral("flow"))
+	{
+		return sizeSmall;
+	}
+
+	return sizeLarge;
 }
