@@ -23,7 +23,7 @@ ListView {
 		required property var items
 
 		id: delegate
-		height: 200
+		height: 220
 		width: parent.width
 		anchors {
 			left: (parent || undefined) && parent.left
