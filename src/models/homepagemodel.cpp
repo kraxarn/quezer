@@ -111,6 +111,7 @@ void HomePageModel::onHomePage()
 	}
 
 	const auto page = response->value<Page>();
+	response->deleteLater();
 
 	beginInsertRows({}, 0, static_cast<int>(page.sections().length()) - 1);
 	{
