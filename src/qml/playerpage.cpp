@@ -22,7 +22,7 @@ void PlayerPage::enqueue(const qint64 trackId)
 	mMediaPlayer.enqueue(trackId, MediaFormat::LowQuality);
 }
 
-void PlayerPage::refreshUserData()
+void PlayerPage::refreshUserData() const
 {
 	const ApiResponse *response = DeezerClient::instance()->gw().userData();
 
@@ -32,7 +32,7 @@ void PlayerPage::refreshUserData()
 
 void PlayerPage::onUserDataResponse()
 {
-	const auto response = qobject_cast<ApiResponse *>(sender());
+	auto *response = qobject_cast<ApiResponse *>(sender());
 	if (!response->isValid())
 	{
 		qWarning() << "Failed to get user data:" << response->errorString();
@@ -52,7 +52,7 @@ void PlayerPage::onUserDataResponse()
 
 void PlayerPage::onUserPictureResponse()
 {
-	const auto reply = qobject_cast<QNetworkReply *>(sender());
+	auto *reply = qobject_cast<QNetworkReply *>(sender());
 	if (reply->error() != QNetworkReply::NoError)
 	{
 		qWarning() << "Failed to get user data:" << reply->errorString();

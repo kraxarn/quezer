@@ -34,7 +34,7 @@ private:
 	QImage mUserImage;
 	UserData mUserData;
 
-	void refreshUserData();
+	void refreshUserData() const;
 
 	void onUserDataResponse();
 

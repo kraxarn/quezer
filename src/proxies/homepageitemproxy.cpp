@@ -30,7 +30,7 @@ auto HomePageItemProxy::filterAcceptsRow(const int sourceRow,
 		return true;
 	}
 
-	const auto *const model = qobject_cast<HomePageItemModel *>(sourceModel());
+	const auto *model = qobject_cast<HomePageItemModel *>(sourceModel());
 	if (model == nullptr)
 	{
 		return true;
