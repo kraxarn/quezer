@@ -11,6 +11,7 @@ auto HomePageItemModel::roleNames() const -> QHash<int, QByteArray>
 		{
 			{static_cast<int>(ItemRole::Title), "title"},
 			{static_cast<int>(ItemRole::PictureUrl), "pictureUrl"},
+			{static_cast<int>(ItemRole::PictureSize), "pictureSize"},
 		}
 	};
 }
@@ -23,20 +24,42 @@ auto HomePageItemModel::rowCount([[maybe_unused]] const QModelIndex &parent) con
 auto HomePageItemModel::data(const QModelIndex &index, int role) const -> QVariant
 {
 	const Page::Section::Item &item = mItems.at(index.row());
+	const auto itemRole = static_cast<ItemRole>(role);
 
-	switch (static_cast<ItemRole>(role))
+	if (itemRole == ItemRole::Title)
 	{
-		case ItemRole::Title:
-			return item.title();
-
-		case ItemRole::PictureUrl:
-			return item.pictures().isEmpty()
-				? item.imageLinkedItem().url()
-				: item.pictures().first().url();
-
-		default:
-			return {};
+		return item.title();
 	}
+
+	if (itemRole == ItemRole::PictureUrl)
+	{
+		if (!item.pictures().isEmpty())
+		{
+			return item.pictures().first().url();
+		}
+
+		if (!item.imageLinkedItem().md5().isEmpty())
+		{
+			return item.imageLinkedItem().url();
+		}
+
+		return QUrl();
+	}
+
+	if (itemRole == ItemRole::PictureSize)
+	{
+		static constexpr auto sizeSmall = 80;
+		static constexpr auto sizeLarge = 140;
+
+		if (item.type() == QStringLiteral("flow"))
+		{
+			return sizeSmall;
+		}
+
+		return sizeLarge;
+	}
+
+	return {};
 }
 
 auto HomePageItemModel::items() const -> const QList<Page::Section::Item> &

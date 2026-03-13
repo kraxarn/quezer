@@ -93,12 +93,13 @@ ListView {
 					: delegate.filterOptions[filter.currentIndex].id
 			}
 			delegate: Column {
-				id: delegate
-				width: 80
-				spacing: 5
-
 				required property string title
 				required property url pictureUrl
+				required property int pictureSize
+
+				id: delegate
+				width: pictureSize
+				spacing: 5
 
 				Rectangle {
 					width: parent.width

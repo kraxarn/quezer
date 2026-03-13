@@ -37,6 +37,7 @@ private:
 	{
 		Title = Qt::UserRole + 1,
 		PictureUrl,
+		PictureSize,
 	};
 
 	QList<Page::Section::Item> mItems;
