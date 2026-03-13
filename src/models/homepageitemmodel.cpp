@@ -5,7 +5,7 @@ HomePageItemModel::HomePageItemModel(QObject *parent)
 {
 }
 
-QHash<int, QByteArray> HomePageItemModel::roleNames() const
+auto HomePageItemModel::roleNames() const -> QHash<int, QByteArray>
 {
 	return {
 		{
@@ -15,7 +15,7 @@ QHash<int, QByteArray> HomePageItemModel::roleNames() const
 	};
 }
 
-auto HomePageItemModel::rowCount(const QModelIndex &parent) const -> int
+auto HomePageItemModel::rowCount([[maybe_unused]] const QModelIndex &parent) const -> int
 {
 	return static_cast<int>(mItems.length());
 }
@@ -48,14 +48,14 @@ void HomePageItemModel::setItems(const QList<Page::Section::Item> &items)
 {
 	if (!mItems.isEmpty())
 	{
-		beginRemoveRows({}, 0, mItems.length() - 1);
+		beginRemoveRows({}, 0, static_cast<int>(mItems.length()) - 1);
 		{
 			mItems.clear();
 		}
 		endRemoveRows();
 	}
 
-	beginInsertRows({}, 0, items.length() - 1);
+	beginInsertRows({}, 0, static_cast<int>(items.length()) - 1);
 	{
 		mItems.append(items);
 	}
