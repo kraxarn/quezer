@@ -65,6 +65,7 @@ void DeezerClient::login(const QString &email, const QString &password)
 	{
 		if (!response->isValid())
 		{
+			qWarning() << response->errorString();
 			response->deleteLater();
 			emit loginFinished(LoginError::NoUserData);
 			return;
