@@ -65,6 +65,11 @@ if (ANDROID)
 	qt_add_android_permission(${APP_NAME} NAME "android.permission.ACCESS_NETWORK_STATE")
 endif ()
 
+if (ANDROID)
+	include(cmake/AndroidOpenSSL.cmake)
+	add_android_openssl_libraries(${APP_NAME})
+endif ()
+
 set_target_properties(${APP_NAME} PROPERTIES
 	# macOS
 	MACOSX_BUNDLE TRUE
