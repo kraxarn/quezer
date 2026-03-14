@@ -60,4 +60,4 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: quezer-android-arm64-v8a
-          path: build
+          path: build/android-build/build/outputs/apk/release
