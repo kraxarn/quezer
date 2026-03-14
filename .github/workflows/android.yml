@@ -56,8 +56,11 @@ jobs:
       - name: Build
         run: cmake --build build --config $BUILD_TYPE
 
+      - name: Prepare signing
+        run: echo "${{secrets.KEYSTORE_FILE}}" | base64 -d > "release.jks"
+
       - name: Package
-        run: androiddeployqt --input "build/android-quezer-deployment-settings.json" --output "build/android-build" --verbose
+        run: androiddeployqt --input "build/android-quezer-deployment-settings.json" --output "build/android-build" --release --sign "release.jks" "quezer" --storepass "${{secrets.KEYSTORE_PASSWORD}}" --verbose
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v7
