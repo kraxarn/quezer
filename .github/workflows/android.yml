@@ -56,6 +56,9 @@ jobs:
       - name: Build
         run: cmake --build build --config $BUILD_TYPE
 
+      - name: Package
+        run: androiddeployqt --input "build/android-quezer-deployment-settings.json" --output "dist" --verbose
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v7
         with:
