@@ -60,6 +60,11 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	target_compile_definitions(${APP_NAME} PRIVATE QT_QML_DEBUG)
 endif ()
 
+if (ANDROID)
+	qt_add_android_permission(${APP_NAME} NAME "android.permission.INTERNET")
+	qt_add_android_permission(${APP_NAME} NAME "android.permission.ACCESS_NETWORK_STATE")
+endif ()
+
 set_target_properties(${APP_NAME} PROPERTIES
 	# macOS
 	MACOSX_BUNDLE TRUE
