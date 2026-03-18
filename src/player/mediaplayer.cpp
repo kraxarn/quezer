@@ -40,10 +40,12 @@ void MediaPlayer::setUserData(const UserData &userData)
 
 void MediaPlayer::play()
 {
-	const QueueItem &item = mQueue.head();
+	QueueItem &item = mQueue.head();
 
 	if (item.status == QueueItemStatus::Waiting)
 	{
+		item.status = QueueItemStatus::Buffering;
+
 		DeezerClient *client = DeezerClient::instance();
 		const ApiResponse *response = client->gw().songData(mCurrentUserData, mQueue.head().trackId);
 
