@@ -26,10 +26,11 @@ private:
 	enum class QueueItemStatus: quint8
 	{
 		Unknown   = 0,
-		Waiting   = 1,
-		Buffering = 2,
-		Ready     = 3,
-		Error     = 4,
+		Loading   = 1,
+		Waiting   = 2,
+		Buffering = 3,
+		Ready     = 4,
+		Error     = 5,
 	};
 
 	struct QueueItem final
