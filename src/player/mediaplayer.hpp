@@ -2,6 +2,7 @@
 
 #include "deezer/enums/mediaformat.hpp"
 #include "deezer/objects/userdata.hpp"
+#include "player/queueitem.hpp"
 
 #include <QAudioDecoder>
 #include <QAudioSink>
@@ -23,25 +24,6 @@ public:
 	void play();
 
 private:
-	enum class QueueItemStatus: quint8
-	{
-		Unknown   = 0,
-		Loading   = 1,
-		Waiting   = 2,
-		Buffering = 3,
-		Ready     = 4,
-		Error     = 5,
-	};
-
-	struct QueueItem final
-	{
-		qint64 trackId;
-		MediaFormat mediaFormat;
-		QUrl mediaUrl;
-		QByteArray audioData;
-		QueueItemStatus status;
-	};
-
 	QNetworkAccessManager mHttp;
 	QAudioDecoder mAudioDecoder;
 	QAudioSink mAudioSink;
