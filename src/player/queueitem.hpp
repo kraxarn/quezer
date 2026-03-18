@@ -1,8 +1,8 @@
 #pragma once
 
+#include "deezer/enums/mediaformat.hpp"
 #include "deezer/objects/songdata.hpp"
 #include "enums/queueitemstatus.hpp"
-#include "deezer/enums/mediaformat.hpp"
 
 #include <QByteArray>
 
