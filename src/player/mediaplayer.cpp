@@ -11,9 +11,11 @@ MediaPlayer::MediaPlayer(const MediaFormat mediaFormat, QObject *parent)
 	: QObject(parent),
 	mAudioDecoder(this),
 	mAudioSink({}, this),
-	mDecodedAudioBuffer(&mDecodedAudioData, this),
+	mAudioSinkData(mAudioSink.start()),
 	mMediaFormat(mediaFormat)
 {
+	mAudioDecoder.setSourceDevice(&mAudioDecoderSource);
+
 	connect(&mAudioDecoder, &QAudioDecoder::bufferReady,
 		this, &MediaPlayer::onAudioDecoderBufferReady);
 
@@ -42,15 +44,15 @@ void MediaPlayer::setUserData(const UserData &userData)
 
 void MediaPlayer::play()
 {
-	mAudioSink.start();
-	if (mAudioSink.state() != QtAudio::IdleState)
+	if (mAudioSink.state() == QtAudio::ActiveState)
 	{
 		return;
 	}
 
 	if (mQueue.isEmpty())
 	{
-		qWarning() << "No item to play";
+		connect(this, &MediaPlayer::queueItemAdded,
+			this, &MediaPlayer::play);
 		return;
 	}
 
@@ -90,30 +92,32 @@ void MediaPlayer::logAudioConfig() const
 
 void MediaPlayer::playHead()
 {
-	QueueItem &item = mQueue.head();
+	const QueueItem &item = mQueue.head();
 
-	mAudioBuffer.setBuffer(&item.audioData);
-	mAudioDecoder.setSourceDevice(&mAudioBuffer);
-	mAudioBuffer.open(QIODevice::ReadOnly);
+	QIODevice *source = mAudioDecoder.sourceDevice();
+
+	source->close();
+	source->open(QIODevice::WriteOnly | QIODevice::Truncate);
+	source->write(item.audioData);
+
+	source->close();
+	source->open(QIODevice::ReadOnly);
+	source->seek(0);
 
 	mAudioDecoder.start();
-
-	mDecodedAudioBuffer.close();
-	mDecodedAudioData.clear();
-	mDecodedAudioBuffer.open(QIODevice::ReadOnly);
-
-	mAudioSink.start(&mDecodedAudioBuffer);
 }
 
-void MediaPlayer::onAudioDecoderBufferReady()
+void MediaPlayer::onAudioDecoderBufferReady() const
 {
 	const QAudioBuffer buffer = mAudioDecoder.read();
-	mDecodedAudioData.append(buffer.constData<const char>(), buffer.byteCount());
+	mAudioSinkData->write(buffer.constData<const char>(), buffer.byteCount());
 }
 
-void MediaPlayer::onAudioDecoderError([[maybe_unused]] const QAudioDecoder::Error error) const
+void MediaPlayer::onAudioDecoderError(const QAudioDecoder::Error error) const
 {
-	qWarning() << "Audio decoder error:" << mAudioDecoder.errorString();
+	qWarning().nospace()
+		<< "Audio decoder error: " << mAudioDecoder.errorString()
+		<< " (" << error << ")";
 }
 
 void MediaPlayer::onAudioSinkStateChanged(const QtAudio::State state) const
@@ -148,6 +152,8 @@ void MediaPlayer::onSongData()
 		.songData = std::move(songData),
 		.mediaFormat = mMediaFormat,
 	});
+
+	emit queueItemAdded();
 }
 
 void MediaPlayer::onMediaUrl()

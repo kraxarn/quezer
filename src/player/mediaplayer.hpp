@@ -23,14 +23,17 @@ public:
 
 	void play();
 
+signals:
+	void queueItemAdded();
+
 private:
 	QNetworkAccessManager mHttp;
-	QAudioDecoder mAudioDecoder;
-	QAudioSink mAudioSink;
 
-	QBuffer mAudioBuffer;
-	QByteArray mDecodedAudioData;
-	QBuffer mDecodedAudioBuffer;
+	QAudioDecoder mAudioDecoder;
+	QBuffer mAudioDecoderSource;
+
+	QAudioSink mAudioSink;
+	QIODevice *mAudioSinkData;
 
 	UserData mCurrentUserData;
 	MediaFormat mMediaFormat;
@@ -40,7 +43,7 @@ private:
 
 	void playHead();
 
-	void onAudioDecoderBufferReady();
+	void onAudioDecoderBufferReady() const;
 
 	void onAudioDecoderError(QAudioDecoder::Error error) const;
 
