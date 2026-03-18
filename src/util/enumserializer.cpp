@@ -62,3 +62,48 @@ auto EnumSerializer::toString(QAudioFormat::SampleFormat sampleFormat) -> QStrin
 			return {};
 	}
 }
+
+auto EnumSerializer::toString(const QtAudio::State state) -> QString
+{
+	switch (state)
+	{
+		case QtAudio::ActiveState:
+			return QStringLiteral("Active");
+
+		case QtAudio::SuspendedState:
+			return QStringLiteral("Suspended");
+
+		case QtAudio::StoppedState:
+			return QStringLiteral("Stopped");
+
+		case QtAudio::IdleState:
+			return QStringLiteral("Idle");
+
+		default:
+			return {};
+	}
+}
+
+auto EnumSerializer::toString(const QtAudio::Error error) -> QString
+{
+	switch (error)
+	{
+		case QtAudio::NoError:
+			return QStringLiteral("No error");
+
+		case QtAudio::OpenError:
+			return QStringLiteral("Error occurred opening audio device");
+
+		case QtAudio::IOError:
+			return QStringLiteral("Error occurred during read/write of audio device");
+
+		case QtAudio::UnderrunError:
+			return QStringLiteral("Audio data not being fed fast enough");
+
+		case QtAudio::FatalError:
+			return QStringLiteral("Audio device unusable at this time");
+
+		default:
+			return {};
+	}
+}

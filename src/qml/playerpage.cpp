@@ -7,7 +7,7 @@
 PlayerPage::PlayerPage(QObject *parent)
 	: QObject(parent),
 	mHttp(this),
-	mMediaPlayer(this)
+	mMediaPlayer(MediaFormat::LowQuality, this)
 {
 	refreshUserData();
 }
@@ -17,9 +17,14 @@ auto PlayerPage::userImage() const -> const QImage &
 	return mUserImage;
 }
 
-void PlayerPage::enqueue(const qint64 trackId)
+void PlayerPage::enqueueTrack(const qint64 trackId)
 {
-	mMediaPlayer.enqueue(trackId, MediaFormat::LowQuality);
+	mMediaPlayer.enqueueTrack(trackId);
+}
+
+void PlayerPage::play()
+{
+	mMediaPlayer.play();
 }
 
 void PlayerPage::refreshUserData() const

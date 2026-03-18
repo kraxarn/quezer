@@ -56,6 +56,11 @@ auto SongData::Artist::fromJson(const QJsonObject &json) -> Artist
 	return artist;
 }
 
+auto SongData::sngId() const -> qint64
+{
+	return mSngId;
+}
+
 auto SongData::trackToken() const -> const QString &
 {
 	return mTrackToken;

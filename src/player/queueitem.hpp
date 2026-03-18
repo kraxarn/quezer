@@ -1,17 +1,15 @@
 #pragma once
 
-#include "deezer/enums/mediaformat.hpp"
+#include "deezer/objects/songdata.hpp"
 #include "enums/queueitemstatus.hpp"
+#include "deezer/enums/mediaformat.hpp"
 
 #include <QByteArray>
-#include <QtTypes>
-#include <QUrl>
 
 struct QueueItem final
 {
-	qint64 trackId;
-	MediaFormat mediaFormat;
-	QUrl mediaUrl;
-	QByteArray audioData;
 	QueueItemStatus status;
+	SongData songData;
+	MediaFormat mediaFormat;
+	QByteArray audioData;
 };

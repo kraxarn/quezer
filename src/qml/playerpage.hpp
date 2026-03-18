@@ -23,7 +23,9 @@ public:
 	[[nodiscard]]
 	auto userImage() const -> const QImage &;
 
-	Q_INVOKABLE void enqueue(qint64 trackId);
+	Q_INVOKABLE void enqueueTrack(qint64 trackId);
+
+	Q_INVOKABLE void play();
 
 signals:
 	void userImageChanged();

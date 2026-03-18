@@ -1,16 +1,22 @@
 #pragma once
 
 #include <QAudioFormat>
+#include <QtAudio>
 
 class EnumSerializer
 {
 public:
+	EnumSerializer() = delete;
+
 	[[nodiscard]]
 	static auto toString(QAudioFormat::ChannelConfig channelConfig) -> QString;
 
 	[[nodiscard]]
 	static auto toString(QAudioFormat::SampleFormat sampleFormat) -> QString;
 
-private:
-	EnumSerializer() = delete;
+	[[nodiscard]]
+	static auto toString(QtAudio::State state) -> QString;
+
+	[[nodiscard]]
+	static auto toString(QtAudio::Error error) -> QString;
 };

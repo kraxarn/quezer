@@ -7,6 +7,8 @@
 class SongData final
 {
 public:
+	SongData() = default;
+
 	[[nodiscard]]
 	static auto fromJson(const QJsonObject &json) -> SongData;
 
@@ -24,14 +26,15 @@ public:
 	};
 
 	[[nodiscard]]
+	auto sngId() const -> qint64;
+
+	[[nodiscard]]
 	auto trackToken() const -> const QString &;
 
 	[[nodiscard]]
 	auto trackTokenExpire() const -> const QDateTime &;
 
 private:
-	SongData() = default;
-
 	qint64 mAlbId = 0;
 	QString mAlbPicture;
 	QString mAlbTitle;

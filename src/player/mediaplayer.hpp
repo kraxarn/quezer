@@ -15,9 +15,9 @@ class MediaPlayer final : public QObject
 	Q_OBJECT
 
 public:
-	explicit MediaPlayer(QObject *parent);
+	MediaPlayer(MediaFormat mediaFormat, QObject *parent);
 
-	void enqueue(qint64 trackId, MediaFormat mediaFormat);
+	void enqueueTrack(qint64 trackId);
 
 	void setUserData(const UserData &userData);
 
@@ -33,13 +33,18 @@ private:
 	QBuffer mDecodedAudioBuffer;
 
 	UserData mCurrentUserData;
+	MediaFormat mMediaFormat;
 	QQueue<QueueItem> mQueue;
 
 	void logAudioConfig() const;
 
+	void playHead();
+
 	void onAudioDecoderBufferReady();
 
 	void onAudioDecoderError(QAudioDecoder::Error error) const;
+
+	void onAudioSinkStateChanged(QtAudio::State state) const;
 
 	void onSongData();
 
