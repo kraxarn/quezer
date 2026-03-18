@@ -20,6 +20,8 @@ public:
 
 	void setUserData(const UserData &userData);
 
+	void play();
+
 private:
 	enum class QueueItemStatus: quint8
 	{

@@ -30,16 +30,45 @@ void MediaPlayer::enqueue(const qint64 trackId, const MediaFormat mediaFormat)
 		.status = QueueItemStatus::Waiting,
 	});
 
-	DeezerClient *client = DeezerClient::instance();
-	const ApiResponse *response = client->gw().songData(mCurrentUserData, trackId);
-
-	connect(response, &ApiResponse::finished,
-		this, &MediaPlayer::onSongData);
+	play();
 }
 
 void MediaPlayer::setUserData(const UserData &userData)
 {
 	mCurrentUserData = userData;
+}
+
+void MediaPlayer::play()
+{
+	const QueueItem &item = mQueue.head();
+
+	if (item.status == QueueItemStatus::Waiting)
+	{
+		DeezerClient *client = DeezerClient::instance();
+		const ApiResponse *response = client->gw().songData(mCurrentUserData, mQueue.head().trackId);
+
+		connect(response, &ApiResponse::finished,
+			this, &MediaPlayer::onSongData);
+
+		return;
+	}
+
+	if (item.status == QueueItemStatus::Ready)
+	{
+		mAudioBuffer.setBuffer(&mQueue.head().audioData);
+		mAudioDecoder.setSourceDevice(&mAudioBuffer);
+		mAudioBuffer.open(QIODevice::ReadOnly);
+
+		mAudioDecoder.start();
+
+		mDecodedAudioBuffer.close();
+		mDecodedAudioData.clear();
+		mDecodedAudioBuffer.open(QIODevice::ReadOnly);
+
+		mAudioSink.start(&mDecodedAudioBuffer);
+
+		return;
+	}
 }
 
 void MediaPlayer::logAudioConfig() const
@@ -137,15 +166,6 @@ void MediaPlayer::onMediaDownloaded()
 		mQueue.head().audioData.prepend(id3Header);
 	}
 
-	mAudioBuffer.setBuffer(&mQueue.head().audioData);
-	mAudioDecoder.setSourceDevice(&mAudioBuffer);
-	mAudioBuffer.open(QIODevice::ReadOnly);
-
-	mAudioDecoder.start();
-
-	mDecodedAudioBuffer.close();
-	mDecodedAudioData.clear();
-	mDecodedAudioBuffer.open(QIODevice::ReadOnly);
-
-	mAudioSink.start(&mDecodedAudioBuffer);
+	mQueue.head().status = QueueItemStatus::Ready;
+	play();
 }
