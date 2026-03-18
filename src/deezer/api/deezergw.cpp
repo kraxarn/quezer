@@ -78,15 +78,21 @@ auto DeezerGw::call(const QString &method, const QString &input, const QByteArra
 	const QString &token) const -> QNetworkReply *
 {
 	QUrl url(QStringLiteral("https://www.deezer.com/ajax/gw-light.php"));
-	url.setQuery({
-		{
-			{QStringLiteral("api_version"), QStringLiteral("1.0")},
-			{QStringLiteral("api_token"), token},
-			{QStringLiteral("input"), QStringLiteral("3")},
-			{QStringLiteral("method"), method},
-			{QStringLiteral("gateway_input"), input},
-		},
+
+	QUrlQuery query;
+	query.setQueryItems({
+		{QStringLiteral("api_version"), QStringLiteral("1.0")},
+		{QStringLiteral("api_token"), token},
+		{QStringLiteral("input"), QStringLiteral("3")},
+		{QStringLiteral("method"), method},
 	});
+
+	if (!input.isEmpty())
+	{
+		query.addQueryItem(QStringLiteral("gateway_input"), input);
+	}
+
+	url.setQuery(query);
 
 	QNetworkRequest request(url);
 	request.setHeader(
