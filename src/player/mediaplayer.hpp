@@ -21,12 +21,22 @@ public:
 	void setUserData(const UserData &userData);
 
 private:
+	enum class QueueItemStatus: quint8
+	{
+		Unknown   = 0,
+		Waiting   = 1,
+		Buffering = 2,
+		Ready     = 3,
+		Error     = 4,
+	};
+
 	struct QueueItem final
 	{
 		qint64 trackId;
 		MediaFormat mediaFormat;
 		QUrl mediaUrl;
 		QByteArray audioData;
+		QueueItemStatus status;
 	};
 
 	QNetworkAccessManager mHttp;

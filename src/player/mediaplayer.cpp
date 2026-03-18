@@ -27,6 +27,7 @@ void MediaPlayer::enqueue(const qint64 trackId, const MediaFormat mediaFormat)
 	mQueue.enqueue({
 		.trackId = trackId,
 		.mediaFormat = mediaFormat,
+		.status = QueueItemStatus::Waiting,
 	});
 
 	DeezerClient *client = DeezerClient::instance();
