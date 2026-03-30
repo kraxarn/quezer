@@ -97,9 +97,6 @@ auto EnumSerializer::toString(const QtAudio::Error error) -> QString
 		case QtAudio::IOError:
 			return QStringLiteral("Error occurred during read/write of audio device");
 
-		case QtAudio::UnderrunError:
-			return QStringLiteral("Audio data not being fed fast enough");
-
 		case QtAudio::FatalError:
 			return QStringLiteral("Audio device unusable at this time");
 
