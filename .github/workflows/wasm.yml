@@ -4,7 +4,7 @@ on: [ push, pull_request ]
 
 env:
   BUILD_TYPE: "MinSizeRel"
-  QT_VERSION: "6.10.2"
+  QT_VERSION: "6.11.0"
   QT_ARCH: "wasm_multithread"
   # https://doc.qt.io/qt-6/wasm.html#installing-emscripten
   EM_VERSION: "4.0.7"
