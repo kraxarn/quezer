@@ -32,6 +32,9 @@ DeezerClient::DeezerClient(QObject *parent)
 			settings.removeArlExpiration();
 		}
 	}
+
+	connect(mHttp, &QNetworkAccessManager::finished,
+		this, &DeezerClient::onNetworkAccessManagerFinished);
 }
 
 auto DeezerClient::login(const QString &arl, const QDateTime &expiration) const -> bool
@@ -228,6 +231,19 @@ auto DeezerClient::arlCookie() const -> QNetworkCookie
 	}
 
 	return QNetworkCookie();
+}
+
+void DeezerClient::onNetworkAccessManagerFinished(const QNetworkReply *reply) const
+{
+	const QVariant cookies = reply->header(QNetworkRequest::SetCookieHeader);
+	for (const QNetworkCookie &cookie: cookies.value<QList<QNetworkCookie>>())
+	{
+		if (cookie.name() == QStringLiteral("sid").toUtf8()
+			|| cookie.name() == QStringLiteral("dzr_uniq_id").toUtf8())
+		{
+			mHttp->cookieJar()->insertCookie(cookie);
+		}
+	}
 }
 
 void DeezerClient::createInstance(QObject *parent)

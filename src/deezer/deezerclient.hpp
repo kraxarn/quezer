@@ -59,6 +59,8 @@ private:
 	[[nodiscard]]
 	auto arlCookie() const -> QNetworkCookie;
 
+	void onNetworkAccessManagerFinished(const QNetworkReply *reply) const;
+
 public:
 	static void createInstance(QObject *parent);
 
