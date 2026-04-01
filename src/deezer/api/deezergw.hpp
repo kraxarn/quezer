@@ -1,6 +1,7 @@
 #pragma once
 
 #include "deezer/apiresponse.hpp"
+#include "deezer/api/gwrequest.hpp"
 #include "deezer/objects/userdata.hpp"
 
 #include <QNetworkAccessManager>
@@ -26,17 +27,5 @@ private:
 	QNetworkAccessManager *mHttp;
 
 	[[nodiscard]]
-	auto call(const QString &method) const -> QNetworkReply *;
-
-	[[nodiscard]]
-	auto call(const QString &method, const QString &input,
-		const QString &token) const -> QNetworkReply *;
-
-	[[nodiscard]]
-	auto call(const QString &method, const QJsonDocument &body,
-		const QString &token) const -> QNetworkReply *;
-
-	[[nodiscard]]
-	auto call(const QString &method, const QString &input, const QByteArray &body,
-		const QString &token) const -> QNetworkReply *;
+	auto call(const GwRequest &request) const -> QNetworkReply *;
 };
