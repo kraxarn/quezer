@@ -4,9 +4,9 @@
 #include "deezer/objects/userdata.hpp"
 #include "player/queueitem.hpp"
 
-#include <QAudioDecoder>
-#include <QAudioSink>
+#include <QAudioOutput>
 #include <QBuffer>
+#include <QMediaPlayer>
 #include <QNetworkAccessManager>
 #include <QQueue>
 
@@ -28,12 +28,9 @@ signals:
 
 private:
 	QNetworkAccessManager mHttp;
-
-	QAudioDecoder mAudioDecoder;
-	QBuffer mAudioDecoderSource;
-
-	QAudioSink mAudioSink;
-	QIODevice *mAudioSinkData;
+	QMediaPlayer mMediaPlayer;
+	QAudioOutput mAudioOutput;
+	QBuffer mAudioBuffer;
 
 	UserData mCurrentUserData;
 	MediaFormat mMediaFormat;
@@ -43,11 +40,12 @@ private:
 
 	void playHead();
 
-	void onAudioDecoderBufferReady() const;
+	static void onMediaPlayerErrorOccurred(QMediaPlayer::Error error,
+		const QString &errorString);
 
-	void onAudioDecoderError(QAudioDecoder::Error error) const;
+	static void onMediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus status);
 
-	void onAudioSinkStateChanged(QtAudio::State state) const;
+	static void onMediaPlayerPlaybackStateChanged(QMediaPlayer::PlaybackState state);
 
 	void onSongData();
 

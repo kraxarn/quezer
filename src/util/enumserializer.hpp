@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QAudioFormat>
+#include <QMediaPlayer>
 #include <QtAudio>
 
 class EnumSerializer
@@ -19,4 +20,10 @@ public:
 
 	[[nodiscard]]
 	static auto toString(QtAudio::Error error) -> QString;
+
+	[[nodiscard]]
+	static auto toString(QMediaPlayer::MediaStatus status) -> QString;
+
+	[[nodiscard]]
+	static auto toString(QMediaPlayer::PlaybackState state) -> QString;
 };

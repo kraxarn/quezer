@@ -5,25 +5,28 @@
 #include "deezer/objects/mediaurl.hpp"
 #include "util/enumserializer.hpp"
 
-#include <QMediaDevices>
+#include <QAudioDevice>
+#include <QAudioOutput>
+#include <QBuffer>
 
 MediaPlayer::MediaPlayer(const MediaFormat mediaFormat, QObject *parent)
 	: QObject(parent),
-	mAudioDecoder(this),
-	mAudioSink({}, this),
-	mAudioSinkData(mAudioSink.start()),
+	mHttp(this),
+	mMediaPlayer(this),
+	mAudioOutput(this),
+	mAudioBuffer(this),
 	mMediaFormat(mediaFormat)
 {
-	mAudioDecoder.setSourceDevice(&mAudioDecoderSource);
+	mMediaPlayer.setAudioOutput(&mAudioOutput);
 
-	connect(&mAudioDecoder, &QAudioDecoder::bufferReady,
-		this, &MediaPlayer::onAudioDecoderBufferReady);
+	connect(&mMediaPlayer, &QMediaPlayer::errorOccurred,
+		this, &MediaPlayer::onMediaPlayerErrorOccurred);
 
-	connect(&mAudioDecoder, qOverload<QAudioDecoder::Error>(&QAudioDecoder::error),
-		this, &MediaPlayer::onAudioDecoderError);
+	connect(&mMediaPlayer, &QMediaPlayer::mediaStatusChanged,
+		this, &MediaPlayer::onMediaPlayerMediaStatusChanged);
 
-	connect(&mAudioSink, &QAudioSink::stateChanged,
-		this, &MediaPlayer::onAudioSinkStateChanged);
+	connect(&mMediaPlayer, &QMediaPlayer::playbackStateChanged,
+		this, &MediaPlayer::onMediaPlayerPlaybackStateChanged);
 
 	logAudioConfig();
 }
@@ -44,7 +47,7 @@ void MediaPlayer::setUserData(const UserData &userData)
 
 void MediaPlayer::play()
 {
-	if (mAudioSink.state() == QtAudio::ActiveState)
+	if (mMediaPlayer.isPlaying())
 	{
 		return;
 	}
@@ -80,58 +83,58 @@ void MediaPlayer::play()
 
 void MediaPlayer::logAudioConfig() const
 {
-	const QAudioDevice device = QMediaDevices::defaultAudioOutput();
+	const QAudioOutput *audioOutput = mMediaPlayer.audioOutput();
+	if (audioOutput == nullptr)
+	{
+		return;
+	}
+
+	const QAudioDevice &device = audioOutput->device();
 	qDebug() << "Playback device:" << device.description();
 	qDebug() << "Channel config:" << EnumSerializer::toString(device.channelConfiguration());
-
-	const QAudioFormat format = mAudioSink.format();
-	qDebug().nospace().noquote()
-		<< "Sample rate: " << format.sampleRate() << " Hz"
-		<< " (" << EnumSerializer::toString(format.sampleFormat()) << ")";
 }
 
 void MediaPlayer::playHead()
 {
-	const QueueItem &item = mQueue.head();
+	QueueItem &item = mQueue.head();
 
-	QIODevice *source = mAudioDecoder.sourceDevice();
+	const QString filename = QStringLiteral("%1%2.%3")
+		.arg(item.songData.sngId())
+		.arg(static_cast<quint8>(item.mediaFormat))
+		.arg(item.mediaFormat == MediaFormat::Lossless
+			? QStringLiteral("flac")
+			: QStringLiteral("mp3"));
 
-	source->close();
-	source->open(QIODevice::WriteOnly | QIODevice::Truncate);
-	source->write(item.audioData);
+	qDebug() << "Playing:" << filename;
 
-	source->close();
-	source->open(QIODevice::ReadOnly);
-	source->seek(0);
+	mAudioBuffer.close();
+	mAudioBuffer.setBuffer(&item.audioData);
+	mAudioBuffer.open(QIODevice::ReadOnly);
 
-	mAudioDecoder.start();
+	mMediaPlayer.setSourceDevice(&mAudioBuffer, filename);
+	mMediaPlayer.play();
 }
 
-void MediaPlayer::onAudioDecoderBufferReady() const
-{
-	const QAudioBuffer buffer = mAudioDecoder.read();
-	mAudioSinkData->write(buffer.constData<const char>(), buffer.byteCount());
-}
-
-void MediaPlayer::onAudioDecoderError(const QAudioDecoder::Error error) const
+void MediaPlayer::onMediaPlayerErrorOccurred(const QMediaPlayer::Error error,
+	const QString &errorString)
 {
 	qWarning().nospace()
-		<< "Audio decoder error: " << mAudioDecoder.errorString()
+		<< "Media player error: " << errorString
 		<< " (" << error << ")";
 }
 
-void MediaPlayer::onAudioSinkStateChanged(const QtAudio::State state) const
+void MediaPlayer::onMediaPlayerMediaStatusChanged(const QMediaPlayer::MediaStatus status)
 {
-	if (mAudioSink.error() == QtAudio::NoError)
-	{
-		qDebug() << "Audio sink:" << EnumSerializer::toString(state);
-	}
-	else
-	{
-		qCritical().nospace()
-			<< "Audio sink: " << EnumSerializer::toString(state)
-			<< " (" << EnumSerializer::toString(mAudioSink.error()) << ")";
-	}
+	qWarning().nospace()
+		<< "Media status: " << EnumSerializer::toString(status)
+		<< " (" << status << ")";
+}
+
+void MediaPlayer::onMediaPlayerPlaybackStateChanged(const QMediaPlayer::PlaybackState state)
+{
+	qWarning().nospace()
+		<< "Playback state: " << EnumSerializer::toString(state)
+		<< " (" << state << ")";
 }
 
 void MediaPlayer::onSongData()
@@ -195,20 +198,9 @@ void MediaPlayer::onMediaDownloaded()
 	const IV iv = Cypher::generateIv();
 	item.audioData = Cypher::decrypt(key, iv, data);
 
-	if (item.mediaFormat != MediaFormat::Lossless)
-	{
-		constexpr std::array<char, 10> id3Header = {
-			0x49, 0x44, 0x33,       // "ID3" identifier
-			0x03, 0x00,             // Version (v2.3.0)
-			0x00,                   // Flags
-			0x00, 0x00, 0x00, 0x00, // Tag size
-		};
-		item.audioData.prepend(id3Header);
-	}
-
 	item.status = QueueItemStatus::Ready;
 
-	if (mAudioSink.state() == QtAudio::IdleState)
+	if (!mMediaPlayer.isPlaying())
 	{
 		playHead();
 	}

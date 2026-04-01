@@ -104,3 +104,54 @@ auto EnumSerializer::toString(const QtAudio::Error error) -> QString
 			return {};
 	}
 }
+
+auto EnumSerializer::toString(const QMediaPlayer::MediaStatus status) -> QString
+{
+	switch (status)
+	{
+		case QMediaPlayer::NoMedia:
+			return QStringLiteral("No media");
+
+		case QMediaPlayer::LoadingMedia:
+			return QStringLiteral("Loading");
+
+		case QMediaPlayer::LoadedMedia:
+			return QStringLiteral("Loaded");
+
+		case QMediaPlayer::StalledMedia:
+			return QStringLiteral("Stalled");
+
+		case QMediaPlayer::BufferingMedia:
+			return QStringLiteral("Buffering");
+
+		case QMediaPlayer::BufferedMedia:
+			return QStringLiteral("Buffered");
+
+		case QMediaPlayer::EndOfMedia:
+			return QStringLiteral("End of media");
+
+		case QMediaPlayer::InvalidMedia:
+			return QStringLiteral("Invalid media");
+
+		default:
+			return {};
+	}
+}
+
+auto EnumSerializer::toString(const QMediaPlayer::PlaybackState state) -> QString
+{
+	switch (state)
+	{
+		case QMediaPlayer::StoppedState:
+			return QStringLiteral("Stopped");
+
+		case QMediaPlayer::PlayingState:
+			return QStringLiteral("Playing");
+
+		case QMediaPlayer::PausedState:
+			return QStringLiteral("Paused");
+
+		default:
+			return {};
+	}
+}
