@@ -4,6 +4,7 @@
 #include "deezer/enums/mediaformat.hpp"
 #include "deezer/objects/userdata.hpp"
 #include "player/mediaplayer.hpp"
+#include "player/metadata.hpp"
 
 #include <QImage>
 #include <QNetworkAccessManager>
@@ -16,6 +17,7 @@ class PlayerPage : public QObject
 	QML_ELEMENT
 
 	Q_PROPERTY(QImage userImage READ userImage NOTIFY userImageChanged)
+	Q_PROPERTY(const MetaData * metaData READ metaData NOTIFY metaDataChanged)
 
 public:
 	explicit PlayerPage(QObject *parent = nullptr);
@@ -23,12 +25,17 @@ public:
 	[[nodiscard]]
 	auto userImage() const -> const QImage &;
 
+	[[nodiscard]]
+	auto metaData() const -> const MetaData *;
+
 	Q_INVOKABLE void enqueueTrack(qint64 trackId);
 
 	Q_INVOKABLE void play();
 
 signals:
 	void userImageChanged();
+
+	void metaDataChanged();
 
 private:
 	QNetworkAccessManager mHttp;

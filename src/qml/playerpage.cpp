@@ -9,12 +9,20 @@ PlayerPage::PlayerPage(QObject *parent)
 	mHttp(this),
 	mMediaPlayer(MediaFormat::LowQuality, this)
 {
+	connect(&mMediaPlayer, &MediaPlayer::metaDataChanged,
+		this, &PlayerPage::metaDataChanged);
+
 	refreshUserData();
 }
 
 auto PlayerPage::userImage() const -> const QImage &
 {
 	return mUserImage;
+}
+
+auto PlayerPage::metaData() const -> const MetaData *
+{
+	return mMediaPlayer.metaData();
 }
 
 void PlayerPage::enqueueTrack(const qint64 trackId)

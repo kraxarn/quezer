@@ -81,6 +81,11 @@ void MediaPlayer::play()
 		this, &MediaPlayer::onMediaUrl);
 }
 
+auto MediaPlayer::metaData() const -> const MetaData *
+{
+	return mMetaData.data();
+}
+
 void MediaPlayer::logAudioConfig() const
 {
 	const QAudioOutput *audioOutput = mMediaPlayer.audioOutput();
@@ -113,6 +118,9 @@ void MediaPlayer::playHead()
 
 	mMediaPlayer.setSourceDevice(&mAudioBuffer, filename);
 	mMediaPlayer.play();
+
+	mMetaData = new MetaData(item.songData, filename);
+	emit metaDataChanged();
 }
 
 void MediaPlayer::onMediaPlayerErrorOccurred(const QMediaPlayer::Error error,

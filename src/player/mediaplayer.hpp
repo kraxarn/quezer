@@ -2,12 +2,14 @@
 
 #include "deezer/enums/mediaformat.hpp"
 #include "deezer/objects/userdata.hpp"
+#include "player/metadata.hpp"
 #include "player/queueitem.hpp"
 
 #include <QAudioOutput>
 #include <QBuffer>
 #include <QMediaPlayer>
 #include <QNetworkAccessManager>
+#include <QPointer>
 #include <QQueue>
 
 class MediaPlayer final : public QObject
@@ -23,8 +25,13 @@ public:
 
 	void play();
 
+	[[nodiscard]]
+	auto metaData() const -> const MetaData *;
+
 signals:
 	void queueItemAdded();
+
+	void metaDataChanged();
 
 private:
 	QNetworkAccessManager mHttp;
@@ -35,6 +42,7 @@ private:
 	UserData mCurrentUserData;
 	MediaFormat mMediaFormat;
 	QQueue<QueueItem> mQueue;
+	QPointer<MetaData> mMetaData;
 
 	void logAudioConfig() const;
 

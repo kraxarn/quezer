@@ -24,13 +24,14 @@ Item {
 
 		Label {
 			id: trackTitle
-			text: "Track title"
+			text: page.metaData ? page.metaData.title : "Nothing playing"
 			font.pointSize: artistName.font.pointSize * 1.4
 		}
 
 		Label {
 			id: artistName
-			text: "Artist name"
+			text: page.metaData && page.metaData.artistNames.join(", ")
+			visible: !!page.metaData
 		}
 
 		Item {
