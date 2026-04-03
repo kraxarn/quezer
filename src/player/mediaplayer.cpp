@@ -98,7 +98,7 @@ void MediaPlayer::playHead()
 {
 	QueueItem &item = mQueue.head();
 
-	const QString filename = QStringLiteral("%1%2.%3")
+	const QString filename = QStringLiteral("%1-%2.%3")
 		.arg(item.songData.sngId())
 		.arg(static_cast<quint8>(item.mediaFormat))
 		.arg(item.mediaFormat == MediaFormat::Lossless
