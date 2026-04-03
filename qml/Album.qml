@@ -1,6 +1,9 @@
+import QtQml
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+
+import ImagePaintedItem
 
 Rectangle {
 	property var margin: 6
@@ -15,9 +18,26 @@ Rectangle {
 	radius: 6
 	color: parent.palette.window.lighter()
 
+	ImagePaintedItem {
+		id: albumPicture
+		anchors {
+			fill: parent
+		}
+		visible: !!image
+
+		Connections {
+			target: page.metaData
+
+			function onAlbumPictureChanged() {
+				albumPicture.image = page.metaData.albumPicture
+			}
+		}
+	}
+
 	Icon {
 		name: "media-optical"
 		size: 100
 		anchors.centerIn: parent
+		visible: !page.metaData || !page.metaData.albumPicture
 	}
 }
