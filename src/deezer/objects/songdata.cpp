@@ -1,4 +1,5 @@
 #include "deezer/objects/songdata.hpp"
+#include "util/json.hpp"
 
 #include <QJsonArray>
 
@@ -56,9 +57,68 @@ auto SongData::Artist::fromJson(const QJsonObject &json) -> Artist
 	return artist;
 }
 
+auto SongData::Artist::artName() const -> const QString &
+{
+	return mArtName;
+}
+
+auto SongData::Contributors::fromJson(const QJsonObject &json) -> Contributors
+{
+	Contributors contributors;
+
+	contributors.mMainArtist = Json::stringList(
+		json.value(QStringLiteral("main_artist")).toArray()
+	);
+
+	contributors.mArtist = Json::stringList(
+		json.value(QStringLiteral("artist")).toArray()
+	);
+
+	contributors.mComposer = Json::stringList(
+		json.value(QStringLiteral("composer")).toArray()
+	);
+
+	contributors.mAuthor = Json::stringList(
+		json.value(QStringLiteral("author")).toArray()
+	);
+
+	return contributors;
+}
+
+auto SongData::albPicture() const -> const QString &
+{
+	return mAlbPicture;
+}
+
+auto SongData::albPictureUrl() const -> QUrl
+{
+	return QStringLiteral("https://cdn-images.dzcdn.net/images/cover/%1/500x500-000000-80-0-0.jpg")
+		.arg(albPicture());
+}
+
+auto SongData::albTitle() const -> const QString &
+{
+	return mAlbTitle;
+}
+
+auto SongData::artists() const -> const QList<Artist> &
+{
+	return mArtists;
+}
+
+auto SongData::digitalReleaseDate() const -> const QDate &
+{
+	return mDigitalReleaseDate;
+}
+
 auto SongData::sngId() const -> qint64
 {
 	return mSngId;
+}
+
+auto SongData::sngTitle() const -> const QString &
+{
+	return mSngTitle;
 }
 
 auto SongData::trackToken() const -> const QString &

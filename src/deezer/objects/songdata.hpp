@@ -17,6 +17,9 @@ public:
 	public:
 		static auto fromJson(const QJsonObject &json) -> Artist;
 
+		[[nodiscard]]
+		auto artName() const -> const QString &;
+
 	private:
 		Artist() = default;
 
@@ -25,8 +28,38 @@ public:
 		QString mArtPicture;
 	};
 
+	class Contributors final
+	{
+	public:
+		static auto fromJson(const QJsonObject &json) -> Contributors;
+
+	private:
+		QStringList mMainArtist;
+		QStringList mArtist;
+		QStringList mComposer;
+		QStringList mAuthor;
+	};
+
+	[[nodiscard]]
+	auto albPicture() const -> const QString &;
+
+	[[nodiscard]]
+	auto albPictureUrl() const -> QUrl;
+
+	[[nodiscard]]
+	auto albTitle() const -> const QString &;
+
+	[[nodiscard]]
+	auto artists() const -> const QList<Artist> &;
+
+	[[nodiscard]]
+	auto digitalReleaseDate() const -> const QDate &;
+
 	[[nodiscard]]
 	auto sngId() const -> qint64;
+
+	[[nodiscard]]
+	auto sngTitle() const -> const QString &;
 
 	[[nodiscard]]
 	auto trackToken() const -> const QString &;

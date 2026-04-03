@@ -40,9 +40,11 @@ include(qml.cmake)
 
 target_include_directories(${APP_NAME} PRIVATE
 	"${CMAKE_CURRENT_SOURCE_DIR}/src"
-	"${CMAKE_CURRENT_SOURCE_DIR}/src/qml"
+	# QML objects
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/models"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/player"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/proxies"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/qml"
 )
 
 target_compile_definitions(${APP_NAME} PRIVATE
